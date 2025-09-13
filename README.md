@@ -1,1 +1,36 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=20316623&assignment_repo_type=AssignmentRepo)
+## Sistema de Gestão de RH
+
+Trabalho final da disciplina Programação Modular – PUC Minas
+Professor: Paulo Henrique D. S. Coelho
+
+## Sobre o projeto
+
+O Sistema de Gestão de Recursos Humanos (RH) é uma solução abrangente para automatizar e otimizar processos-chave do departamento de pessoal de uma empresa. Inspirado em sistemas líderes de mercado como o da TOTVS, este projeto foca em funcionalidades essenciais como folha de pagamento, controle de ponto eletrônico, e gestão de dados de funcionários.
+
+O objetivo é criar uma ferramenta robusta que:
+
+Automatize o cálculo salarial, considerando descontos, benefícios e horas extras.
+
+Gerencie o registro de ponto, permitindo o controle de jornada e a integração com o cálculo da folha.
+
+Ofereça um portal para que funcionários consultem contracheques, solicitem abonos e férias.
+
+Garanta a conformidade com as leis trabalhistas, como a Portaria 671, que regulamenta o registro de ponto eletrônico.
+
+O desenvolvimento segue as melhores práticas de qualidade de software, incluindo Programação Orientada a Objetos (POO), aplicação dos princípios SOLID e a criação de uma suíte completa de testes unitários para garantir a confiabilidade e a integridade dos dados.
+
+## Tecnologias Utilizadas
+
+**Java**: Linguagem de programação base do projeto.
+
+**Spring Boot**: Framework para o desenvolvimento da aplicação.
+
+**JUnit**: Ferramenta para testes unitários.
+
+**Maven**: Gerenciador de dependências e automação de build.
+
+**Banco de Dados**: A definir.
+
+**Frontend**: React.
+
+**Teste de usuário**: Selenium
