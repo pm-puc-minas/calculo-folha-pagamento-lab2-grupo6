@@ -9,14 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GestaoRhApplication {
 
-    @GetMapping("/hello-world")
-    public String helloWorld()
-    {
-        return "Hello World";
-    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(GestaoRhApplication.class, args);
+//        //Importe seu Repositório aqui
+//         @Autowired
+//         private FuncionarioRepository repository;
+//
+//        //Tente contar os registros:
+//         long count = repository.count();
+//         System.out.println("Conexão OK! Total de itens: " + count);
 	}
 
 }
