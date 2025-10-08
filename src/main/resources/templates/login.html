@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Gestão RH</title>
     <style>
+        .alert {
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .alert-danger {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+        font-weight: bold;
+    }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f7f6;
@@ -72,16 +87,11 @@
 <div class="login-container">
     <h2>Portal do Colaborador RH</h2>
 
-    <form action="/login" method="POST">
+    <form method="POST">
 
         <div class="form-group">
-            <label for="name">Nome do Usuario:</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-
-        <div class="form-group">
-            <label for="login">Matrícula / Usuário:</label>
-            <input type="text" id="login" name="userLogin" required>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
         </div>
 
         <div class="form-group">
@@ -91,6 +101,7 @@
 
         <button type="submit" class="btn-login">Entrar</button>
 
+        <div th:if="${error != null}" class="alert alert-danger" role="alert" th:text="${error}"></div>
         <a href="#" class="link-forgot">Esqueci minha senha</a>
 
     </form>

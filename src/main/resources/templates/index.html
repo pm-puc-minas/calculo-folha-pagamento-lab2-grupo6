@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RH-Sys | Dashboard</title>
+</head>
+<body>
+
+<header class="header-principal">
+    <div class="logo">
+        <h1>RH-Sys</h1>
+    </div>
+    <nav class="menu-principal">
+        <ul>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#funcionarios">Funcionários</a></li>
+            <li><a href="#folha">Folha de Pagamento</a></li>
+            <li><a href="#recrutamento">Recrutamento</a></li>
+            <li><a href="#config">Configurações</a></li>
+        </ul>
+    </nav>
+    <div class="usuario-info">
+        Ola,<span th:text="${name}"></span>
+        <a href="/login">Sair</a>
+    </div>
+</header>
+
+<main class="container-principal">
+    <h2>Dashboard - Visão Geral do RH</h2>
+
+    <section class="cards-estatisticas">
+        <div class="card card-total-func">
+            <h3>Total de Funcionários</h3>
+            <p class="valor">150</p>
+        </div>
+        <div class="card card-novas-vagas">
+            <h3>Vagas Abertas</h3>
+            <p class="valor">5</p>
+        </div>
+        <div class="card card-ausencias">
+            <h3>Ausências Hoje</h3>
+            <p class="valor">3</p>
+        </div>
+        <div class="card card-proximo-aniv">
+            <h3>Aniversariantes do Mês</h3>
+            <p class="valor">12</p>
+        </div>
+    </section>
+
+    <section class="acoes-rapidas">
+        <h3>Ações Rápidas</h3>
+        <ul class="lista-acoes">
+            <li><a href="/funcionarios/novo" class="btn btn-primario">Adicionar Novo Funcionário</a></li>
+            <li><a href="/recrutamento/status" class="btn btn-secundario">Ver Status de Recrutamento</a></li>
+            <li><a href="/folha/fechamento" class="btn btn-secundario">Fechamento Mensal</a></li>
+        </ul>
+    </section>
+
+    <section class="pendencias">
+        <h3>Alertas e Pendências</h3>
+        <ul class="lista-pendencias">
+            <li class="alerta-urgente">Aprovar 2 pedidos de férias.</li>
+            <li>Concluir avaliação de desempenho de 5 colaboradores.</li>
+            <li>Verificar 1 documento de admissão pendente.</li>
+        </ul>
+    </section>
+
+</main>
+
+<footer class="rodape-sistema">
+    <p>&copy; 2025 RH-Sys. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>
