@@ -14,7 +14,7 @@ public class User {
     @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Getter
     @Setter
@@ -24,7 +24,7 @@ public class User {
     @Getter
     @Setter
     @NotEmpty
-    private String userLogin;
+    private String email;
 
     @Getter
     @Setter
@@ -33,9 +33,9 @@ public class User {
 
     public User() {
     }
-    public User(String userLogin,String password, String name)
+    public User(String email,String password, String name)
     {
-        this.userLogin = userLogin;
+        this.email = email;
         this.password = password;
         this.name = name;
     }
