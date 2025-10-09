@@ -3,7 +3,7 @@
 Trabalho final da disciplina Programação Modular – PUC Minas
 Professor: Paulo Henrique D. S. Coelho
 
-[Documentação] (/docs/README.md)
+[Veja a Documentação Completa](docs/README.md)
 
 ## Sobre o projeto
 
