@@ -1,9 +1,6 @@
 package io.github.progmodular.gestaorh.model.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,8 +9,8 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class User {
+@MappedSuperclass
+public abstract class User {
 
     @Getter
     @Id
@@ -34,4 +31,6 @@ public class User {
     @Setter
     @NotEmpty
     private String password;
+
+    public abstract String getUserType();
 }
