@@ -3,6 +3,8 @@
 Trabalho final da disciplina Programação Modular – PUC Minas
 Professor: Paulo Henrique D. S. Coelho
 
+[Documentação] (/docs/README.md)
+
 ## Sobre o projeto
 
 O Sistema de Gestão de Recursos Humanos (RH) é uma solução abrangente para automatizar e otimizar processos-chave do departamento de pessoal de uma empresa. Inspirado em sistemas líderes de mercado como o da TOTVS, este projeto foca em funcionalidades essenciais como folha de pagamento, controle de ponto eletrônico, e gestão de dados de funcionários.
