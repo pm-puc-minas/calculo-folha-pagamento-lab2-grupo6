@@ -1,10 +1,4 @@
-Com certeza! É fundamental documentar o que você entregou na Sprint 2, focando nos conceitos de POO.
 
-Sua parte implementou com sucesso o **RF10 (Relatório)** e os princípios de **Baixo Acoplamento** e **Polimorfismo**, que eram o foco desta etapa.
-
-Aqui está a documentação do seu módulo, seguindo o estilo que você forneceu:
-
----
 
 ## Documentação do Módulo Relatório (Sprint 2)
 
@@ -46,3 +40,4 @@ O núcleo da entrega da Sprint 2 é a separação das responsabilidades:
 
 * **Isolamento do Código:** A classe **`RelatorioFolhaTest`** utiliza o Mocking (simulação) através de uma classe que implementa `IFolhaPagamentoDados`.
 * **Validação da Abstração:** Isso garante que o módulo Relatório foi testado em completo isolamento, provando que sua lógica de coordenação e formatação (RF10) está correta, independentemente do código dos seus colegas (CalculadoraFolha).
+
