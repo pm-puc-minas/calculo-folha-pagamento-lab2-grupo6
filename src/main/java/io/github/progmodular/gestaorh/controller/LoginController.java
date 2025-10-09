@@ -1,12 +1,11 @@
 package io.github.progmodular.gestaorh.controller;
 
 import io.github.progmodular.gestaorh.model.entities.User;
-import io.github.progmodular.gestaorh.model.services.AuthenticationService;
+import io.github.progmodular.gestaorh.service.AuthenticationService;
 //import io.github.progmodular.gestaorh.repository.UserRepository;
 import io.github.progmodular.gestaorh.service.CookieService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
