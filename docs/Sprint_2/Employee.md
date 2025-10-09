@@ -1,45 +1,26 @@
-Documentação da Classe Employee
-Visão Geral
+## Documentação da Classe 
 
-A classe Employee representa os funcionários administrativos do sistema e estende a classe abstrata User. Por meio da herança, herda todos os atributos e comportamentos comuns aos usuários, enquanto fornece implementações específicas para métodos abstratos e pode adicionar funcionalidades próprias, se necessário.
+### Visão Geral
 
-1. Detalhes de Implementação
-Recurso	Descrição
-Extensão da Superclasse	public class Employee extends User
-A classe concreta Employee especializa o comportamento da superclasse abstrata User, herdando seus atributos e funcionalidades.
-Anotações JPA	A classe herda as anotações JPA da superclasse. Não necessita repetir anotações como @Entity, pois são aplicadas na hierarquia da superclasse User.
-Discriminador	Por conta da anotação @DiscriminatorColumn presente em User, cada instância da classe Employee será registrada com o valor "EMPLOYEE" na coluna USER_TYPE da tabela.
-Implementação do Método Abstrato	Implementa o método getUserType() de forma específica:
-@Override public String getUserType() { return "EMPLOYEE"; }
-Garante o polimorfismo no uso da superclasse.
-Atributos Específicos (opcional)	A classe pode conter atributos próprios dos funcionários administrativos, caso necessário (ex: cargo, setor, etc.). Atualmente, utiliza apenas os atributos herdados.
-2. Aplicação Direta dos Conceitos de POO (Sprint 2)
-2.1. Herança e Reuso
+A classe PayrollAdmin é uma subclasse concreta que estende a classe abstrata User. Ela representa o usuário do sistema com permissões de administração e gerenciamento de folha de pagamento.
 
-A classe Employee herda da superclasse User, reaproveitando todos os atributos mapeados e comportamentos comuns, como:
-
-id, username, email, password (exemplos de atributos da superclasse)
-
-Mapeamento JPA para persistência
-
-Estratégia de herança SINGLE_TABLE definida na superclasse
-
-2.2. Polimorfismo
-
-A implementação do método getUserType() em Employee permite ao sistema invocar esse comportamento de forma polimórfica. Mesmo quando referenciado como User, um objeto Employee responderá com seu tipo específico.
-
-User user = new Employee();
-System.out.println(user.getUserType()); // Saída: EMPLOYEE
+A criação desta classe é a implementação direta dos conceitos de Herança e Polimorfismo, garantindo que apenas tipos específicos e funcionais de usuários sejam instanciados.
 
 
-Esse comportamento é essencial para diferenciar os tipos de usuários na camada de lógica de negócios, segurança ou apresentação.
+#### 1. Detalhes de Implementação
 
-2.3. Responsabilidade Específica
+| **Recurso**               | **Aplicação em PayrollAdmin**                                                                                                                                                                                                                                                                                                                                                                                 |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Herança**               | PayrollAdmin extends User: Herda automaticamente os atributos básicos (id, name, email, password) e os comportamentos definidos na classe base.                                                                                                                                                                                                                                                                                    |
+| **Polimorfismo**          | Sobrescrita do Método **getUserType()**: Implementa o método abstrato herdado de User, retornando o tipo específico "PAYROLL". Isso permite que o sistema trate um objeto como User, mas invoque o comportamento específico de PayrollAdmin em tempo de execução.                                                                                                                              |
+| **Classes Abstratas**     | Cumpre a regra da User abstrata, fornecendo uma implementação concreta que pode ser instanciada. |
 
-A classe Employee é responsável por representar os usuários com função administrativa. Mesmo que atualmente não tenha atributos adicionais, ela serve como uma especialização clara e futura extensão da lógica de negócios para esse tipo de usuário.
+#### 2. Detalhes de Implementação 
 
-3. Considerações Futuras
-
-Se necessário, novos atributos ou métodos específicos de Employee poderão ser adicionados (ex: cargo, área administrativa, etc.).
-
-Pode-se aplicar validações ou regras específicas nessa subclasse para diferenciar ainda mais sua lógica de negócio em relação a outros tipos de usuário.
+| **Recurso**       | **Descrição**                                                                                                                                            |
+|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Superclasse**   | PayrollAdmin extends User: Herda automaticamente os atributos básicos (id, name, email, password) e os comportamentos definidos na classe base.          |
+| **Anotação JPA**  | @Entity: Marca a classe para persistência.                                                                                                               |
+| **Discriminador** | @DiscriminatorValue("payroll_user"): Define o valor que será registrado na coluna USER_TYPE da tabela única, distinguindo-o de outros subtipos de User.  |
+| **isAdmin** | Atributo específico do administrador, inicializado como true. | 
+| **Método getUserType()** | Implementa o contrato da superclasse, sendo crucial para a lógica polimórfica de identificação do usuário.|
