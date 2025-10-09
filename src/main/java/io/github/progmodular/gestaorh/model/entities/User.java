@@ -5,9 +5,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class User {
 
@@ -30,14 +34,4 @@ public class User {
     @Setter
     @NotEmpty
     private String password;
-
-    public User() {
-    }
-    public User(String email,String password, String name)
-    {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-    }
-
 }
