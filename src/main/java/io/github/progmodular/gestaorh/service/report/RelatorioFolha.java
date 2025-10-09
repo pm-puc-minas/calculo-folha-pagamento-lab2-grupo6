@@ -1,6 +1,6 @@
-package com.folha.pagamento.relatorio;
+package io.github.progmodular.gestaorh.service.report;
 
-import com.folha.pagamento.dados.IFolhaPagamentoDados;
+import io.github.progmodular.gestaorh.service.payment.dados.IFolhaPagamentoDados;
 
 /**
  * Classe principal de sua responsabilidade.

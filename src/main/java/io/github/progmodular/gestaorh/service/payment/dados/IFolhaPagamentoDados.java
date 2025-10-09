@@ -1,4 +1,4 @@
-package com.folha.pagamento.dados;
+package io.github.progmodular.gestaorh.service.payment.dados;
 
 import java.math.BigDecimal;
 

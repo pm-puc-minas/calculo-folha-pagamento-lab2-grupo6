@@ -1,6 +1,8 @@
-package com.folha.pagamento.relatorio;
+package io.github.progmodular.gestaorh.acceptance;
 
-import com.folha.pagamento.dados.IFolhaPagamentoDados;
+import io.github.progmodular.gestaorh.service.payment.dados.IFolhaPagamentoDados;
+import io.github.progmodular.gestaorh.service.report.FormatadorConsoleRetro;
+import io.github.progmodular.gestaorh.service.report.RelatorioFolha;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.*;

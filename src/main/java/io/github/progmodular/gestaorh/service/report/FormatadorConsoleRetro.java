@@ -1,6 +1,7 @@
-package com.folha.pagamento.relatorio;
+package io.github.progmodular.gestaorh.service.report;
 
-import com.folha.pagamento.dados.IFolhaPagamentoDados;
+import io.github.progmodular.gestaorh.service.payment.dados.IFolhaPagamentoDados;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 

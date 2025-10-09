@@ -1,8 +1,8 @@
-package io.github.progmodular.gestaorh.service;
+package io.github.progmodular.gestaorh.infra.config;
 
+import io.github.progmodular.gestaorh.infra.security.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 

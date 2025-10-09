@@ -1,4 +1,4 @@
-package io.github.progmodular.gestaorh.service;
+package io.github.progmodular.gestaorh.infra.web;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

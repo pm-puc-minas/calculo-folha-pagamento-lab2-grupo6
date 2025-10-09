@@ -1,4 +1,4 @@
-package io.github.progmodular.gestaorh;
+package io.github.progmodular.gestaorh.acceptance;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
