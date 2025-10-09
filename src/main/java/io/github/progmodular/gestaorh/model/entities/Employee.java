@@ -5,7 +5,9 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,8 +15,25 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("employee_user")
 public class Employee extends User {
 
-    @Column(name = "grossSalary")
+    @Getter
+    @Setter
     private Double grossSalary;
+
+    @Getter
+    @Setter
+    private String cpf;
+
+    @Getter
+    @Setter
+    private String position;
+
+    @Getter
+    @Setter
+    private Double hoursWorked;
+
+    @Getter
+    @Setter
+    private int daysWorked;
 
     @Override
     public String getUserType() {
