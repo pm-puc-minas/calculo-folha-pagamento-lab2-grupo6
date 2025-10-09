@@ -1,4 +1,4 @@
-package io.github.progmodular.gestaorh.model.services;
+package io.github.progmodular.gestaorh.service;
 
 import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.entities.PayrollAdmin;
