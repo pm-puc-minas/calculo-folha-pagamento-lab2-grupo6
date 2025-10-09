@@ -2,9 +2,8 @@
 
 ### Visão Geral
 
-A classe User é uma Entidade fundamental no sistema de Gestão de RH (gestaorh). Ela representa os usuários básicos da aplicação, como colaboradores, administradores ou gerentes, e é mapeada diretamente para uma tabela no banco de dados, utilizando o framework Spring Data JPA (evidenciado pelas anotações @Entity, @Id, etc.).
+A classe User é uma Entidade fundamental no sistema de Gestão de RH. Ela representa os usuários básicos da aplicação, como colaboradores, administradores ou gerentes, e é mapeada diretamente para uma tabela no banco de dados, utilizando o framework Spring Data JPA (evidenciado pelas anotações @Entity, @Id, etc.).
 
-É uma classe simples de modelo (POJO - Plain Old Java Object) que armazena informações essenciais para autenticação e identificação: id, name, email e password.
 
 #### 1. Detalhes de Implementação
 
