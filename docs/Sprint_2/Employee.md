@@ -2,7 +2,7 @@
 
 ### Visão Geral
 
-A classe employee é uma subclasse concreta que estende a classe abstrata User. Ela representa o usuário do sistema com permissões de administração e gerenciamento de folha de pagamento.
+A classe employee é uma subclasse concreta que estende a classe abstrata User. Ela representa o usuário do sistema com menos permissões de administração e gerenciamento de folha de pagamento.
 
 A criação desta classe é a implementação direta dos conceitos de Herança e Polimorfismo, garantindo que apenas tipos específicos e funcionais de usuários sejam instanciados.
 
