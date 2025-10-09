@@ -1,7 +1,8 @@
 package io.github.progmodular.gestaorh.controller;
 
 import io.github.progmodular.gestaorh.model.entities.User;
-import io.github.progmodular.gestaorh.repository.UserRepository;
+import io.github.progmodular.gestaorh.model.services.AuthenticationService;
+//import io.github.progmodular.gestaorh.repository.UserRepository;
 import io.github.progmodular.gestaorh.service.CookieService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,9 +10,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.io.UnsupportedEncodingException;
@@ -20,7 +21,7 @@ import java.io.UnsupportedEncodingException;
 public class LoginController {
 
     @Autowired
-    private UserRepository ur;
+    private AuthenticationService authenticationService;
 
     @GetMapping("/login")
     public String login()
@@ -35,34 +36,40 @@ public class LoginController {
     }
 
     @PostMapping(value = "/login")
-    public String loginUser(User user, Model model, HttpServletResponse response) throws UnsupportedEncodingException {
-        User loggedUser = this.ur.login(user.getEmail(),user.getPassword());
+    public String loginUser(
+            @RequestParam String email,
+            @RequestParam String password,
+            Model model,
+            HttpServletResponse response) throws UnsupportedEncodingException {
 
-        if(loggedUser != null)
-        {
-            CookieService.setCookie(response,"usuarioId",String.valueOf(loggedUser.getId()),10000);
-            CookieService.setCookie(response,"userName",String.valueOf(loggedUser.getName()),10000);
-            return "redirect:/";
+        // Tentativa de login como Employee primeiro
+        User loggedUser = authenticationService.login(email, password, "EMPLOYEE");
+        String userType = "EMPLOYEE";
+
+
+        // Se não encontrou como Employee, tenta como Payroll
+        if (loggedUser == null) {
+            loggedUser = authenticationService.login(email, password, "PAYROLL");
+            userType = "PAYROLL";
         }
 
-        model.addAttribute("error","Invalid User");
+        if (loggedUser != null) {
+            CookieService.setCookie(response, "usuarioId", String.valueOf(loggedUser.getId()), 10000);
+            CookieService.setCookie(response, "userName", loggedUser.getName(), 10000);
+            CookieService.setCookie(response, "userType", userType, 10000);
+            CookieService.setCookie(response, "userEmail", loggedUser.getEmail(), 10000);
+
+            return switch (userType) {
+                case "EMPLOYEE" -> "redirect:/";
+                case "PAYROLL" -> "redirect:/";
+                default -> "redirect:/";
+            };
+        }
+
+        model.addAttribute("error", "Email ou senha inválidos");
         return "login";
     }
 
 
-    @GetMapping("/cadastro")
-    public String cadastro()
-    {
-        return "cadastro";
-    }
 
-    @PostMapping(value = "/cadastro")
-    public String userRegister(@Valid User user, BindingResult result)
-    {
-        if(result.hasErrors())
-            return "redirect:/cadastro";
-
-        ur.save(user);
-        return "redirect:/login";
-    }
 }
