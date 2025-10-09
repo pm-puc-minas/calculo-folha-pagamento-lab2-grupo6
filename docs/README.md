@@ -1,5 +1,5 @@
 ### Diagrama UML
-[UML](Sprint_1/Diagrama%20UML.jpg)
+* [UML](Sprint_1/Diagrama%20UML.jpg)
 
 ### Documentação de classes (Sprint 2)
 * [User](Sprint_2/User.md)
