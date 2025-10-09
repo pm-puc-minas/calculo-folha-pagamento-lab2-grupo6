@@ -32,9 +32,7 @@ public class CalculadoraFolha {
         this.horasMensais = horasMensais;
     }
     
-    /*
-     * Métodos pra calcular salario
-     */
+  
 
     public double calcularSalarioHora(int horasTrabalhadasPorDia, int diasTrabalhadosPorSemana) {
         double jornadaSemanal = horasTrabalhadasPorDia * diasTrabalhadosPorSemana;
