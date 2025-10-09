@@ -1,9 +1,7 @@
 package io.github.progmodular.gestaorh.model.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,9 +18,6 @@ public class PayrollAdmin extends User
     @Setter
     @NotEmpty
     private Boolean isAdmin = true;
-
-    @Column(name = "payroll_level")
-    private String payrollLevel;
 
     @Override
     public String getUserType() {

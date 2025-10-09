@@ -1,4 +1,4 @@
-## Documentação da Classe User - Módulo de Entidades
+## Documentação da Classe User
 
 ### Visão Geral
 
