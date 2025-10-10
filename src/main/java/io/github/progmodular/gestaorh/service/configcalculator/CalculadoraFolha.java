@@ -1,19 +1,5 @@
 //public class CalculadoraFolha {
 
-//    public CalculadoraFolha(double salarioBruto, int horasMensais) {
-//        this.salarioBruto = salarioBruto;
-//        this.horasMensais = horasMensais;
-//    }
-//
-//
-//    public double calcularSalarioHora(int horasTrabalhadasPorDia, int diasTrabalhadosPorSemana) {
-//        double jornadaSemanal = horasTrabalhadasPorDia * diasTrabalhadosPorSemana;
-//        double jornadaMensal = jornadaSemanal * 5;
-//        salarioHora = salarioBruto / jornadaMensal;
-//        return salarioHora;
-//    }
-//
-
 //    public double calcularInsalubridade(String grauInsalubridade) {
 //        grauInsalubridade.toLowerCase();
 //        switch (grauInsalubridade) {
@@ -36,10 +22,7 @@
 //
 //
 //
-//    public double calcularValeAlimentacao(double valeDiario, int diasTrabalhados) {
-//        valeAlimentacao = valeDiario * diasTrabalhados;
-//        return valeAlimentacao;
-//    }
+
 
 
 
