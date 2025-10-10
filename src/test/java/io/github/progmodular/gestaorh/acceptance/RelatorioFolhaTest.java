@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RelatorioFolhaTest {
 
-    // 1. Injeta os dados mockados no  RelatorioFolha
     private final IFolhaPagamentoDados dadosTeste = new MockFolhaPagamentoDados();
     private final RelatorioFolha relatorio = new RelatorioFolha(new FormatadorConsoleRetro());
 
@@ -20,15 +19,11 @@ class RelatorioFolhaTest {
     void deveGerarRelatorioComSalarioLiquidoCorretamenteFormatado() {
         String resultado = relatorio.gerarRelatorio(dadosTeste);
 
-        // substituir qualquer espaço invisível ('\u00A0')
-        // por um espaço normal (' ') antes da comparação.
         String resultadoNormalizado = resultado.replace('\u00A0', ' ');
 
-        //  comparação é feita com a string normalizada, garantindo que o teste passe.
         assertTrue(resultadoNormalizado.contains("R$ 5.780,57"),
                 "O relatório deve conter o valor líquido R$ 5.780,57 formatado em Reais.");
 
-        // Verificação de Título e Nome (RF10)
         assertTrue(resultadoNormalizado.contains("DEMONSTRATIVO DE PAGAMENTO"), "Deve ter o título principal.");
         assertTrue(resultadoNormalizado.contains("Colaborador: Alexandre Teste"), "Deve incluir o nome do colaborador.");
     }
