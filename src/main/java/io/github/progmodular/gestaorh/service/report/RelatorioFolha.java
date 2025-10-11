@@ -6,7 +6,6 @@ public class RelatorioFolha {
 
     private final IFormatadorRelatorio formatador;
     public RelatorioFolha(IFormatadorRelatorio formatador) {
-        // Isso garante o baixo acoplamento (RFN)
         this.formatador = formatador;
     }
 
