@@ -1,43 +1,39 @@
-
-
-## Documentação do Módulo Relatório (Sprint 2)
+## Documentação do Módulo de Relatório 
 
 ### Visão Geral
 
-O Módulo Relatório é composto pelas classes **`RelatorioFolha`**, **`FormatadorConsoleRetro`** e suas interfaces de contrato. Ele é responsável por satisfazer o **Requisito Funcional 10 (RF10)**: exibir o demonstrativo de pagamento na tela com todas as informações e cálculos da folha.
+O Módulo de Relatório implementa a camada de **Apresentação** do demonstrativo de pagamento. O design é fundamentado no **Padrão Strategy** e no uso de **Interfaces**, o que garante a máxima flexibilidade e o **desacoplamento** entre a lógica de coordenação e a camada visual do sistema.
 
-O módulo foi projetado utilizando o **Padrão Strategy** através de Interfaces, garantindo a **Manutenibilidade** (RFN) e o **Baixo Acoplamento**. A classe `RelatorioFolha` atua como um **Coordenador/Controlador** que orquestra a geração do relatório.
+Esta arquitetura simplifica a manutenção, pois a alteração na aparência do relatório não exige modificação nas classes que orquestram a geração dos dados.
 
 ---
 
-### 1. Detalhes de Implementação
+### 1. Estrutura de Classes e Responsabilidades
 
-| Recurso | Descrição | Conceito POO |
+Abaixo estão as classes e interfaces principais, com suas responsabilidades e a aplicação dos conceitos de POO:
+
+| Arquivo/Classe | Responsabilidade Principal | Conceitos Chave |
 | :--- | :--- | :--- |
-| **`IFolhaPagamentoDados`** | Interface de contrato de dados. Define quais informações (salário bruto, descontos INSS/IRRF, líquido, etc.) são esperadas para a exibição (RF10). | **Interface**: Garante que o módulo aceite dados de qualquer origem (Mock, `FolhaPagamento` real, etc.). |
-| **`IFormatadorRelatorio`** | Interface de contrato de comportamento. Define o método `formatar(dados)` que deve retornar a `String` final do relatório. | **Interface & Inversão de Dependência**: Usada pela `RelatorioFolha` para manter o acoplamento baixo. |
-| **`RelatorioFolha`** | Classe Coordenadora. Recebe uma implementação de `IFormatadorRelatorio` no construtor. É a única classe que conhece a **regra de negócio** (RF10): gerar o relatório. | **Baixo Acoplamento**: A classe depende apenas da interface `IFormatadorRelatorio` (abstração), não da classe concreta de formatação. |
-| **`FormatadorConsoleRetro`** | Implementação concreta da interface `IFormatadorRelatorio`. | **Requisito Extra**: Responsável por gerar a string de saída com o visual **MS-DOS**, utilizando caracteres de desenho de caixas (`╔`, `╠`, `╚`). |
-| **`NumberFormat`** | Classe utilitária usada dentro do `FormatadorConsoleRetro` para formatar os valores em Reais (R$) com padrões brasileiros. | **RFN - Usabilidade**: Garante que os números sejam exibidos de forma clara e correta. |
+| **`IFolhaPagamentoDados`** | Define o **Contrato** para o acesso aos dados essenciais para o relatório (salário, descontos, etc.). | **Interface**: Garante que o relatório aceita dados de qualquer fonte que implemente esse contrato. |
+| **`IFormatadorRelatorio`** | Define o **Contrato de Comportamento** para a apresentação do relatório através do método `formatar()`. | **Abstração**: Permite a substituição fácil e segura da estratégia de visualização. |
+| **`RelatorioFolha`** | **Coordenador.** Orquestra o processo de geração do relatório. Recebe a implementação de `IFormatadorRelatorio` via construtor. | **Baixo Acoplamento**: Depende apenas de interfaces (Princípio da Inversão de Dependência). |
+| **`FormatadorConsoleRetro`** | **Estratégia Concreta.** É a implementação de `IFormatadorRelatorio`. Sua função é construir a *string* de saída, formatar valores em R$, e aplicar o visual MS-DOS. | **Encapsulamento**: Isola a lógica complexa de apresentação. |
+| **`DemonstracaoRelatorio`** | **Ponto de Execução (`main`).** Instancia o conjunto de dados, o `FormatadorConsoleRetro` e a classe `RelatorioFolha` para demonstrar o funcionamento integrado do módulo. | **Prova Funcional**: Ponto de entrada para a execução. |
+| **`BigDecimal`** | Utilizado em todas as definições de valores monetários no módulo. | **Tipagem Segura**: Garante a precisão financeira, essencial para evitar erros de arredondamento em cálculos. |
 
 ---
 
-### 2. Aplicação Direta dos Conceitos de POO (Sprint 2)
+### 2. Análise dos Conceitos de POO Aplicados
 
-#### 2.1. Interfaces e Baixo Acoplamento (RFN - Manutenibilidade)
+#### 2.1. Polimorfismo e Padrão Strategy
 
-O núcleo da entrega da Sprint 2 é a separação das responsabilidades:
+O design utiliza o **Padrão Strategy** para desacoplar o algoritmo (a formatação) do objeto principal (`RelatorioFolha`).
 
-* **Inversão de Dependência:** A classe **`RelatorioFolha`** (o Coordenador) não precisa saber como formatar o relatório. Ela apenas armazena uma **referência** à interface `IFormatadorRelatorio`.
-* **Flexibilidade:** Caso o grupo decida criar um `FormatadorHTML` ou `FormatadorPDF` no futuro, apenas uma nova classe que implemente `IFormatadorRelatorio` precisa ser criada. A classe `RelatorioFolha` (o seu código) **não precisa ser alterada**, seguindo o Princípio Aberto/Fechado.
+* A classe `RelatorioFolha` referencia o tipo **abstrato** `IFormatadorRelatorio`.
+* Quando o método `gerarRelatorio()` é chamado, ele executa o método `formatar()` do objeto concreto que foi injetado (o `FormatadorConsoleRetro`).
+* Este é um exemplo de **Polimorfismo Dinâmico**, que torna o módulo **aberto para extensão** (novos formatadores, como HTML) e **fechado para modificação** (a lógica central do `RelatorioFolha` permanece intacta).
 
-#### 2.2. Polimorfismo
+#### 2.2. Inversão de Dependência
 
-* **Polimorfismo Comportamental:** O método `gerarRelatorio` chama `formatador.formatar(dados)`.
-* **Polimorfismo Dinâmico:** Embora o tipo declarado seja a interface (`IFormatadorRelatorio`), o objeto armazenado é a implementação concreta (`FormatadorConsoleRetro`). O Java, em tempo de execução, executa o código específico do **`FormatadorConsoleRetro`** (ou seja, o relatório MS-DOS), provando que o Polimorfismo foi aplicado com sucesso.
-
-#### 2.3. Testes Unitários
-
-* **Isolamento do Código:** A classe **`RelatorioFolhaTest`** utiliza o Mocking (simulação) através de uma classe que implementa `IFolhaPagamentoDados`.
-* **Validação da Abstração:** Isso garante que o módulo Relatório foi testado em completo isolamento, provando que sua lógica de coordenação e formatação (RF10) está correta, independentemente do código dos seus colegas (CalculadoraFolha).
-
+* O princípio de **Inversão de Dependência** é aplicado: as classes de alto nível (`RelatorioFolha`) não dependem de classes de baixo nível (`FormatadorConsoleRetro`). Ambas dependem de abstrações (as Interfaces).
+* Isso resulta em um sistema com **Baixo Acoplamento**, facilitando a manutenção e a substituição de componentes.
