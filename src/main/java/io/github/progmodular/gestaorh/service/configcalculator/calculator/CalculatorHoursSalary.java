@@ -1,12 +1,12 @@
 package io.github.progmodular.gestaorh.service.configcalculator.calculator;
 
 import io.github.progmodular.gestaorh.service.configcalculator.CalculatorAbstract;
-import io.github.progmodular.gestaorh.service.configcalculator.CalculatorInterface;
+import io.github.progmodular.gestaorh.service.configcalculator.ICalculatorInterface;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class CalculatorHoursSalary extends CalculatorAbstract implements CalculatorInterface {
+public class CalculatorHoursSalary extends CalculatorAbstract implements ICalculatorInterface {
 
     public CalculatorHoursSalary(BigDecimal salarioBruto, int diasTrabalhadosSemana, int horasDias)
     {

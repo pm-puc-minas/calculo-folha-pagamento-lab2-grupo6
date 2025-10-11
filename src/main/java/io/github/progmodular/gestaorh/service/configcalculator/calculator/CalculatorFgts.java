@@ -5,13 +5,14 @@ import io.github.progmodular.gestaorh.service.configcalculator.ICalculatorInterf
 
 import java.math.BigDecimal;
 
-public class CalculatorDanger extends CalculatorAbstract implements ICalculatorInterface {
+public class CalculatorFgts extends CalculatorAbstract implements ICalculatorInterface {
 
-    public CalculatorDanger(BigDecimal salarioBruto)
+    public CalculatorFgts(BigDecimal salarioBruto)
     {
         this.salarioBruto = salarioBruto;
     }
+
     public BigDecimal calculator() {
-        return salarioBruto.multiply(this.dangerPercentage);
+        return salarioBruto.multiply(this.fgtsPercentage);
     }
 }

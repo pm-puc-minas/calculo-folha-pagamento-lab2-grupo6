@@ -1,13 +1,13 @@
 package io.github.progmodular.gestaorh.service.configcalculator.calculator;
 
 import io.github.progmodular.gestaorh.service.configcalculator.CalculatorAbstract;
-import io.github.progmodular.gestaorh.service.configcalculator.CalculatorInterface;
+import io.github.progmodular.gestaorh.service.configcalculator.ICalculatorInterface;
 
 import java.math.BigDecimal;
 
-public class CalculatorIRFF extends CalculatorAbstract implements CalculatorInterface {
+public class CalculatorIrff extends CalculatorAbstract implements ICalculatorInterface {
 
-    public CalculatorIRFF(BigDecimal salarioBruto,BigDecimal inss,int dependetes)
+    public CalculatorIrff(BigDecimal salarioBruto, BigDecimal inss, int dependetes)
     {
         super();
         this.salarioBruto = salarioBruto;
@@ -31,7 +31,7 @@ public class CalculatorIRFF extends CalculatorAbstract implements CalculatorInte
             deducao = new BigDecimal("142.80");
         } else if (baseCalculo.compareTo(new BigDecimal("3751.05")) <= 0){
             aliquota = new BigDecimal("0.15");
-            deducao = new BigDecimal("1354.80");
+            deducao = new BigDecimal("354.80");
         } else if (baseCalculo.compareTo(new BigDecimal("4664.68")) <= 0) {
             aliquota = new BigDecimal("0.225");
             deducao = new BigDecimal("636.13");
