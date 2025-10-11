@@ -1,13 +1,13 @@
 package io.github.progmodular.gestaorh.service.configcalculator.calculator;
 
 import io.github.progmodular.gestaorh.service.configcalculator.CalculatorAbstract;
-import io.github.progmodular.gestaorh.service.configcalculator.CalculatorInterface;
+import io.github.progmodular.gestaorh.service.configcalculator.ICalculatorInterface;
 
 import java.math.BigDecimal;
 
-public class CalculatorValueTransport extends CalculatorAbstract implements CalculatorInterface {
+public class CalculatorValueTransport extends CalculatorAbstract implements ICalculatorInterface {
 
-    public CalculatorValueTransport(BigDecimal salarioBruto,BigDecimal valeTransporte)
+    public CalculatorValueTransport(BigDecimal salarioBruto, BigDecimal valeTransporte)
     {
         this.salarioBruto = salarioBruto;
         this.valeTransporte = valeTransporte;

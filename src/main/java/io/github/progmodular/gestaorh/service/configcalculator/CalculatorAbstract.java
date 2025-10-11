@@ -21,15 +21,16 @@ public abstract class CalculatorAbstract {
     protected BigDecimal insalubridade;
     protected BigDecimal valeTransporte;
     protected BigDecimal inss;
-    protected BigDecimal fgts;
+    protected final BigDecimal fgtsPercentage = new BigDecimal("0.08");
     protected BigDecimal salarioLiquido;
     protected BigDecimal irrf;
     protected BigDecimal valeDiario;
-    protected int horasMensais;
-    protected int horasDias;
-    protected int diasTrabalhados;
-    protected int diasTrabalhadosSemana;
-    protected int dependentes;
+    protected final BigDecimal dangerPercentage = new BigDecimal("0.3");
+    protected Integer horasMensais;
+    protected Integer horasDias;
+    protected Integer diasTrabalhados;
+    protected Integer diasTrabalhadosSemana;
+    protected Integer dependentes;
     protected GrauInsalubridade grauInsalubridade;
 
 }

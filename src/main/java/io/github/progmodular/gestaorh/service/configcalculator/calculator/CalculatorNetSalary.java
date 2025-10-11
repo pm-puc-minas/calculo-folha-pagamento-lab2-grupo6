@@ -1,13 +1,13 @@
 package io.github.progmodular.gestaorh.service.configcalculator.calculator;
 
 import io.github.progmodular.gestaorh.service.configcalculator.CalculatorAbstract;
-import io.github.progmodular.gestaorh.service.configcalculator.CalculatorInterface;
+import io.github.progmodular.gestaorh.service.configcalculator.ICalculatorInterface;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @NoArgsConstructor
-public class CalculatorNetSalary extends CalculatorAbstract implements CalculatorInterface {
+public class CalculatorNetSalary extends CalculatorAbstract implements ICalculatorInterface {
 
     public CalculatorNetSalary(BigDecimal salarioBruto, BigDecimal inss,
                                BigDecimal irrf, BigDecimal valeTransporte) {
