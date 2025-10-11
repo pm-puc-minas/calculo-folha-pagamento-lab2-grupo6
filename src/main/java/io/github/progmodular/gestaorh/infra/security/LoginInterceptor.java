@@ -13,6 +13,13 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+
+        String uri = request.getRequestURI(); // <-- única linha necessária
+
+        if (uri.startsWith("/dashboard")) {
+            return true;
+        }
+
         if(CookieService.getCookie(request,"usuarioId") != null)
         {
             return true;
