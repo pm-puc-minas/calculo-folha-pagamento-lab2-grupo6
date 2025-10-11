@@ -1,6 +1,6 @@
 ## Documentação de testes implementados
 
-Como referenciado anteriormente na [Sprint 1 (testes)](Sprint_1/testes.md), os testes planejados foram focados na parte mais crítica do sistema, os cálculos salariais, garantindo a precisão e a confiabilidade de todas as parcelas da folha de pagamento.
+Como referenciado anteriormente na [Sprint 1 (testes)](../Sprint_1/testes.md), os testes planejados foram focados na parte mais crítica do sistema, os cálculos salariais, garantindo a precisão e a confiabilidade de todas as parcelas da folha de pagamento.
 
 Os testes foram escritos utilizando o framework JUnit (ou similar) e focam na validação das regras de negócio de cada classe que implementa a ICalculatorInterface.
 
