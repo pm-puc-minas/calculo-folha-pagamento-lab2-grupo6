@@ -69,7 +69,7 @@ class CalculatorTest {
         assertEquals(0, expected.compareTo(resultado),
                 "O cálculo do vale alimentação deve ser dias trabalhados * vale diário");
     }
-
+    // Uso errôneo de assertEquals
     @Test
     @DisplayName("Teste CalculatorHoursSalary - cálculo do salário por hora")
     void testCalculatorHoursSalary() {
