@@ -11,26 +11,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @DiscriminatorValue("employee_user")
+@Getter
+@Setter
 public class Employee extends User {
 
-    @Getter
-    @Setter
     private Double grossSalary;
 
-    @Getter
-    @Setter
     private String cpf;
 
-    @Getter
-    @Setter
     private String position;
 
-    @Getter
-    @Setter
     private Double hoursWorked;
 
-    @Getter
-    @Setter
     private int daysWorked;
 
     @Override

@@ -1,111 +1,111 @@
-<!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Gestão RH</title>
-    <style>
-        .alert {
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid transparent;
-        border-radius: 4px;
-        font-size: 14px;
-    }
+<!--<!DOCTYPE html>-->
+<!--<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Login - Gestão RH</title>-->
+<!--    <style>-->
+<!--        .alert {-->
+<!--        padding: 10px;-->
+<!--        margin-bottom: 15px;-->
+<!--        border: 1px solid transparent;-->
+<!--        border-radius: 4px;-->
+<!--        font-size: 14px;-->
+<!--    }-->
 
-    .alert-danger {
-        color: #a94442;
-        background-color: #f2dede;
-        border-color: #ebccd1;
-        font-weight: bold;
-    }
+<!--    .alert-danger {-->
+<!--        color: #a94442;-->
+<!--        background-color: #f2dede;-->
+<!--        border-color: #ebccd1;-->
+<!--        font-weight: bold;-->
+<!--    }-->
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .login-container {
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 350px;
-        }
-        .login-container h2 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 25px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #34495e;
-        }
-        .form-group input[type="text"],
-        .form-group input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        .btn-login {
-            width: 100%;
-            padding: 12px;
-            background-color: #2980b9;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        .btn-login:hover {
-            background-color: #2c3e50;
-        }
-        .link-forgot {
-            display: block;
-            text-align: right;
-            margin-top: 15px;
-            font-size: 14px;
-            color: #3498db;
-            text-decoration: none;
-        }
-    </style>
-</head>
-<body>
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            background-color: #f4f7f6;-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            height: 100vh;-->
+<!--            margin: 0;-->
+<!--        }-->
+<!--        .login-container {-->
+<!--            background-color: #ffffff;-->
+<!--            padding: 40px;-->
+<!--            border-radius: 10px;-->
+<!--            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);-->
+<!--            width: 350px;-->
+<!--        }-->
+<!--        .login-container h2 {-->
+<!--            text-align: center;-->
+<!--            color: #2c3e50;-->
+<!--            margin-bottom: 25px;-->
+<!--        }-->
+<!--        .form-group {-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+<!--        .form-group label {-->
+<!--            display: block;-->
+<!--            margin-bottom: 8px;-->
+<!--            font-weight: bold;-->
+<!--            color: #34495e;-->
+<!--        }-->
+<!--        .form-group input[type="text"],-->
+<!--        .form-group input[type="password"] {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            border: 1px solid #bdc3c7;-->
+<!--            border-radius: 5px;-->
+<!--            box-sizing: border-box;-->
+<!--        }-->
+<!--        .btn-login {-->
+<!--            width: 100%;-->
+<!--            padding: 12px;-->
+<!--            background-color: #2980b9;-->
+<!--            color: white;-->
+<!--            border: none;-->
+<!--            border-radius: 5px;-->
+<!--            cursor: pointer;-->
+<!--            font-size: 16px;-->
+<!--            transition: background-color 0.3s;-->
+<!--        }-->
+<!--        .btn-login:hover {-->
+<!--            background-color: #2c3e50;-->
+<!--        }-->
+<!--        .link-forgot {-->
+<!--            display: block;-->
+<!--            text-align: right;-->
+<!--            margin-top: 15px;-->
+<!--            font-size: 14px;-->
+<!--            color: #3498db;-->
+<!--            text-decoration: none;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
 
-<div class="login-container">
-    <h2>Portal do Colaborador RH</h2>
+<!--<div class="login-container">-->
+<!--    <h2>Portal do Colaborador RH</h2>-->
 
-    <form method="POST">
+<!--    <form method="POST">-->
 
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="text" id="email" name="email" required>
-        </div>
+<!--        <div class="form-group">-->
+<!--            <label for="email">Email:</label>-->
+<!--            <input type="text" id="email" name="email" required>-->
+<!--        </div>-->
 
-        <div class="form-group">
-            <label for="password">Senha:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
+<!--        <div class="form-group">-->
+<!--            <label for="password">Senha:</label>-->
+<!--            <input type="password" id="password" name="password" required>-->
+<!--        </div>-->
 
-        <button type="submit" class="btn-login">Entrar</button>
+<!--        <button type="submit" class="btn-login">Entrar</button>-->
 
-        <div th:if="${error != null}" class="alert alert-danger" role="alert" th:text="${error}"></div>
-        <a href="#" class="link-forgot">Esqueci minha senha</a>
+<!--        <div th:if="${error != null}" class="alert alert-danger" role="alert" th:text="${error}"></div>-->
+<!--        <a href="#" class="link-forgot">Esqueci minha senha</a>-->
 
-    </form>
-</div>
+<!--    </form>-->
+<!--</div>-->
 
-</body>
-</html>
+<!--</body>-->
+<!--</html>-->
