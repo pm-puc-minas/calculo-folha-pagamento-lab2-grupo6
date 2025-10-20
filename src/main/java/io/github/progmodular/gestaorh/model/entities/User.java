@@ -12,25 +12,21 @@ import lombok.Setter;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "USER_TYPE", discriminatorType = DiscriminatorType.STRING)
+@Getter
+@Setter
+@Table(name = "users")
 public abstract class User {
 
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter
-    @Setter
     @NotEmpty
     private String name;
 
-    @Getter
-    @Setter
     @NotEmpty
     private String email;
 
-    @Getter
-    @Setter
     @NotEmpty
     private String password;
 
