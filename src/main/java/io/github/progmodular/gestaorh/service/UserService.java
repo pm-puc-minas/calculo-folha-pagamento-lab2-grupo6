@@ -26,6 +26,11 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public void deleteById(Long id)
+    {
+        userRepository.deleteById(id);
+    }
+
     public User checkUser(UserDTO userdto,UserType currentlyUserType) {
         User user = null;
         if(currentlyUserType == UserType.EMPLOYEE)

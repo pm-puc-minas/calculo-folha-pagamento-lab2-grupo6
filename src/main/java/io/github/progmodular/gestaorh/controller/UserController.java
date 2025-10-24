@@ -2,7 +2,6 @@ package io.github.progmodular.gestaorh.controller;
 
 import io.github.progmodular.gestaorh.controller.dto.UserDTO;
 import io.github.progmodular.gestaorh.controller.dto.UserDTOResponse;
-import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.entities.PayrollAdmin;
 import io.github.progmodular.gestaorh.model.entities.User;
@@ -78,5 +77,18 @@ public class UserController {
                 .toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<UserDTOResponse> delete(@PathVariable("id") Long id)
+    {
+        Optional<User> optionalUser = userService.getById(id);
+
+        if(optionalUser.isEmpty())
+        {
+            return ResponseEntity.notFound().build();
+        }
+        userService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
