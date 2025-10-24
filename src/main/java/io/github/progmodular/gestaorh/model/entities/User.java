@@ -5,6 +5,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Entity
@@ -12,6 +17,7 @@ import lombok.Setter;
 @DiscriminatorColumn(name = "USER_TYPE", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
 public abstract class User {
 
@@ -35,6 +41,14 @@ public abstract class User {
 
     @Column(name="is_admin",nullable = false,columnDefinition = "boolean default false")
     private Boolean isAdmin;
+
+    @CreatedDate
+    @Column(name="creation_date_time",nullable = false)
+    private LocalDateTime creationDateTime;
+
+    @LastModifiedDate
+    @Column(name="last_date_time",nullable = false)
+    private LocalDateTime lastUpdateDateTime;
 
     @PrePersist
     public void setDefaultValues() {
