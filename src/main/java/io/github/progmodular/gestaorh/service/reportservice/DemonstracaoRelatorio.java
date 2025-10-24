@@ -1,6 +1,6 @@
-package io.github.progmodular.gestaorh.service.report;
+package io.github.progmodular.gestaorh.service.reportservice;
 
-import io.github.progmodular.gestaorh.service.payment.dados.IFolhaPagamentoDados;
+import io.github.progmodular.gestaorh.service.paymentservice.dados.IFolhaPagamentoDados;
 
 import java.math.BigDecimal;
 

@@ -1,4 +1,4 @@
-package io.github.progmodular.gestaorh.service.configcalculator;
+package io.github.progmodular.gestaorh.service.calculatorservice;
 
 import java.math.BigDecimal;
 

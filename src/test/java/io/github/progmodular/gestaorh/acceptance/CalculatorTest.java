@@ -1,15 +1,15 @@
 package io.github.progmodular.gestaorh.acceptance;
 
-import io.github.progmodular.gestaorh.service.configcalculator.GrauInsalubridade;
-import io.github.progmodular.gestaorh.service.configcalculator.calculator.CalculatorDanger;
-import io.github.progmodular.gestaorh.service.configcalculator.calculator.CalculatorFgts;
-import io.github.progmodular.gestaorh.service.configcalculator.calculator.CalculatorFoodValue;
-import io.github.progmodular.gestaorh.service.configcalculator.calculator.CalculatorHoursSalary;
-import io.github.progmodular.gestaorh.service.configcalculator.calculator.CalculatorInss;
-import io.github.progmodular.gestaorh.service.configcalculator.calculator.CalculatorIrff;
-import io.github.progmodular.gestaorh.service.configcalculator.calculator.CalculatorNetSalary;
-import io.github.progmodular.gestaorh.service.configcalculator.calculator.CalculatorUnhealthiness;
-import io.github.progmodular.gestaorh.service.configcalculator.calculator.CalculatorValueTransport;
+import io.github.progmodular.gestaorh.service.calculatorservice.GrauInsalubridade;
+import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorDanger;
+import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorFgts;
+import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorFoodValue;
+import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorHoursSalary;
+import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorInss;
+import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorIrff;
+import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorNetSalary;
+import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorUnhealthiness;
+import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorValueTransport;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;

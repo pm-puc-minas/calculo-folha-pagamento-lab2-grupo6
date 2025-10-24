@@ -1,8 +1,8 @@
-package io.github.progmodular.gestaorh.service.configcalculator.calculator;
+package io.github.progmodular.gestaorh.service.calculatorservice.calculator;
 
-import io.github.progmodular.gestaorh.service.configcalculator.CalculatorAbstract;
-import io.github.progmodular.gestaorh.service.configcalculator.ICalculatorInterface;
-import io.github.progmodular.gestaorh.service.configcalculator.GrauInsalubridade;
+import io.github.progmodular.gestaorh.service.calculatorservice.CalculatorAbstract;
+import io.github.progmodular.gestaorh.service.calculatorservice.ICalculatorInterface;
+import io.github.progmodular.gestaorh.service.calculatorservice.GrauInsalubridade;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
