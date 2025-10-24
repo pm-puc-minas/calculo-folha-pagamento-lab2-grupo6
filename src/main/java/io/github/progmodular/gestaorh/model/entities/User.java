@@ -57,6 +57,7 @@ public abstract class User {
         }
     }
 
+    @Enumerated(EnumType.STRING)
     @Column(name="USER_TYPE", length = 100, nullable = false,insertable = false, updatable = false)
     private UserType userType;
 
