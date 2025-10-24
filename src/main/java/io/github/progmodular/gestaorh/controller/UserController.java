@@ -91,4 +91,39 @@ public class UserController {
         userService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Void> update(@PathVariable("id") Long id,@RequestBody UserDTO dto)
+    {
+        Optional<User> userOptional = userService.getById(id);
+
+        if(userOptional.isEmpty())
+        {
+            return ResponseEntity.notFound().build();
+        }
+
+        User user = userOptional.get();
+
+        if(user instanceof Employee employee)
+        {
+            employee.setName(dto.name());
+            employee.setEmail(dto.email());
+            employee.setPassword(dto.password());
+            employee.setGrossSalary(dto.grossSalary());
+            employee.setCpf(dto.cpf());
+            employee.setPosition(dto.position());
+            employee.setHoursWorked(dto.hoursWorked());
+            employee.setDaysWorked(dto.daysWorked());
+        }
+
+        if(user instanceof PayrollAdmin payrollAdmin)
+        {
+            payrollAdmin.setName(dto.name());
+            payrollAdmin.setEmail(dto.email());
+            payrollAdmin.setPassword(dto.password());
+        }
+
+        userService.updateById(user);
+        return ResponseEntity.noContent().build();
+    }
 }

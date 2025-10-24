@@ -1,7 +1,6 @@
 package io.github.progmodular.gestaorh.service;
 
 import io.github.progmodular.gestaorh.controller.dto.UserDTO;
-import io.github.progmodular.gestaorh.controller.dto.UserDTOResponse;
 import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.User;
 import io.github.progmodular.gestaorh.repository.IUserRepository;
@@ -29,6 +28,15 @@ public class UserService {
     public void deleteById(Long id)
     {
         userRepository.deleteById(id);
+    }
+
+    public void updateById(User user)
+    {
+        if(user.getId() == null)
+        {
+             throw new IllegalArgumentException("Usuario nao existe, não pode ser atualizado");
+        }
+        userRepository.save(user);
     }
 
     public User checkUser(UserDTO userdto,UserType currentlyUserType) {
