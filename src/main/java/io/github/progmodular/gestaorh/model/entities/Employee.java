@@ -1,32 +1,39 @@
 package io.github.progmodular.gestaorh.model.entities;
 
+import io.github.progmodular.gestaorh.model.Enum.UserType;
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
+import java.math.BigDecimal;
+
 @Entity
-@DiscriminatorValue("employee_user")
 @Getter
 @Setter
+@DiscriminatorValue("EMPLOYEE")
+
 public class Employee extends User {
 
-    private Double grossSalary;
+    public Employee() {
+        super();
+        this.setUserType(UserType.EMPLOYEE);
+    }
 
+    @Column(name="grossSalary")
+    private BigDecimal grossSalary;
+
+    @Column(name="cpf")
     private String cpf;
 
+    @Column(name="position")
     private String position;
 
-    private Double hoursWorked;
+    @Column(name="hoursWorked")
+    private Integer hoursWorked;
 
-    private int daysWorked;
+    @Column(name="daysWorked")
+    private Integer daysWorked;
 
-    @Override
-    public String getUserType() {
-        return "EMPLOYEE";
-    }
 }

@@ -1,13 +1,11 @@
 package io.github.progmodular.gestaorh.model.entities;
 
+import io.github.progmodular.gestaorh.model.Enum.UserType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -17,18 +15,35 @@ import lombok.Setter;
 @Table(name = "users")
 public abstract class User {
 
+    public User() {
+        this.isAdmin = false;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id",nullable = false)
     private Long id;
 
-    @NotEmpty
+    @Column(name="name",length = 100,nullable = false)
     private String name;
 
-    @NotEmpty
+    @Column(name="email",length = 100,nullable = false)
     private String email;
 
-    @NotEmpty
+    @Column(name="password",length = 100,nullable = false)
     private String password;
 
-    public abstract String getUserType();
+    @Column(name="is_admin",nullable = false,columnDefinition = "boolean default false")
+    private Boolean isAdmin;
+
+    @PrePersist
+    public void setDefaultValues() {
+        if (this.isAdmin == null) {
+            this.isAdmin = false;
+        }
+    }
+
+    @Column(name="USER_TYPE", length = 100, nullable = false,insertable = false, updatable = false)
+    private UserType userType;
+
 }

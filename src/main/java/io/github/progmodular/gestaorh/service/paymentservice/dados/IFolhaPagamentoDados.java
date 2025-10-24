@@ -1,4 +1,4 @@
-package io.github.progmodular.gestaorh.service.payment.dados;
+package io.github.progmodular.gestaorh.service.paymentservice.dados;
 
 import java.math.BigDecimal;
 

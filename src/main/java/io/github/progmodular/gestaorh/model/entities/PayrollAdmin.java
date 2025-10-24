@@ -1,26 +1,20 @@
 package io.github.progmodular.gestaorh.model.entities;
 
+import io.github.progmodular.gestaorh.model.Enum.UserType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@DiscriminatorValue("payroll_user")
+@Getter
+@Setter
+@DiscriminatorValue("PAYROLL_ADMIN")
+
 public class PayrollAdmin extends User
 {
-    @Getter
-    @Setter
-    @NotNull
-    private Boolean isAdmin = true;
-
-    @Override
-    public String getUserType() {
-        return "PAYROLL";
+    public PayrollAdmin() {
+        super();
+        this.setUserType(UserType.PAYROLL_ADMIN);
     }
+
 }
