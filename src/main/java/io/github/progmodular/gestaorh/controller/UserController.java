@@ -25,8 +25,6 @@ public class UserController {
     public ResponseEntity<UserDTOResponse> get(@PathVariable("id") Long id)
     {
         Optional<User> optionalUser = userService.getById(id);
-        if(optionalUser.isPresent())
-        {
             User user = optionalUser.get();
 
             if(user instanceof PayrollAdmin payrollAdmin)
@@ -54,40 +52,27 @@ public class UserController {
                         employee.getIsAdmin());
                 return ResponseEntity.ok(dto);
             }
-        }
         return ResponseEntity.notFound().build();
     }
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody UserDTO userdto)
+    public ResponseEntity<Object> create(@RequestBody UserDTO userdto)
     {
+            User user = userService.checkUser(userdto,userdto.getUserType());
 
-        User user = userService.checkUser(userdto,userdto.getUserType());
 
-        if(user == null)
-        {
-            throw new IllegalArgumentException("Tipo de usuário inválido ou não mapeado para instanciação.");
-        }
+            userService.saveUser(user);
 
-        userService.saveUser(user);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(user.getId())
-                .toUri();
-
-        return ResponseEntity.created(location).build();
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(user.getId())
+                    .toUri();
+            return ResponseEntity.created(location).build();
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<UserDTOResponse> delete(@PathVariable("id") Long id)
     {
-        Optional<User> optionalUser = userService.getById(id);
-
-        if(optionalUser.isEmpty())
-        {
-            return ResponseEntity.notFound().build();
-        }
         userService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -96,11 +81,6 @@ public class UserController {
     public ResponseEntity<Void> update(@PathVariable("id") Long id,@RequestBody UserDTO dto)
     {
         Optional<User> userOptional = userService.getById(id);
-
-        if(userOptional.isEmpty())
-        {
-            return ResponseEntity.notFound().build();
-        }
 
         User user = userOptional.get();
 
@@ -123,7 +103,7 @@ public class UserController {
             payrollAdmin.setPassword(dto.password());
         }
 
-        userService.updateById(user);
+        userService.updateById(user,id);
         return ResponseEntity.noContent().build();
     }
 }
