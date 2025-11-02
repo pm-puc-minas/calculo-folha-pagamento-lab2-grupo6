@@ -4,6 +4,7 @@ import io.github.progmodular.gestaorh.controller.dto.UserDTO;
 import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.User;
 import io.github.progmodular.gestaorh.repository.IUserRepository;
+import io.github.progmodular.gestaorh.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,27 +16,30 @@ public class UserService {
     @Autowired
     IUserRepository userRepository;
 
-    public User saveUser(User user)
+    @Autowired
+    UserValidator userValidator;
+
+    public void saveUser(User user)
     {
-        return userRepository.save(user);
+        userValidator.validateOnCreation(user);
+        userRepository.save(user);
     }
 
     public Optional<User> getById(Long id)
     {
+        userValidator.isUserExistById(id);
         return userRepository.findById(id);
     }
 
     public void deleteById(Long id)
     {
+        userValidator.isUserExistById(id);
         userRepository.deleteById(id);
     }
 
-    public void updateById(User user)
+    public void updateById(User user,Long id)
     {
-        if(user.getId() == null)
-        {
-             throw new IllegalArgumentException("Usuario nao existe, não pode ser atualizado");
-        }
+        userValidator.isUserExistById(id);
         userRepository.save(user);
     }
 
