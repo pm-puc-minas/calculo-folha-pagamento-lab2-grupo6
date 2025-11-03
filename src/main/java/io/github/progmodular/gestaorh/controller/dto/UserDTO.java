@@ -3,19 +3,32 @@ package io.github.progmodular.gestaorh.controller.dto;
 import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.entities.PayrollAdmin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record UserDTO(String name,
-                      String email,
-                      String password,
-                      UserType userType,
-                      BigDecimal grossSalary,
-                      String cpf,
-                      String position,
-                      Integer hoursWorked,
-                      Integer daysWorked,
-                      Boolean isAdmin
+public record UserDTO(
+        String name,
+
+        String email,
+
+        String password,
+
+        UserType userType,
+
+        BigDecimal grossSalary,
+
+        String cpf,
+
+        String position,
+
+        Integer hoursWorked,
+
+        Integer daysWorked,
+
+        @NotNull(message = "IsAdmin can not be null or blank")
+        Boolean isAdmin
                       )
 {
     public UserType getUserType()
