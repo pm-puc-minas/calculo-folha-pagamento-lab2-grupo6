@@ -1,10 +1,12 @@
 package io.github.progmodular.gestaorh.service;
 
 import io.github.progmodular.gestaorh.controller.dto.UserDTO;
+import io.github.progmodular.gestaorh.controller.exceptions.ValidationListException;
 import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.User;
 import io.github.progmodular.gestaorh.repository.IUserRepository;
 import io.github.progmodular.gestaorh.validator.UserValidator;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,13 +45,14 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User checkUser(UserDTO userdto,UserType currentlyUserType) {
+    public User checkUser(UserDTO userdto) {
+        userValidator.nullValidation(userdto);
         User user = null;
-        if(currentlyUserType == UserType.EMPLOYEE)
+        if(userdto.userType() == UserType.EMPLOYEE)
         {
             return  userdto.setEmployee();
         }
-        else if(currentlyUserType == UserType.PAYROLL_ADMIN)
+        else if(userdto.userType() == UserType.PAYROLL_ADMIN)
         {
             return userdto.setPayroll();
         }

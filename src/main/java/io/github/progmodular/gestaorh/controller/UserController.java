@@ -6,8 +6,11 @@ import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.entities.PayrollAdmin;
 import io.github.progmodular.gestaorh.model.entities.User;
 import io.github.progmodular.gestaorh.service.UserService;
+import io.github.progmodular.gestaorh.validator.UserValidator;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -54,10 +57,12 @@ public class UserController {
             }
         return ResponseEntity.notFound().build();
     }
+
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody UserDTO userdto)
+    public ResponseEntity<Object> create(@RequestBody UserDTO userdto, BindingResult bindingResult)
     {
-            User user = userService.checkUser(userdto,userdto.getUserType());
+
+            User user = userService.checkUser(userdto);
 
 
             userService.saveUser(user);

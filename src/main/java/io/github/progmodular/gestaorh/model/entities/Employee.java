@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @DiscriminatorValue("EMPLOYEE")
-
 public class Employee extends User {
 
     public Employee() {
