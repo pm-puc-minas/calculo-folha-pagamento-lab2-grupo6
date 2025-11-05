@@ -1,23 +1,24 @@
 package io.github.progmodular.gestaorh.service.calculatorservice.calculator;
 
+import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.service.calculatorservice.CalculatorAbstract;
 import io.github.progmodular.gestaorh.service.calculatorservice.ICalculatorInterface;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
 public class CalculatorIrff extends CalculatorAbstract implements ICalculatorInterface {
 
-    public CalculatorIrff(BigDecimal salarioBruto, BigDecimal inss, int dependetes)
+    public CalculatorIrff(Employee employee)
     {
         super();
-        this.salarioBruto = salarioBruto;
-        this.inss = inss;
-        this.dependentes = dependetes;
+        this.employee = employee;
     }
 
     public BigDecimal calculator() {
-        BigDecimal salarioBase = salarioBruto.subtract(inss);
-        double deducaoDependentes = dependentes * 189.59;
+
+        BigDecimal salarioBase = this.employee.getGrossSalary().subtract(new CalculatorInss(employee).calculator() );
+        double deducaoDependentes = this.employee.getDependents() * 189.59;
         BigDecimal baseCalculo = salarioBase.subtract(new BigDecimal(String.valueOf(deducaoDependentes)));
         BigDecimal irrf;
         BigDecimal aliquota ;
@@ -47,6 +48,11 @@ public class CalculatorIrff extends CalculatorAbstract implements ICalculatorInt
         }
 
         this.irrf = irrf;
-        return irrf;
+        return this.irrf;
+    }
+
+    @Override
+    public String getCalculationType() {
+        return "IRRF";
     }
 }

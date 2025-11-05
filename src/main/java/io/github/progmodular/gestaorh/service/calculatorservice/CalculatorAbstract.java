@@ -1,36 +1,37 @@
 package io.github.progmodular.gestaorh.service.calculatorservice;
 
+import io.github.progmodular.gestaorh.model.entities.Employee;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
 @Setter
 @Getter
+@Component
 public abstract class CalculatorAbstract {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    protected BigDecimal salarioBruto;
-    protected BigDecimal salarioHora;
-    protected BigDecimal insalubridade;
-    protected BigDecimal valeTransporte;
+    protected Employee employee;
+    protected BigDecimal hourSalary;
+    protected BigDecimal vtDiscountValue;
     protected BigDecimal inss;
     protected final BigDecimal fgtsPercentage = new BigDecimal("0.08");
-    protected BigDecimal salarioLiquido;
+    protected BigDecimal netSalary;
     protected BigDecimal irrf;
-    protected BigDecimal valeDiario;
-    protected final BigDecimal dangerPercentage = new BigDecimal("0.3");
-    protected Integer horasMensais;
-    protected Integer horasDias;
-    protected Integer diasTrabalhados;
-    protected Integer diasTrabalhadosSemana;
-    protected Integer dependentes;
-    protected GrauInsalubridade grauInsalubridade;
-
+    protected BigDecimal valeDaily;
+    protected final BigDecimal dangerPercentage = new BigDecimal("0.30");
+    protected Integer hoursMonth;
+    protected Integer hoursDay;
+    protected Integer daysWorked;
+    protected Integer daysWorkedPerWeek;
+    protected BigDecimal unhealthyConditions;
+    protected DegreeUnhealthiness degreeOfUnhealthiness;
 }

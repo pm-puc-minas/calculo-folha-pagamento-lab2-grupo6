@@ -50,7 +50,7 @@ public class UserController {
                         employee.getGrossSalary(),
                         employee.getCpf(),
                         employee.getPosition(),
-                        employee.getHoursWorked(),
+                        employee.getHoursWorkedMonth(),
                         employee.getDaysWorked(),
                         employee.getIsAdmin());
                 return ResponseEntity.ok(dto);
@@ -97,7 +97,7 @@ public class UserController {
             employee.setGrossSalary(dto.grossSalary());
             employee.setCpf(dto.cpf());
             employee.setPosition(dto.position());
-            employee.setHoursWorked(dto.hoursWorked());
+            employee.setHoursWorkedMonth(dto.hoursWorkedMonth());
             employee.setDaysWorked(dto.daysWorked());
         }
 

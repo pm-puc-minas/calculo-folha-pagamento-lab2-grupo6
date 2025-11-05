@@ -85,7 +85,7 @@ public class UserValidator
                 errors.add(new ErrorField("position", "Position is a mandatory field."));
             }
 
-            if (employee.getHoursWorked() == null)
+            if (employee.getHoursWorkedMonth() == null)
             {
                 errors.add(new ErrorField("hoursWorked", "hoursWorked is a mandatory field."));
             }
@@ -149,7 +149,7 @@ public class UserValidator
                 errors.add(new ErrorField("position", "Position is a mandatory field."));
             }
 
-            if (user.hoursWorked() == null)
+            if (user.hoursWorkedMonth() == null)
             {
                 errors.add(new ErrorField("hoursWorked", "hoursWorked is a mandatory field."));
             }

@@ -62,7 +62,15 @@ public class GlobalExceptionHandler extends RuntimeException {
     public ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex)
     {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        var response = ErrorResponse.standardResponse(ex.getMessage());
+        String customMessage = ex.getMessage();
+
+        if (ex.getMessage().contains("io.github.progmodular.gestaorh.model.Enum.UserType")) {
+            customMessage = ex.getMessage().replace(
+                    "io.github.progmodular.gestaorh.model.Enum.UserType",
+                    "UserType"
+            );
+        }
+        var response = ErrorResponse.standardResponse(customMessage);
         return new ResponseEntity<>(response,status);
     }
 }
