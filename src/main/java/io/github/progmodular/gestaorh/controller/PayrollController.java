@@ -2,18 +2,45 @@ package io.github.progmodular.gestaorh.controller;
 import io.github.progmodular.gestaorh.controller.dto.PayrollRequest;
 import io.github.progmodular.gestaorh.model.entities.PayrollResult;
 import io.github.progmodular.gestaorh.service.PayrollOrchestrationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/payroll")
 @CrossOrigin(origins = "*")
 public class PayrollController {
 
-    private final PayrollOrchestrationService payrollService;
+    @Autowired
+    private PayrollOrchestrationService payrollService;
 
-    public PayrollController(PayrollOrchestrationService payrollService) {
-        this.payrollService = payrollService;
+//    private final PayrollOrchestrationService payrollService;
+//
+//    public PayrollController(PayrollOrchestrationService payrollService) {
+//        this.payrollService = payrollService;
+//    }
+
+    @GetMapping("/employee/{employeeId}/history")
+    public ResponseEntity<List<PayrollResult>> getPayrollHistory(
+            @PathVariable Long employeeId,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month) {
+
+        try {
+            List<PayrollResult> history;
+
+            if (year != null && month != null) {
+                history = payrollService.getPayrollByMonthAndYear(employeeId, month, year);
+            } else {
+                history = payrollService.getPayrollHistory(employeeId);
+            }
+
+            return ResponseEntity.ok(history);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("/calculate")
@@ -27,26 +54,6 @@ public class PayrollController {
         }
     }
 
-//    @GetMapping("/employee/{employeeId}/history")
-//    public ResponseEntity<List<PayrollResult>> getPayrollHistory(
-//            @PathVariable Long employeeId,
-//            @RequestParam(required = false) Integer year,
-//            @RequestParam(required = false) Integer month) {
-//
-//        try {
-//            List<PayrollResult> history;
-//
-//            if (year != null && month != null) {
-//                history = payrollService.getPayrollByMonthAndYear(employeeId, month, year);
-//            } else {
-//                history = payrollService.getPayrollHistory(employeeId);
-//            }
-//
-//            return ResponseEntity.ok(history);
-//        } catch (Exception e) {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
 
 //    @PutMapping("/recalculate/{payrollId}")
 //    public ResponseEntity<PayrollResult> recalculatePayroll(@PathVariable Long payrollId) {

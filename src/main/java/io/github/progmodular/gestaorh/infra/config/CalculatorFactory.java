@@ -19,7 +19,7 @@ public class CalculatorFactory {
                 new CalculatorInss(employee),
                 new CalculatorIrff(employee),
                 new CalculatorNetSalary(employee),
-//                new CalculatorUnhealthiness(employee),
+                new CalculatorUnhealthiness(employee),
                 new CalculatorDiscountValueTransport(employee)
         );
     }
@@ -33,7 +33,7 @@ public class CalculatorFactory {
             case "INSS" -> new CalculatorInss(employee);
             case "IRRF" -> new CalculatorIrff(employee);
             case "NET_SALARY" -> new CalculatorNetSalary(employee);
-//            case "UNHEALTHY" -> new CalculatorUnhealthiness(employee);
+            case "UNHEALTHY" -> new CalculatorUnhealthiness(employee);
             case "VALUE_TRANSPORT" -> new CalculatorDiscountValueTransport(employee);
             default -> throw new IllegalStateException("Unexpected value: " + type);
 
