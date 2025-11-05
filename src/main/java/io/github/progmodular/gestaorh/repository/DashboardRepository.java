@@ -20,7 +20,7 @@ public class DashboardRepository {
         e1.setGrossSalary(new BigDecimal("4200.00"));
         e1.setCpf("123.456.789-00");
         e1.setPosition("Analista de RH");
-        e1.setHoursWorked(160);
+        e1.setHoursWorkedMonth(160);
         e1.setDaysWorked(22);
 
         Employee e2 = new Employee();
@@ -29,7 +29,7 @@ public class DashboardRepository {
         e2.setGrossSalary(new BigDecimal("3800.00"));
         e2.setCpf("987.654.321-00");
         e2.setPosition("Assistente Administrativo");
-        e2.setHoursWorked(168);
+        e2.setHoursWorkedMonth(168);
         e2.setDaysWorked(21);
 
         Employee e3 = new Employee();
@@ -38,7 +38,7 @@ public class DashboardRepository {
         e3.setGrossSalary(new BigDecimal("5200.00"));
         e3.setCpf("456.789.123-00");
         e3.setPosition("Coordenadora de DP");
-        e3.setHoursWorked(172);
+        e3.setHoursWorkedMonth(172);
         e3.setDaysWorked(22);
 
         employees.add(e1);

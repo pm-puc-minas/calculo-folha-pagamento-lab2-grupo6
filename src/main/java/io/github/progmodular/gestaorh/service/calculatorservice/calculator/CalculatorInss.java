@@ -1,7 +1,9 @@
 package io.github.progmodular.gestaorh.service.calculatorservice.calculator;
 
+import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.service.calculatorservice.CalculatorAbstract;
 import io.github.progmodular.gestaorh.service.calculatorservice.ICalculatorInterface;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,34 +20,36 @@ public class CalculatorInss extends CalculatorAbstract implements ICalculatorInt
     private static final BigDecimal ALIQUOTA_12 = new BigDecimal("0.12");
     private static final BigDecimal ALIQUOTA_14 = new BigDecimal("0.14");
 
-    public CalculatorInss(BigDecimal salarioBruto) {
-        this.salarioBruto = salarioBruto;
+    public CalculatorInss(Employee employee)
+    {
+        this.employee = employee;
     }
 
+    @Override
     public BigDecimal calculator() {
         BigDecimal inss;
 
-        if (salarioBruto.compareTo(LIMITE_FAIXA1) <= 0) {
-            inss = salarioBruto.multiply(ALIQUOTA_7_5);
+        if (this.employee.getGrossSalary().compareTo(LIMITE_FAIXA1) <= 0) {
+            inss = this.employee.getGrossSalary().multiply(ALIQUOTA_7_5);
 
-        } else if (salarioBruto.compareTo(LIMITE_FAIXA2) <= 0) {
+        } else if (this.employee.getGrossSalary().compareTo(LIMITE_FAIXA2) <= 0) {
             BigDecimal valorFaixa1 = LIMITE_FAIXA1.multiply(ALIQUOTA_7_5);
-            BigDecimal diferencaFaixa2 = salarioBruto.subtract(LIMITE_FAIXA1);
+            BigDecimal diferencaFaixa2 = this.employee.getGrossSalary().subtract(LIMITE_FAIXA1);
             BigDecimal valorFaixa2 = diferencaFaixa2.multiply(ALIQUOTA_9);
             inss = valorFaixa1.add(valorFaixa2);
 
-        } else if (salarioBruto.compareTo(LIMITE_FAIXA3) <= 0) {
+        } else if (this.employee.getGrossSalary().compareTo(LIMITE_FAIXA3) <= 0) {
             BigDecimal valorFaixa1 = LIMITE_FAIXA1.multiply(ALIQUOTA_7_5);
             BigDecimal valorFaixa2 = LIMITE_FAIXA2.subtract(LIMITE_FAIXA1).multiply(ALIQUOTA_9);
-            BigDecimal diferencaFaixa3 = salarioBruto.subtract(LIMITE_FAIXA2);
+            BigDecimal diferencaFaixa3 = this.employee.getGrossSalary().subtract(LIMITE_FAIXA2);
             BigDecimal valorFaixa3 = diferencaFaixa3.multiply(ALIQUOTA_12);
             inss = valorFaixa1.add(valorFaixa2).add(valorFaixa3);
 
-        } else if (salarioBruto.compareTo(LIMITE_FAIXA4) <= 0) {
+        } else if (this.employee.getGrossSalary().compareTo(LIMITE_FAIXA4) <= 0) {
             BigDecimal valorFaixa1 = LIMITE_FAIXA1.multiply(ALIQUOTA_7_5);
             BigDecimal valorFaixa2 = LIMITE_FAIXA2.subtract(LIMITE_FAIXA1).multiply(ALIQUOTA_9);
             BigDecimal valorFaixa3 = LIMITE_FAIXA3.subtract(LIMITE_FAIXA2).multiply(ALIQUOTA_12);
-            BigDecimal diferencaFaixa4 = salarioBruto.subtract(LIMITE_FAIXA3);
+            BigDecimal diferencaFaixa4 = this.employee.getGrossSalary().subtract(LIMITE_FAIXA3);
             BigDecimal valorFaixa4 = diferencaFaixa4.multiply(ALIQUOTA_14);
             inss = valorFaixa1.add(valorFaixa2).add(valorFaixa3).add(valorFaixa4);
 
@@ -57,6 +61,12 @@ public class CalculatorInss extends CalculatorAbstract implements ICalculatorInt
             inss = valorFaixa1.add(valorFaixa2).add(valorFaixa3).add(valorFaixa4);
         }
 
-        return inss.setScale(2, RoundingMode.HALF_UP);
+        this.inss = inss;
+        return this.inss.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public String getCalculationType() {
+        return "INSS";
     }
 }

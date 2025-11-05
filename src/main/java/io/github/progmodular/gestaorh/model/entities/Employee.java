@@ -29,10 +29,16 @@ public class Employee extends User {
     @Column(name="position")
     private String position;
 
-    @Column(name="hoursWorked")
-    private Integer hoursWorked;
+    @Column(name="dependents")
+    private int dependents;
+
+    @Column(name="hoursWorkedMonth")
+    private Integer hoursWorkedMonth;
 
     @Column(name="daysWorked")
     private Integer daysWorked;
+
+    @Column(name="actualVTCost")
+    private BigDecimal actualVTCost;
 
 }

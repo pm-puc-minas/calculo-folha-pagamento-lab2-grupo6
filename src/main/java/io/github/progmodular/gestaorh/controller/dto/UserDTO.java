@@ -23,18 +23,18 @@ public record UserDTO(
 
         String position,
 
-        Integer hoursWorked,
+        int dependents,
+
+        Integer hoursWorkedMonth,
 
         Integer daysWorked,
+
+        BigDecimal actualVTCost,
 
         @NotNull(message = "IsAdmin can not be null or blank")
         Boolean isAdmin
                       )
 {
-    public UserType getUserType()
-    {
-        return this.userType;
-    }
     public Employee setEmployee()
     {
         Employee employee = new Employee();
@@ -47,8 +47,10 @@ public record UserDTO(
         employee.setGrossSalary(this.grossSalary);
         employee.setCpf(this.cpf);
         employee.setPosition(this.position);
-        employee.setHoursWorked(this.hoursWorked);
+        employee.setDependents(this.dependents);
+        employee.setHoursWorkedMonth(this.hoursWorkedMonth);
         employee.setDaysWorked(this.daysWorked);
+        employee.setActualVTCost(this.actualVTCost);
 
         return employee;
     }

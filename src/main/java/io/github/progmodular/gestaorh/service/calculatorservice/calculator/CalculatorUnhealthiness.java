@@ -1,24 +1,31 @@
 package io.github.progmodular.gestaorh.service.calculatorservice.calculator;
 
+import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.service.calculatorservice.CalculatorAbstract;
 import io.github.progmodular.gestaorh.service.calculatorservice.ICalculatorInterface;
-import io.github.progmodular.gestaorh.service.calculatorservice.GrauInsalubridade;
+import io.github.progmodular.gestaorh.service.calculatorservice.DegreeUnhealthiness;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class CalculatorUnhealthiness extends CalculatorAbstract implements ICalculatorInterface {
 
-    public CalculatorUnhealthiness(GrauInsalubridade grauInsalubridade, BigDecimal salarioBruto)
+    public CalculatorUnhealthiness(Employee employee/*, DegreeUnhealthiness degreeOfUnhealthiness*/)
     {
-        this.grauInsalubridade = grauInsalubridade;
-        this.salarioBruto = salarioBruto;
+        this.employee = employee;
+//        this.degreeOfUnhealthiness = degreeOfUnhealthiness;
     }
     public BigDecimal calculator() {
 
-        this.insalubridade = salarioBruto.multiply(grauInsalubridade.getPercentual());
+        this.unhealthyConditions = this.employee.getGrossSalary().multiply(degreeOfUnhealthiness.getPercentage());
 
-        return salarioBruto.add(this.insalubridade)
+        return this.employee.getGrossSalary().add(this.unhealthyConditions)
                 .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public String getCalculationType() {
+        return "UNHEALTHY";
     }
 }
