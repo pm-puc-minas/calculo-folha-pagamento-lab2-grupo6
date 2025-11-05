@@ -1,6 +1,7 @@
 package io.github.progmodular.gestaorh.model.entities;
 
 import io.github.progmodular.gestaorh.model.Enum.UserType;
+import io.github.progmodular.gestaorh.service.calculatorservice.DegreeUnhealthiness;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -40,5 +41,8 @@ public class Employee extends User {
 
     @Column(name="actualVTCost")
     private BigDecimal actualVTCost;
+
+    @Column(name="degreeUnhealthiness")
+    private DegreeUnhealthiness degreeUnhealthiness;
 
 }

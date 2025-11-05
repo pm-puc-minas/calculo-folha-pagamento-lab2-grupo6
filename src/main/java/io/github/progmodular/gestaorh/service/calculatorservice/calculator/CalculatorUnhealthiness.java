@@ -11,16 +11,15 @@ import java.math.RoundingMode;
 
 public class CalculatorUnhealthiness extends CalculatorAbstract implements ICalculatorInterface {
 
-    public CalculatorUnhealthiness(Employee employee/*, DegreeUnhealthiness degreeOfUnhealthiness*/)
+    public CalculatorUnhealthiness(Employee employee)
     {
         this.employee = employee;
-//        this.degreeOfUnhealthiness = degreeOfUnhealthiness;
     }
     public BigDecimal calculator() {
 
-        this.unhealthyConditions = this.employee.getGrossSalary().multiply(degreeOfUnhealthiness.getPercentage());
+        BigDecimal unhealthyConditions = minimunSalary.multiply(employee.getDegreeUnhealthiness().getPercentage());
 
-        return this.employee.getGrossSalary().add(this.unhealthyConditions)
+        return this.employee.getGrossSalary().add(unhealthyConditions)
                 .setScale(2, RoundingMode.HALF_UP);
     }
 

@@ -33,16 +33,26 @@ public class PayrollOrchestrationService {
         this.calculatorFactory = calculatorFactory;
     }
 
+    public List<PayrollResult> getPayrollByMonthAndYear (Long employeeId, Integer month, Integer year)
+    {
+        return payrollResultRepository.findByEmployeeIdAndMonthAndYear(employeeId,month,year);
+    }
+
+    public List<PayrollResult> getPayrollHistory (Long employeeId)
+    {
+        return payrollResultRepository.findByEmployeeId(employeeId);
+    }
+
     public PayrollResult calculateCompletePayroll(PayrollRequest request) {
         User user = employeeRepository.findById(request.employeeId())
                 .orElseThrow(() -> new EntityNotFoundException("Employee não encontrado"));
-        user.setUserType(UserType.EMPLOYEE);
+//        user.setUserType(UserType.EMPLOYEE);
 
         if(user instanceof Employee employee)
         {
             List<ICalculatorInterface> calculators = calculatorFactory.createAllCalculators(employee);
 
-            PayrollResult result = executeCalculations(employee, calculators);
+            PayrollResult result = executeCalculations(employee, calculators,request);
 
             return payrollResultRepository.save(result);
         }
@@ -54,13 +64,13 @@ public class PayrollOrchestrationService {
         return null;
     }
 
-    private PayrollResult executeCalculations(Employee employee, List<ICalculatorInterface> calculators) {
+    private PayrollResult executeCalculations(Employee employee, List<ICalculatorInterface> calculators,PayrollRequest request) {
         PayrollResult result = new PayrollResult();
         result.setEmployee(employee);
         result.setGrossSalary(employee.getGrossSalary());
         result.setCalculationDate(LocalDateTime.now());
-        result.setMonth(LocalDateTime.now().getMonthValue());
-        result.setYear(LocalDateTime.now().getYear());
+        result.setMonth(request.month());
+        result.setYear(request.year());
 
         for (ICalculatorInterface calculator : calculators) {
             BigDecimal calculationResult = calculator.calculator();

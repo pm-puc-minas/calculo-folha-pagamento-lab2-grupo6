@@ -20,6 +20,7 @@ public abstract class CalculatorAbstract {
     private Long id;
 
     protected Employee employee;
+    protected BigDecimal minimunSalary = new BigDecimal("1518.00");
     protected BigDecimal hourSalary;
     protected BigDecimal vtDiscountValue;
     protected BigDecimal inss;

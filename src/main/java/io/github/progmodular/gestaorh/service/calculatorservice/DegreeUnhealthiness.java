@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 
 public enum DegreeUnhealthiness {
 
+    NO_DEGREE_UNHEALTHINESS("NoDegreeUnhealthiness", new BigDecimal("0.00")),
+
     MINIMUM("Minimum", new BigDecimal("0.10")),
 
     AVERAGE("Average", new BigDecimal("0.20")),
