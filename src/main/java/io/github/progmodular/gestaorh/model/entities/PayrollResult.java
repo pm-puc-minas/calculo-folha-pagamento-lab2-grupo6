@@ -23,12 +23,14 @@ public class PayrollResult {
     private Integer month;
     private Integer year;
     private BigDecimal grossSalary;
+    private BigDecimal dangerAllowance;
+    private BigDecimal valueTransportDiscount;
+    private BigDecimal fgts;
+    private BigDecimal hoursSalary;
     private BigDecimal inssDiscount;
     private BigDecimal irrfDiscount;
-    private BigDecimal fgts;
-    private BigDecimal dangerAllowance;
-//    private BigDecimal unhealthyAllowance;
     private BigDecimal netSalary;
+    private BigDecimal unhealthyAllowance;
     private LocalDateTime calculationDate;
 
 }

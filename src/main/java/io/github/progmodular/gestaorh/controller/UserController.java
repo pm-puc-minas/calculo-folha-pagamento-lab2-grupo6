@@ -50,8 +50,11 @@ public class UserController {
                         employee.getGrossSalary(),
                         employee.getCpf(),
                         employee.getPosition(),
+                        employee.getDependents(),
                         employee.getHoursWorkedMonth(),
                         employee.getDaysWorked(),
+                        employee.getActualVTCost(),
+                        employee.getDegreeUnhealthiness(),
                         employee.getIsAdmin());
                 return ResponseEntity.ok(dto);
             }

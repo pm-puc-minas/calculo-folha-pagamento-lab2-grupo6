@@ -10,15 +10,16 @@ import java.math.RoundingMode;
 
 public class CalculatorInss extends CalculatorAbstract implements ICalculatorInterface {
 
-    private static final BigDecimal LIMITE_FAIXA1 = new BigDecimal("1320.00");
-    private static final BigDecimal LIMITE_FAIXA2 = new BigDecimal("2571.29");
-    private static final BigDecimal LIMITE_FAIXA3 = new BigDecimal("3856.94");
-    private static final BigDecimal LIMITE_FAIXA4 = new BigDecimal("7507.49");
+    private static final BigDecimal LIMITE_FAIXA1 = new BigDecimal("1412.00");
+    private static final BigDecimal LIMITE_FAIXA2 = new BigDecimal("2666.68");
+    private static final BigDecimal LIMITE_FAIXA3 = new BigDecimal("4000.03");
+    private static final BigDecimal LIMITE_FAIXA4 = new BigDecimal("7786.02");
 
     private static final BigDecimal ALIQUOTA_7_5 = new BigDecimal("0.075");
     private static final BigDecimal ALIQUOTA_9 = new BigDecimal("0.09");
     private static final BigDecimal ALIQUOTA_12 = new BigDecimal("0.12");
     private static final BigDecimal ALIQUOTA_14 = new BigDecimal("0.14");
+
 
     public CalculatorInss(Employee employee)
     {

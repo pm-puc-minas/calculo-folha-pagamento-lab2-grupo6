@@ -31,7 +31,7 @@ public class Employee extends User {
     private String position;
 
     @Column(name="dependents")
-    private int dependents;
+    private Integer dependents;
 
     @Column(name="hoursWorkedMonth")
     private Integer hoursWorkedMonth;

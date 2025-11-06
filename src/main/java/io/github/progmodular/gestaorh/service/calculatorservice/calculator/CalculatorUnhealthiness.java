@@ -16,11 +16,8 @@ public class CalculatorUnhealthiness extends CalculatorAbstract implements ICalc
         this.employee = employee;
     }
     public BigDecimal calculator() {
-
-        BigDecimal unhealthyConditions = minimunSalary.multiply(employee.getDegreeUnhealthiness().getPercentage());
-
-        return this.employee.getGrossSalary().add(unhealthyConditions)
-                .setScale(2, RoundingMode.HALF_UP);
+        System.out.println("debbug" + minimunSalary.multiply(employee.getDegreeUnhealthiness().getPercentage()));
+        return minimunSalary.multiply(employee.getDegreeUnhealthiness().getPercentage());
     }
 
     @Override

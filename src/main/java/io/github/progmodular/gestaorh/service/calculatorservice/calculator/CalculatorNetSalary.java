@@ -15,10 +15,10 @@ public class CalculatorNetSalary extends CalculatorAbstract implements ICalculat
 
     public BigDecimal calculator() {
         BigDecimal inss = new CalculatorInss(employee).calculator();
-        BigDecimal irff = new CalculatorIrff(employee).calculator();
-        BigDecimal sumPartial = inss.add(irff);
-        BigDecimal sumTotal = sumPartial.subtract(new CalculatorDiscountValueTransport(employee).calculator());
-        netSalary = this.employee.getGrossSalary().subtract(sumTotal);
+        BigDecimal irff = new CalculatorIrrf(employee).calculator();
+        BigDecimal valueTransportDiscount = new CalculatorDiscountValueTransport(employee).calculator();
+        BigDecimal sumTotalDiscount = inss.add(irff).add(valueTransportDiscount);
+        netSalary = this.employee.getGrossSalary().subtract(sumTotalDiscount);
         return netSalary;
     }
 

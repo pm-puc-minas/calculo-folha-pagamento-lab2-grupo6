@@ -14,10 +14,9 @@ public class CalculatorFactory {
         return List.of(
                 new CalculatorDanger(employee),
                 new CalculatorFgts(employee),
-//                new CalculatorFoodValue(1,new BigDecimal("1")),
                 new CalculatorHoursSalary(employee),
                 new CalculatorInss(employee),
-                new CalculatorIrff(employee),
+                new CalculatorIrrf(employee),
                 new CalculatorNetSalary(employee),
                 new CalculatorUnhealthiness(employee),
                 new CalculatorDiscountValueTransport(employee)
@@ -28,10 +27,9 @@ public class CalculatorFactory {
         return switch (type) {
             case "DANGER" -> new CalculatorDanger(employee);
             case "FGTS" -> new CalculatorFgts(employee);
-//            case "FOOD_VALUE" -> new CalculatorFoodValue(1,new BigDecimal("1"));
             case "HOURS_SALARY" -> new CalculatorHoursSalary(employee);
             case "INSS" -> new CalculatorInss(employee);
-            case "IRRF" -> new CalculatorIrff(employee);
+            case "IRRF" -> new CalculatorIrrf(employee);
             case "NET_SALARY" -> new CalculatorNetSalary(employee);
             case "UNHEALTHY" -> new CalculatorUnhealthiness(employee);
             case "VALUE_TRANSPORT" -> new CalculatorDiscountValueTransport(employee);
