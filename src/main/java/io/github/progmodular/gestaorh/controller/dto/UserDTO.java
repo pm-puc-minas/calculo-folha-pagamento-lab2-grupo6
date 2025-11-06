@@ -3,6 +3,7 @@ package io.github.progmodular.gestaorh.controller.dto;
 import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.entities.PayrollAdmin;
+import io.github.progmodular.gestaorh.service.calculatorservice.DegreeUnhealthiness;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -23,7 +24,7 @@ public record UserDTO(
 
         String position,
 
-        int dependents,
+        Integer dependents,
 
         Integer hoursWorkedMonth,
 
@@ -31,7 +32,8 @@ public record UserDTO(
 
         BigDecimal actualVTCost,
 
-        @NotNull(message = "IsAdmin can not be null or blank")
+        DegreeUnhealthiness degreeUnhealthiness,
+
         Boolean isAdmin
                       )
 {
@@ -51,6 +53,7 @@ public record UserDTO(
         employee.setHoursWorkedMonth(this.hoursWorkedMonth);
         employee.setDaysWorked(this.daysWorked);
         employee.setActualVTCost(this.actualVTCost);
+        employee.setDegreeUnhealthiness(this.degreeUnhealthiness);
 
         return employee;
     }

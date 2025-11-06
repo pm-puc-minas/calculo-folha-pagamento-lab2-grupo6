@@ -2,7 +2,6 @@ package io.github.progmodular.gestaorh.service;
 
 import io.github.progmodular.gestaorh.controller.dto.PayrollRequest;
 import io.github.progmodular.gestaorh.infra.config.CalculatorFactory;
-import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.entities.PayrollAdmin;
 import io.github.progmodular.gestaorh.model.entities.PayrollResult;
@@ -12,6 +11,7 @@ import io.github.progmodular.gestaorh.repository.PayrollResultRepository;
 import io.github.progmodular.gestaorh.service.calculatorservice.ICalculatorInterface;
 import io.github.progmodular.gestaorh.service.calculatorservice.calculator.*;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,15 +23,13 @@ import java.util.List;
 @Transactional
 public class PayrollOrchestrationService {
 
-    private final IUserRepository employeeRepository;
-    private final PayrollResultRepository payrollResultRepository;
-    private final CalculatorFactory calculatorFactory;
+    @Autowired
+    private IUserRepository employeeRepository;
+    @Autowired
+    private PayrollResultRepository payrollResultRepository;
+    @Autowired
+    private CalculatorFactory calculatorFactory;
 
-    public PayrollOrchestrationService(IUserRepository employeeRepository, PayrollResultRepository payrollResultRepository, CalculatorFactory calculatorFactory) {
-        this.employeeRepository = employeeRepository;
-        this.payrollResultRepository = payrollResultRepository;
-        this.calculatorFactory = calculatorFactory;
-    }
 
     public List<PayrollResult> getPayrollByMonthAndYear (Long employeeId, Integer month, Integer year)
     {
@@ -46,7 +44,6 @@ public class PayrollOrchestrationService {
     public PayrollResult calculateCompletePayroll(PayrollRequest request) {
         User user = employeeRepository.findById(request.employeeId())
                 .orElseThrow(() -> new EntityNotFoundException("Employee não encontrado"));
-//        user.setUserType(UserType.EMPLOYEE);
 
         if(user instanceof Employee employee)
         {
@@ -81,16 +78,22 @@ public class PayrollOrchestrationService {
     }
 
     private void applyCalculationToResult(PayrollResult result, ICalculatorInterface calculator, BigDecimal value) {
-        if (calculator instanceof CalculatorInss) {
-            result.setInssDiscount(value);
-        } else if (calculator instanceof CalculatorIrff) {
-            result.setIrrfDiscount(value);
+        if (calculator instanceof CalculatorDanger) {
+            result.setDangerAllowance(value);
+        } else if (calculator instanceof CalculatorDiscountValueTransport ) {
+            result.setValueTransportDiscount(value);
         } else if (calculator instanceof CalculatorFgts) {
             result.setFgts(value);
-        } else if (calculator instanceof CalculatorDanger) {
-            result.setDangerAllowance(value);
+        } else if (calculator instanceof CalculatorHoursSalary) {
+            result.setHoursSalary(value);
+        } else if (calculator instanceof CalculatorInss) {
+            result.setInssDiscount(value);
+        } else if (calculator instanceof CalculatorIrrf) {
+            result.setIrrfDiscount(value);
         } else if (calculator instanceof CalculatorNetSalary) {
             result.setNetSalary(value);
+        } else if (calculator instanceof CalculatorUnhealthiness) {
+            result.setUnhealthyAllowance(value);
         }
     }
 }
