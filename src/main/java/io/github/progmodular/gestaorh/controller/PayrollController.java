@@ -16,11 +16,6 @@ public class PayrollController {
     @Autowired
     private PayrollOrchestrationService payrollService;
 
-//    private final PayrollOrchestrationService payrollService;
-//
-//    public PayrollController(PayrollOrchestrationService payrollService) {
-//        this.payrollService = payrollService;
-//    }
 
     @GetMapping("/employee/{employeeId}/history")
     public ResponseEntity<List<PayrollResult>> getPayrollHistory(
@@ -55,15 +50,17 @@ public class PayrollController {
     }
 
 
-//    @PutMapping("/recalculate/{payrollId}")
-//    public ResponseEntity<PayrollResult> recalculatePayroll(@PathVariable Long payrollId) {
-//        try {
-//            PayrollResult result = payrollService.recalculatePayroll(payrollId);
-//            return ResponseEntity.ok(result);
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
+    @PutMapping("/recalculate/{payrollId}/{month}/{year}")
+    public ResponseEntity<PayrollResult> recalculatePayroll(@PathVariable("payrollId") Long payrollId,
+                                                            @PathVariable("month") int month,
+                                                            @PathVariable("year") int year) {
+        try {
+            PayrollResult result = payrollService.recalculatePayroll(payrollId, month, year);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 
 //    @PostMapping("/calculate-specific")
@@ -80,12 +77,18 @@ public class PayrollController {
 //    }
 
 
-//    @DeleteMapping("/{payrollId}")
-//    public ResponseEntity<Void> deletePayroll(@PathVariable Long payrollId) {
-//        try {
-//            payrollService.deletePayroll(payrollId);
-//            return ResponseEntity.noContent().build();
-//        } catch (Exception e) {
-//            return ResponseEntity.notFound().build();
-//        }
+    @DeleteMapping("{id}/{month}/{year}/employee/{employeeId}")
+    public ResponseEntity<Void> deletePayroll(@PathVariable("id") Long id,
+                                              @PathVariable("month") int month,
+                                              @PathVariable("year") int year,
+                                              @PathVariable("employeeId") Long employeeId) {
+        try {
+            payrollService.deletePayrollByIdMonthYearEmployeeId(id, month, year, employeeId);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
+}
