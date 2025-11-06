@@ -50,7 +50,6 @@ public class PayrollOrchestrationService {
             List<ICalculatorInterface> calculators = calculatorFactory.createAllCalculators(employee);
 
             PayrollResult result = executeCalculations(employee, calculators,request);
-
             return payrollResultRepository.save(result);
         }
         if(user instanceof PayrollAdmin payrollAdmin)
@@ -94,6 +93,26 @@ public class PayrollOrchestrationService {
             result.setNetSalary(value);
         } else if (calculator instanceof CalculatorUnhealthiness) {
             result.setUnhealthyAllowance(value);
+        }
+    }
+
+    public PayrollResult recalculatePayroll (Long employeeId, int month, int year)
+    {
+        List<PayrollResult> payrollResult = payrollResultRepository.findByEmployeeIdAndMonthAndYear(employeeId,month,year);
+        Employee employee = payrollResult.getFirst().getEmployee();
+        PayrollRequest payrollRequest = new PayrollRequest(employee.getId(),month,year);
+
+        PayrollResult result = executeCalculations(employee, calculatorFactory.createAllCalculators(employee),payrollRequest);
+
+        result.setId(payrollResult.getFirst().getId());
+        return payrollResultRepository.save(result);
+    }
+
+    public void deletePayrollByIdMonthYearEmployeeId(Long id, int month, int year, Long employeeid) {
+        int deletedCount = payrollResultRepository.deleteByIdAndMonthAndYearAndEmployeeId(id, month, year, employeeid);
+
+        if (deletedCount == 0) {
+            throw new IllegalArgumentException("ERRO AO DELETAR RELATORIO: Registro não encontrado");
         }
     }
 }
