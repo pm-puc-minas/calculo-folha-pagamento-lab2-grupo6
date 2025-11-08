@@ -1,7 +1,7 @@
 package io.github.progmodular.gestaorh.model.entities;
 
 import io.github.progmodular.gestaorh.model.Enum.UserType;
-import io.github.progmodular.gestaorh.service.calculatorservice.DegreeUnhealthiness;
+import io.github.progmodular.gestaorh.infra.config.calculator.DegreeUnhealthiness;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

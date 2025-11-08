@@ -1,8 +1,8 @@
 package io.github.progmodular.gestaorh.infra.config;
 
+import io.github.progmodular.gestaorh.infra.config.calculator.*;
 import io.github.progmodular.gestaorh.model.entities.Employee;
-import io.github.progmodular.gestaorh.service.calculatorservice.ICalculatorInterface;
-import io.github.progmodular.gestaorh.service.calculatorservice.calculator.*;
+import io.github.progmodular.gestaorh.infra.config.calculator.ICalculatorInterface;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

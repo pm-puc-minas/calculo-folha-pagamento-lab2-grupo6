@@ -1,18 +1,16 @@
 package io.github.progmodular.gestaorh.validator;
 
-import io.github.progmodular.gestaorh.controller.dto.ErrorField;
-import io.github.progmodular.gestaorh.controller.dto.UserDTO;
-import io.github.progmodular.gestaorh.controller.exceptions.DuplicaValueException;
-import io.github.progmodular.gestaorh.controller.exceptions.UserNotExistException;
-import io.github.progmodular.gestaorh.controller.exceptions.ValidationListException;
+import io.github.progmodular.gestaorh.dto.ErrorField;
+import io.github.progmodular.gestaorh.dto.UserDTO;
+import io.github.progmodular.gestaorh.exceptions.DuplicaValueException;
+import io.github.progmodular.gestaorh.exceptions.UserNotExistException;
+import io.github.progmodular.gestaorh.exceptions.ValidationListException;
 import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.entities.User;
 import io.github.progmodular.gestaorh.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.ArrayList;
 import java.util.List;
