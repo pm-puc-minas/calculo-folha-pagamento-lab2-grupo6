@@ -2,11 +2,11 @@ package io.github.progmodular.gestaorh.validator;
 
 import io.github.progmodular.gestaorh.dto.ErrorField;
 import io.github.progmodular.gestaorh.dto.UserDTO;
-import io.github.progmodular.gestaorh.exceptions.DuplicaValueException;
-import io.github.progmodular.gestaorh.exceptions.UserNotExistException;
-import io.github.progmodular.gestaorh.exceptions.ValidationListException;
+import io.github.progmodular.gestaorh.exceptions.handle.DeleteErroException;
+import io.github.progmodular.gestaorh.exceptions.handle.DuplicaValueException;
+import io.github.progmodular.gestaorh.exceptions.handle.UserNotExistException;
+import io.github.progmodular.gestaorh.exceptions.handle.ValidationListException;
 import io.github.progmodular.gestaorh.model.Enum.UserType;
-import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.entities.User;
 import io.github.progmodular.gestaorh.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,76 +33,16 @@ public class UserValidator
             throw new UserNotExistException("User provided not exist in the system");
         }
     }
-    public void nullValidation(User user)
+
+    public void deleteValidator(int deletedCount)
     {
-        List<ErrorField> errors = new ArrayList<>();
-
-        if (user.getName() == null || user.getName().trim().isEmpty())
-        {
-            errors.add(new ErrorField("name", "Name is a mandatory field."));
-        }
-        if (user.getEmail() == null || user.getEmail().trim().isEmpty())
-        {
-            errors.add(new ErrorField("email", "Email is a mandatory field."));
-        }
-        if (user.getPassword() == null || user.getPassword().trim().isEmpty())
-        {
-            errors.add(new ErrorField("password", "Password is a mandatory field."));
-        }
-        if (user.getIsAdmin() == null)
-        {
-            errors.add(new ErrorField("isAdmin", "isAdmin is a mandatory field."));
-        }
-        System.out.println("DEBUG: Iniciando validação - userType: " + user.getUserType());
-
-        if (user.getUserType() == null)
-        {
-            errors.add(new ErrorField("userType", "userType is a mandatory field."));
-        }
-
-//        if (!(user.getUserType().equals(UserType.EMPLOYEE) || user.getUserType().equals(UserType.PAYROLL_ADMIN)))
-//        {
-//            errors.add(new ErrorField("userType", "userType " + user.getUserType() + "is not a valid value."));
-//        }
-
-
-        if(user instanceof  Employee employee)
-        {
-            if (employee.getGrossSalary() == null)
-            {
-                errors.add(new ErrorField("grossSalary", "Gross salary is a mandatory field."));
-            }
-
-            if (employee.getCpf() == null || employee.getCpf().trim().isEmpty())
-            {
-                errors.add(new ErrorField("cpf", "CPF is a mandatory field."));
-            }
-
-            if (employee.getPosition() == null || employee.getPosition().trim().isEmpty())
-            {
-                errors.add(new ErrorField("position", "Position is a mandatory field."));
-            }
-
-            if (employee.getHoursWorkedMonth() == null)
-            {
-                errors.add(new ErrorField("hoursWorked", "hoursWorked is a mandatory field."));
-            }
-
-            if (employee.getDaysWorked() == null)
-            {
-                errors.add(new ErrorField("daysWorked", "daysWorked is a mandatory field."));
-            }
-
-
-        }
-        if (!errors.isEmpty()) {
-            throw new ValidationListException(errors);
+        if (deletedCount == 0) {
+            throw new DeleteErroException("ERROR DELETING: Record not found");
         }
     }
 
     public void nullValidation(UserDTO user)
     {
-        System.out.println("DEBUG: Iniciando validação - userType: " + (user.userType() == null));
 
         List<ErrorField> errors = new ArrayList<>();
 

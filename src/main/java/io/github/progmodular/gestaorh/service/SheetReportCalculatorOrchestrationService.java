@@ -3,16 +3,16 @@ package io.github.progmodular.gestaorh.service;
 import io.github.progmodular.gestaorh.dto.SheetRequest;
 import io.github.progmodular.gestaorh.dto.SheetResponse;
 import io.github.progmodular.gestaorh.dto.UserDTOResponse;
+import io.github.progmodular.gestaorh.exceptions.handle.UserNotExistException;
 import io.github.progmodular.gestaorh.infra.config.CalculatorFactory;
 import io.github.progmodular.gestaorh.infra.config.calculator.*;
 import io.github.progmodular.gestaorh.model.entities.Employee;
-import io.github.progmodular.gestaorh.model.entities.PayrollAdmin;
 import io.github.progmodular.gestaorh.model.entities.SheetReport;
 import io.github.progmodular.gestaorh.model.entities.User;
 import io.github.progmodular.gestaorh.repository.IUserRepository;
 import io.github.progmodular.gestaorh.repository.SheetReportRepository;
 import io.github.progmodular.gestaorh.infra.config.calculator.ICalculatorInterface;
-import jakarta.persistence.EntityNotFoundException;
+import io.github.progmodular.gestaorh.validator.SheetReportValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,15 +32,19 @@ public class SheetReportCalculatorOrchestrationService {
     private SheetReportRepository sheetReportRepository;
     @Autowired
     private CalculatorFactory calculatorFactory;
+    @Autowired
+    private SheetReportValidator sheetReportValidator;
 
     public List<SheetResponse> getPayrollHistory (Long employeeId)
     {
+        sheetReportValidator.isEmployeeExistById(employeeId);
         List<SheetReport> listReport = sheetReportRepository.findByEmployeeId(employeeId);
         return getListdto(listReport);
     }
 
     public List<SheetResponse> getPayrollByMonthAndYear (Long employeeId, Integer month, Integer year)
     {
+        sheetReportValidator.isPayrollExistByEmployeeIdMonthYear(employeeId,month,year);
          List<SheetReport> listReport = sheetReportRepository.findByEmployeeIdAndMonthAndYear(employeeId,month,year);
 
          return getListdto(listReport);
@@ -90,19 +94,17 @@ public class SheetReportCalculatorOrchestrationService {
     }
 
     public SheetReport calculateCompletePayroll(SheetRequest request) {
+        sheetReportValidator.nullValidation(request);
+        sheetReportValidator.validateOnCreation(request);
         User user = employeeRepository.findById(request.employeeId())
-                .orElseThrow(() -> new EntityNotFoundException("Employee não encontrado"));
-
+                .orElseThrow(() -> new UserNotExistException("User provided not exist in the system"));
+        sheetReportValidator.isEmployee(user);
         if(user instanceof Employee employee)
         {
             List<ICalculatorInterface> calculators = calculatorFactory.createAllCalculators(employee);
 
             SheetReport result = executeCalculations(employee, calculators,request);
             return sheetReportRepository.save(result);
-        }
-        if(user instanceof PayrollAdmin payrollAdmin)
-        {
-            throw new IllegalArgumentException("payroll admin nao pode possuir folha");
         }
 
         return null;
@@ -146,6 +148,7 @@ public class SheetReportCalculatorOrchestrationService {
 
     public SheetReport recalculatePayroll (Long employeeId, int month, int year)
     {
+        sheetReportValidator.isPayrollExistByEmployeeIdMonthYear(employeeId,month,year);
         List<SheetReport> sheetReport = sheetReportRepository.findByEmployeeIdAndMonthAndYear(employeeId,month,year);
         Employee employee = sheetReport.getFirst().getEmployee();
         SheetRequest sheetRequest = new SheetRequest(employee.getId(),month,year);
@@ -158,9 +161,8 @@ public class SheetReportCalculatorOrchestrationService {
 
     public void deletePayrollByIdMonthYearEmployeeId(Long id, int month, int year, Long employeeid) {
         int deletedCount = sheetReportRepository.deleteByIdAndMonthAndYearAndEmployeeId(id, month, year, employeeid);
-
-        if (deletedCount == 0) {
-            throw new IllegalArgumentException("ERRO AO DELETAR RELATORIO: Registro não encontrado");
-        }
+        sheetReportValidator.deleteValidator(deletedCount);
     }
+
+
 }

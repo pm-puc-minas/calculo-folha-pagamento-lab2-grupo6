@@ -1,4 +1,4 @@
-package io.github.progmodular.gestaorh.exceptions;
+package io.github.progmodular.gestaorh.exceptions.handle;
 
 import io.github.progmodular.gestaorh.dto.ErrorField;
 

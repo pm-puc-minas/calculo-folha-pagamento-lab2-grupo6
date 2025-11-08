@@ -11,11 +11,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/sheetReport")
+@RequestMapping("/api/payroll")
 @CrossOrigin(origins = "*")
 @Tag(name = "Cálculo e Relatórios de Folha de Pagamento", description = "Endpoints para calcular, recalcular, buscar e excluir registros de holerites (SheetReport).")
 public class SheetReportController {
@@ -40,8 +42,6 @@ public class SheetReportController {
             @PathVariable Long employeeId,
             @RequestParam(required = false) Integer year,
             @RequestParam(required = false) Integer month) {
-
-        try {
             List<SheetResponse> history;
             if (year != null && month != null) {
                 history = payrollService.getPayrollByMonthAndYear(employeeId, month, year);
@@ -50,30 +50,29 @@ public class SheetReportController {
                 history = payrollService.getPayrollHistory(employeeId);
             }
             return ResponseEntity.ok(history);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+
     }
 
     @PostMapping("/calculate")
-    @Operation(summary = "Calcula e Salva Novo Holerite",
-            description = "Dispara o cálculo completo do holerite para um funcionário/período, baseando-se nos dados fornecidos no corpo da requisição.",
+    @Operation(summary = "Calcula e Salva Novo folha de pagamento",
+            description = "Dispara o cálculo completo do folha de pagamento para um funcionário/período, baseando-se nos dados fornecidos no corpo da requisição.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Cálculo concluído. Retorna o SheetReport gerado."),
                     @ApiResponse(responseCode = "400", description = "Requisição inválida (falha no cálculo ou dados incompletos).")
             })
-    public ResponseEntity<SheetReport> calculatePayroll(@RequestBody SheetRequest request) {
-        try {
+    public ResponseEntity<Object> calculatePayroll(@RequestBody SheetRequest request) {
             SheetReport result = payrollService.calculateCompletePayroll(request);
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(result.getId())
+                    .toUri();
+            return ResponseEntity.created(location).build();
     }
 
 
-    @PutMapping("/recalculate/{payrollId}/{month}/{year}")
+    @PutMapping("/recalculate/payroll/{payrollId}/month/{month}/year/{year}")
     @Operation(summary = "Recalcula uma folha de pagamento Existente",
             description = "Recalcula um folha de pagamento específico (identificado pelo ID, Mês e Ano) e atualiza o registro no banco de dados. Não requer corpo (RequestBody).",
             responses = {
@@ -84,12 +83,8 @@ public class SheetReportController {
     public ResponseEntity<SheetReport> recalculatePayroll(@PathVariable("payrollId") Long payrollId,
                                                           @PathVariable("month") int month,
                                                           @PathVariable("year") int year) {
-        try {
             SheetReport result = payrollService.recalculatePayroll(payrollId, month, year);
             return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
     }
 
 
@@ -105,26 +100,7 @@ public class SheetReportController {
                                               @PathVariable("month") int month,
                                               @PathVariable("year") int year,
                                               @PathVariable("employeeId") Long employeeId) {
-        try {
             payrollService.deletePayrollByIdMonthYearEmployeeId(id, month, year, employeeId);
             return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
     }
-
-//    @PostMapping("/calculate-specific")
-//    public ResponseEntity<BigDecimal> calculateSpecific(
-//            @RequestParam String calculationType,
-//            @RequestBody SheetRequest request) {
-//
-//        try {
-//            BigDecimal result = payrollService.calculateSpecific(calculationType, request);
-//            return ResponseEntity.ok(result);
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
 }

@@ -1,6 +1,9 @@
 package io.github.progmodular.gestaorh.exceptions;
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import io.github.progmodular.gestaorh.dto.ErrorField;
+import io.github.progmodular.gestaorh.exceptions.handle.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import io.github.progmodular.gestaorh.dto.ErrorResponse;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,9 +21,21 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends RuntimeException {
 
+    @ExceptionHandler(DeleteErroException.class)
+    public ResponseEntity<ErrorResponse> handleDeleteErroException(DeleteErroException e) {
+        var erroDTO = ErrorResponse.conflictResponse(e.getMessage());
+        return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+    }
+
     @ExceptionHandler(DuplicaValueException.class)
     public ResponseEntity<ErrorResponse> handleDuplicaValueExceptionException(DuplicaValueException e) {
         var erroDTO = ErrorResponse.conflictResponse(e.getMessage());
+        return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+    }
+
+    @ExceptionHandler(PayrollEmployeesOnlyException.class)
+    public ResponseEntity<ErrorResponse> handlePayrollEmployeesOnlyException(PayrollEmployeesOnlyException e) {
+        var erroDTO = ErrorResponse.standardResponse(e.getMessage());
         return ResponseEntity.status(erroDTO.status()).body(erroDTO);
     }
 
@@ -68,6 +84,30 @@ public class GlobalExceptionHandler extends RuntimeException {
                     "UserType"
             );
         }
+        var response = ErrorResponse.standardResponse(customMessage);
+        return new ResponseEntity<>(response,status);
+    }
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex)
+    {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String customMessage = ex.getMessage();
+        var response = ErrorResponse.standardResponse(customMessage);
+        return new ResponseEntity<>(response,status);
+    }
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<Object> handleNoResourceFoundException(NoResourceFoundException ex)
+    {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String customMessage = ex.getMessage();
+        var response = ErrorResponse.standardResponse(customMessage);
+        return new ResponseEntity<>(response,status);
+    }
+    @ExceptionHandler(MismatchedInputException.class)
+    public ResponseEntity<Object> handleMismatchedInputException(MismatchedInputException ex)
+    {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String customMessage = ex.getMessage();
         var response = ErrorResponse.standardResponse(customMessage);
         return new ResponseEntity<>(response,status);
     }
