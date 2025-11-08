@@ -33,6 +33,6 @@ public abstract class CalculatorAbstract {
     protected Integer hoursDay;
     protected Integer daysWorked;
     protected Integer daysWorkedPerWeek;
-    protected BigDecimal unhealthyConditions;
-    protected DegreeUnhealthiness degreeOfUnhealthiness;
+    protected BigDecimal unhealthyAddition;
+//    protected DegreeUnhealthiness degreeOfUnhealthiness;
 }

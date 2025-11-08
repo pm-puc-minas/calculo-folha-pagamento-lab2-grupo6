@@ -7,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -105,6 +106,14 @@ public class GlobalExceptionHandler extends RuntimeException {
     }
     @ExceptionHandler(MismatchedInputException.class)
     public ResponseEntity<Object> handleMismatchedInputException(MismatchedInputException ex)
+    {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String customMessage = ex.getMessage();
+        var response = ErrorResponse.standardResponse(customMessage);
+        return new ResponseEntity<>(response,status);
+    }
+    @ExceptionHandler(TransactionSystemException.class)
+    public ResponseEntity<Object> handleTransactionSystemException(TransactionSystemException ex)
     {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         String customMessage = ex.getMessage();

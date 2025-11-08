@@ -1,18 +1,18 @@
 package io.github.progmodular.gestaorh.service;
 
-import io.github.progmodular.gestaorh.dto.SheetRequest;
-import io.github.progmodular.gestaorh.dto.SheetResponse;
+import io.github.progmodular.gestaorh.dto.PayrollDTO;
+import io.github.progmodular.gestaorh.dto.PayrollDTOResponse;
 import io.github.progmodular.gestaorh.dto.UserDTOResponse;
 import io.github.progmodular.gestaorh.exceptions.handle.UserNotExistException;
 import io.github.progmodular.gestaorh.infra.config.CalculatorFactory;
 import io.github.progmodular.gestaorh.infra.config.calculator.*;
 import io.github.progmodular.gestaorh.model.entities.Employee;
-import io.github.progmodular.gestaorh.model.entities.SheetReport;
+import io.github.progmodular.gestaorh.model.entities.Payroll;
 import io.github.progmodular.gestaorh.model.entities.User;
 import io.github.progmodular.gestaorh.repository.IUserRepository;
-import io.github.progmodular.gestaorh.repository.SheetReportRepository;
+import io.github.progmodular.gestaorh.repository.PayrollRepository;
 import io.github.progmodular.gestaorh.infra.config.calculator.ICalculatorInterface;
-import io.github.progmodular.gestaorh.validator.SheetReportValidator;
+import io.github.progmodular.gestaorh.validator.PayrollValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,39 +24,39 @@ import java.util.List;
 
 @Service
 @Transactional
-public class SheetReportCalculatorOrchestrationService {
+public class PayrollCalculatorOrchestrationService {
 
     @Autowired
     private IUserRepository employeeRepository;
     @Autowired
-    private SheetReportRepository sheetReportRepository;
+    private PayrollRepository payrollRepository;
     @Autowired
     private CalculatorFactory calculatorFactory;
     @Autowired
-    private SheetReportValidator sheetReportValidator;
+    private PayrollValidator payrollValidator;
 
-    public List<SheetResponse> getPayrollHistory (Long employeeId)
+    public List<PayrollDTOResponse> getPayrollHistory (Long employeeId)
     {
-        sheetReportValidator.isEmployeeExistById(employeeId);
-        List<SheetReport> listReport = sheetReportRepository.findByEmployeeId(employeeId);
+        payrollValidator.isEmployeeExistById(employeeId);
+        List<Payroll> listReport = payrollRepository.findByEmployeeId(employeeId);
         return getListdto(listReport);
     }
 
-    public List<SheetResponse> getPayrollByMonthAndYear (Long employeeId, Integer month, Integer year)
+    public List<PayrollDTOResponse> getPayrollByMonthAndYear (Long employeeId, Integer month, Integer year)
     {
-        sheetReportValidator.isPayrollExistByEmployeeIdMonthYear(employeeId,month,year);
-         List<SheetReport> listReport = sheetReportRepository.findByEmployeeIdAndMonthAndYear(employeeId,month,year);
+        payrollValidator.isPayrollExistByEmployeeIdMonthYear(employeeId,month,year);
+         List<Payroll> listReport = payrollRepository.findByEmployeeIdAndMonthAndYear(employeeId,month,year);
 
          return getListdto(listReport);
     }
 
-    private static List<SheetResponse> getListdto (List<SheetReport> listReport)
+    private static List<PayrollDTOResponse> getListdto (List<Payroll> listReport)
     {
-        List<SheetResponse> listResponse = new ArrayList<>();
-        for(SheetReport lists : listReport)
+        List<PayrollDTOResponse> listResponse = new ArrayList<>();
+        for(Payroll lists : listReport)
         {
             UserDTOResponse userDTOResponse = getUserDTOResponse(lists);
-            SheetResponse sheetResponse = new SheetResponse
+            PayrollDTOResponse payrollDTOResponse = new PayrollDTOResponse
                     (
                             userDTOResponse,
                             lists.getId(),
@@ -72,12 +72,12 @@ public class SheetReportCalculatorOrchestrationService {
                             lists.getNetSalary(),
                             lists.getUnhealthyAllowance()
                     );
-            listResponse.add(sheetResponse);
+            listResponse.add(payrollDTOResponse);
         }
         return  listResponse;
     }
 
-    private static UserDTOResponse getUserDTOResponse(SheetReport lists) {
+    private static UserDTOResponse getUserDTOResponse(Payroll lists) {
         Employee employee = lists.getEmployee();
         UserDTOResponse dto = new UserDTOResponse(
                 employee.getId(),
@@ -93,25 +93,25 @@ public class SheetReportCalculatorOrchestrationService {
         return dto;
     }
 
-    public SheetReport calculateCompletePayroll(SheetRequest request) {
-        sheetReportValidator.nullValidation(request);
-        sheetReportValidator.validateOnCreation(request);
+    public Payroll calculateCompletePayroll(PayrollDTO request) {
+        payrollValidator.nullValidation(request);
+        payrollValidator.validateOnCreation(request);
         User user = employeeRepository.findById(request.employeeId())
                 .orElseThrow(() -> new UserNotExistException("User provided not exist in the system"));
-        sheetReportValidator.isEmployee(user);
+        payrollValidator.isEmployee(user);
         if(user instanceof Employee employee)
         {
             List<ICalculatorInterface> calculators = calculatorFactory.createAllCalculators(employee);
 
-            SheetReport result = executeCalculations(employee, calculators,request);
-            return sheetReportRepository.save(result);
+            Payroll result = executeCalculations(employee, calculators,request);
+            return payrollRepository.save(result);
         }
 
         return null;
     }
 
-    private SheetReport executeCalculations(Employee employee, List<ICalculatorInterface> calculators, SheetRequest request) {
-        SheetReport result = new SheetReport();
+    private Payroll executeCalculations(Employee employee, List<ICalculatorInterface> calculators, PayrollDTO request) {
+        Payroll result = new Payroll();
         result.setEmployee(employee);
         result.setGrossSalary(employee.getGrossSalary());
         result.setCalculationDate(LocalDateTime.now());
@@ -126,7 +126,7 @@ public class SheetReportCalculatorOrchestrationService {
         return result;
     }
 
-    private void applyCalculationToResult(SheetReport result, ICalculatorInterface calculator, BigDecimal value) {
+    private void applyCalculationToResult(Payroll result, ICalculatorInterface calculator, BigDecimal value) {
         if (calculator instanceof CalculatorDanger) {
             result.setDangerAllowance(value);
         } else if (calculator instanceof CalculatorDiscountValueTransport) {
@@ -146,22 +146,22 @@ public class SheetReportCalculatorOrchestrationService {
         }
     }
 
-    public SheetReport recalculatePayroll (Long employeeId, int month, int year)
+    public Payroll recalculatePayroll (Long employeeId, int month, int year)
     {
-        sheetReportValidator.isPayrollExistByEmployeeIdMonthYear(employeeId,month,year);
-        List<SheetReport> sheetReport = sheetReportRepository.findByEmployeeIdAndMonthAndYear(employeeId,month,year);
+        payrollValidator.isPayrollExistByEmployeeIdMonthYear(employeeId,month,year);
+        List<Payroll> sheetReport = payrollRepository.findByEmployeeIdAndMonthAndYear(employeeId,month,year);
         Employee employee = sheetReport.getFirst().getEmployee();
-        SheetRequest sheetRequest = new SheetRequest(employee.getId(),month,year);
+        PayrollDTO payrollDTO = new PayrollDTO(employee.getId(),month,year);
 
-        SheetReport result = executeCalculations(employee, calculatorFactory.createAllCalculators(employee), sheetRequest);
+        Payroll result = executeCalculations(employee, calculatorFactory.createAllCalculators(employee), payrollDTO);
 
         result.setId(sheetReport.getFirst().getId());
-        return sheetReportRepository.save(result);
+        return payrollRepository.save(result);
     }
 
     public void deletePayrollByIdMonthYearEmployeeId(Long id, int month, int year, Long employeeid) {
-        int deletedCount = sheetReportRepository.deleteByIdAndMonthAndYearAndEmployeeId(id, month, year, employeeid);
-        sheetReportValidator.deleteValidator(deletedCount);
+        int deletedCount = payrollRepository.deleteByIdAndMonthAndYearAndEmployeeId(id, month, year, employeeid);
+        payrollValidator.deleteValidator(deletedCount);
     }
 
 

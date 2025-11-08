@@ -17,7 +17,7 @@ public class PayrollReport {
 
     @OneToOne
     @JoinColumn(name = "result_id")
-    private PayrollResult payrollResult;
+    private Payroll payrollResult;
 
     private LocalDateTime generationDate;
 }

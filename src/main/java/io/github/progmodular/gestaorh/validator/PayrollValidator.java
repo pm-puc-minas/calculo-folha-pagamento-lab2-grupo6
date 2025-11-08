@@ -1,11 +1,11 @@
 package io.github.progmodular.gestaorh.validator;
 
 import io.github.progmodular.gestaorh.dto.ErrorField;
-import io.github.progmodular.gestaorh.dto.SheetRequest;
+import io.github.progmodular.gestaorh.dto.PayrollDTO;
 import io.github.progmodular.gestaorh.exceptions.handle.*;
 import io.github.progmodular.gestaorh.model.entities.PayrollAdmin;
 import io.github.progmodular.gestaorh.model.entities.User;
-import io.github.progmodular.gestaorh.repository.SheetReportRepository;
+import io.github.progmodular.gestaorh.repository.PayrollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class SheetReportValidator {
+public class PayrollValidator {
 
     @Autowired
-    private SheetReportRepository sheetReportRepository;
+    private PayrollRepository payrollRepository;
 
     public void isEmployee(User user)
     {
@@ -27,14 +27,14 @@ public class SheetReportValidator {
     }
 
     public void isEmployeeExistById(Long employeeId) {
-        if(sheetReportRepository.findById(employeeId).isEmpty())
+        if(payrollRepository.findById(employeeId).isEmpty())
         {
-            throw new UserNotExistException("Employee provided not exist in the system");
+            throw new UserNotExistException("Employee provided not exist in the system or not have any payroll active");
         }
     }
 
     public void isPayrollExistByEmployeeIdMonthYear(Long employeeId, int month, int year) {
-        if(sheetReportRepository.findByEmployeeIdAndMonthAndYear(employeeId,month,year).isEmpty())
+        if(payrollRepository.findByEmployeeIdAndMonthAndYear(employeeId,month,year).isEmpty())
         {
             throw new UserNotExistException("Payroll with this parameters provided not exist in the system");
         }
@@ -47,23 +47,23 @@ public class SheetReportValidator {
         }
     }
 
-    public void validateOnCreation(SheetRequest request) {
-        if(!(sheetReportRepository.findByEmployeeIdAndMonthAndYear(request.employeeId(),request.month(),request.year()).isEmpty()))
+    public void validateOnCreation(PayrollDTO request) {
+        if(!(payrollRepository.findByEmployeeIdAndMonthAndYear(request.employeeId(),request.month(),request.year()).isEmpty()))
         {
             throw new DuplicaValueException("There is already a payroll for this employee this month and year.");
         }
     }
 
-    public void nullValidation(SheetRequest sheetRequest) {
+    public void nullValidation(PayrollDTO payrollDTO) {
         List<ErrorField> errors = new ArrayList<>();
 
-        if (sheetRequest.employeeId() == null) {
+        if (payrollDTO.employeeId() == null) {
             errors.add(new ErrorField("employeeId", "employeeId is a mandatory field."));
         }
-        if (sheetRequest.month() == null) {
+        if (payrollDTO.month() == null) {
             errors.add(new ErrorField("month", "month is a mandatory field."));
         }
-        if (sheetRequest.year() == null) {
+        if (payrollDTO.year() == null) {
             errors.add(new ErrorField("year", "year is a mandatory field."));
         }
         if (!errors.isEmpty()) {
