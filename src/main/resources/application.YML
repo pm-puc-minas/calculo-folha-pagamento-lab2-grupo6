@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gestao_database
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    config-url: /v3/api-docs/swagger-config
+    url: /v3/api-docs
+  packages-to-scan: io.github.progmodular.gestaorh.controller
+  paths-to-match: /api/**,/users/**

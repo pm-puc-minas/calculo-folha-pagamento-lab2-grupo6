@@ -1,12 +1,10 @@
 package io.github.progmodular.gestaorh.service;
 
-import io.github.progmodular.gestaorh.controller.dto.UserDTO;
-import io.github.progmodular.gestaorh.controller.exceptions.ValidationListException;
+import io.github.progmodular.gestaorh.dto.UserDTO;
 import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.User;
 import io.github.progmodular.gestaorh.repository.IUserRepository;
 import io.github.progmodular.gestaorh.validator.UserValidator;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

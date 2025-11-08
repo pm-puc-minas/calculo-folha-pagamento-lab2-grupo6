@@ -42,12 +42,13 @@ public class DashboardResumo {
 ```
 
 ### 🧩 Repository: `DashboardRepository.java`
+
 ```java
 package io.github.progmodular.gestaorh.repository;
 
-import io.github.progmodular.gestaorh.model.entities.DashboardResumo;
 import io.github.progmodular.gestaorh.model.entities.Employee;
 import org.springframework.stereotype.Repository;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,12 +56,12 @@ import java.util.List;
 public class DashboardRepository {
 
     private final List<Employee> employees = Arrays.asList(
-        new Employee("Maria Silva", "maria@empresa.com", "123", "senha123",
-            4200.00, "123.456.789-00", "Analista de RH", 160.0, 22),
-        new Employee("João Pereira", "joao@empresa.com", "124", "senha123",
-            3800.00, "987.654.321-00", "Assistente Administrativo", 168.0, 21),
-        new Employee("Ana Souza", "ana@empresa.com", "125", "senha123",
-            5200.00, "456.789.123-00", "Coordenadora de DP", 172.0, 22)
+            new Employee("Maria Silva", "maria@empresa.com", "123", "senha123",
+                    4200.00, "123.456.789-00", "Analista de RH", 160.0, 22),
+            new Employee("João Pereira", "joao@empresa.com", "124", "senha123",
+                    3800.00, "987.654.321-00", "Assistente Administrativo", 168.0, 21),
+            new Employee("Ana Souza", "ana@empresa.com", "125", "senha123",
+                    5200.00, "456.789.123-00", "Coordenadora de DP", 172.0, 22)
     );
 
     public DashboardResumo getResumoDashboard() {
@@ -77,11 +78,10 @@ public class DashboardRepository {
 ``` 
 
 ### 🧩 Service: `DashboardService.java`
+
 ```java
 package io.github.progmodular.gestaorh.service;
 
-import io.github.progmodular.gestaorh.model.entities.DashboardResumo;
-import io.github.progmodular.gestaorh.repository.DashboardRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -101,11 +101,11 @@ public class DashboardService {
 ``` 
 
 ### 🧩 Controller: `DashboardController.java`
+
 ```java
 
 package io.github.progmodular.gestaorh.controller;
 
-import io.github.progmodular.gestaorh.service.DashboardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
