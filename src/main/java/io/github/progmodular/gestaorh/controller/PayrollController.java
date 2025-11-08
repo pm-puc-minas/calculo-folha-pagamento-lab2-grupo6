@@ -1,5 +1,6 @@
 package io.github.progmodular.gestaorh.controller;
 import io.github.progmodular.gestaorh.controller.dto.PayrollRequest;
+import io.github.progmodular.gestaorh.controller.dto.PayrollResponseDTO;
 import io.github.progmodular.gestaorh.model.entities.PayrollResult;
 import io.github.progmodular.gestaorh.service.PayrollOrchestrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,13 @@ public class PayrollController {
     @Autowired
     private PayrollOrchestrationService payrollService;
 
+
+    @GetMapping("/id")
+    public ResponseEntity<PayrollResponseDTO> getPayrollById(@PathVariable Long id){
+        PayrollResponseDTO response = payrollService
+                .getPayrollById(id);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/employee/{employeeId}/history")
     public ResponseEntity<List<PayrollResult>> getPayrollHistory(

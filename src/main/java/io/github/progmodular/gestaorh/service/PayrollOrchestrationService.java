@@ -1,6 +1,7 @@
 package io.github.progmodular.gestaorh.service;
 
 import io.github.progmodular.gestaorh.controller.dto.PayrollRequest;
+import io.github.progmodular.gestaorh.controller.dto.PayrollResponseDTO;
 import io.github.progmodular.gestaorh.infra.config.CalculatorFactory;
 import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.entities.PayrollAdmin;
@@ -14,6 +15,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -29,6 +32,8 @@ public class PayrollOrchestrationService {
     private PayrollResultRepository payrollResultRepository;
     @Autowired
     private CalculatorFactory calculatorFactory;
+    @Autowired
+    private PayrollReportService payrollReportService;
 
 
     public List<PayrollResult> getPayrollByMonthAndYear (Long employeeId, Integer month, Integer year)
@@ -115,4 +120,11 @@ public class PayrollOrchestrationService {
             throw new IllegalArgumentException("ERRO AO DELETAR RELATORIO: Registro não encontrado");
         }
     }
+
+    public PayrollResponseDTO getPayrollById(Long id) {
+        var payroll = payrollResultRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Payroll not found"));
+        return new PayrollResponseDTO(payroll);
+    }
+
 }
