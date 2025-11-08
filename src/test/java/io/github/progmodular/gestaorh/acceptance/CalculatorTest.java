@@ -1,241 +1,418 @@
-//package io.github.progmodular.gestaorh.acceptance;
-//
-//import io.github.progmodular.gestaorh.service.calculatorservice.GrauInsalubridade;
-//import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorDanger;
-//import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorFgts;
-//import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorFoodValue;
-//import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorHoursSalary;
-//import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorInss;
-//import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorIrff;
-//import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorNetSalary;
-//import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorUnhealthiness;
-//import io.github.progmodular.gestaorh.service.calculatorservice.calculator.CalculatorValueTransport;
-//
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.DisplayName;
-//
-//import java.math.BigDecimal;
-//import java.math.RoundingMode;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//class CalculatorTest {
-//
-//    @Test
-//    @DisplayName("Teste CalculatorDanger - cálculo de periculosidade")
-//    void testCalculatorDanger() {
-//
-//        BigDecimal salarioBruto = new BigDecimal("3000.00");
-//        CalculatorDanger calculator = new CalculatorDanger(salarioBruto);
-//
-//
-//        BigDecimal resultado = calculator.calculator();
-//        BigDecimal expected = new BigDecimal("900.00");
-//
-//
-//        assertEquals(0, expected.compareTo(resultado),
-//                "O cálculo de periculosidade deve ser 30% do salário bruto");
-//    }
-//
-//    @Test
-//    @DisplayName("Teste CalculatorFgts - cálculo do FGTS")
-//    void testCalculatorFgts() {
-//
-//        BigDecimal salarioBruto = new BigDecimal("2500.00");
-//        CalculatorFgts calculator = new CalculatorFgts(salarioBruto);
-//
-//
-//        BigDecimal resultado = calculator.calculator();
-//        BigDecimal expected = new BigDecimal("200.00");
-//
-//
-//        assertEquals(0, expected.compareTo(resultado),
-//                "O cálculo do FGTS deve ser 8% do salário bruto");
-//    }
-//
-//    @Test
-//    @DisplayName("Teste CalculatorFoodValue - cálculo do vale alimentação")
-//    void testCalculatorFoodValue() {
-//
-//        int diasTrabalhados = 22;
-//        BigDecimal valeDiario = new BigDecimal("15.00");
-//        CalculatorFoodValue calculator = new CalculatorFoodValue(diasTrabalhados, valeDiario);
-//
-//
-//        BigDecimal resultado = calculator.calculator();
-//        BigDecimal expected = new BigDecimal("330.00");
-//
-//
-//        assertEquals(0, expected.compareTo(resultado),
-//                "O cálculo do vale alimentação deve ser dias trabalhados * vale diário");
-//    }
-//    // Uso errôneo de assertEquals
-//    @Test
-//    @DisplayName("Teste CalculatorHoursSalary - cálculo do salário por hora")
-//    void testCalculatorHoursSalary() {
-//
-//        BigDecimal salarioBruto = new BigDecimal("2200.00");
-//        int diasTrabalhadosSemana = 5;
-//        int horasDias = 8;
-//        CalculatorHoursSalary calculator = new CalculatorHoursSalary(salarioBruto, diasTrabalhadosSemana, horasDias);
-//
-//
-//        BigDecimal resultado = calculator.calculator();
-//        BigDecimal expected = new BigDecimal("11.00");
-//
-//
-//        assertEquals(0, expected.compareTo(resultado),
-//                "O cálculo do salário por hora deve estar correto");
-//    }
-//
-//    @Test
-//    @DisplayName("Teste CalculatorInss - cálculo do INSS para diferentes faixas")
-//    void testCalculatorInss() {
-//
-//         CalculatorInss calculator1 = new CalculatorInss(new BigDecimal("1300.00"));
-//         BigDecimal resultado1 = calculator1.calculator();
-//         BigDecimal expected1 = new BigDecimal("97.50");
-//         assertEquals(expected1, resultado1, "INSS faixa 1 deve ser 7.5%");
-//
-//
-//         CalculatorInss calculator2 = new CalculatorInss(new BigDecimal("2000.00"));
-//         BigDecimal resultado2 = calculator2.calculator();
-//
-//         BigDecimal expected2 = new BigDecimal("160.20");
-//         assertEquals(expected2, resultado2, "INSS faixa 2 deve calcular corretamente");
-//
-//
-//         CalculatorInss calculator3 = new CalculatorInss(new BigDecimal("3500.00"));
-//         BigDecimal resultado3 = calculator3.calculator();
-//
-//         BigDecimal expected3 = new BigDecimal("323.06");
-//         assertEquals(expected3, resultado3, "INSS faixa 3 deve calcular corretamente");
-//
-//
-//         CalculatorInss calculator4 = new CalculatorInss(new BigDecimal("5000.00"));
-//         BigDecimal resultado4 = calculator4.calculator();
-//
-//         BigDecimal expected4 = new BigDecimal("525.92");
-//         assertEquals(expected4, resultado4, "INSS faixa 4 deve calcular corretamente");
-//
-//
-//         CalculatorInss calculator5 = new CalculatorInss(new BigDecimal("8000.00"));
-//         BigDecimal resultado5 = calculator5.calculator();
-//
-//         BigDecimal expected5 = new BigDecimal("876.97");
-//         assertEquals(expected5, resultado5, "INSS acima do teto deve aplicar valor máximo");
-//    }
-//
-//    @Test
-//    @DisplayName("Teste CalculatorIrff - cálculo do IRRF para diferentes faixas")
-//    void testCalculatorIrff() {
-//
-//
-//        CalculatorIrff calculator1 = new CalculatorIrff(
-//                new BigDecimal("2000.00"), new BigDecimal("150.00"), 0);
-//        BigDecimal resultado1 = calculator1.calculator();
-//        BigDecimal expected1 = BigDecimal.ZERO;
-//
-//        assertEquals(0, expected1.compareTo(resultado1), "IRRF deve ser zero para base de cálculo até 1903.98");
-//
-//        CalculatorIrff calculator2 = new CalculatorIrff(
-//                new BigDecimal("3000.00"), new BigDecimal("200.00"), 1);
-//        BigDecimal resultado2 = calculator2.calculator();
-//
-//        BigDecimal expected2 = new BigDecimal("52.98");
-//        assertEquals(expected2, resultado2.setScale(2, RoundingMode.HALF_UP), "IRRF faixa 7.5% deve calcular corretamente");
-//
-//        CalculatorIrff calculator3 = new CalculatorIrff(
-//                new BigDecimal("4000.00"), new BigDecimal("300.00"), 0);
-//        BigDecimal resultado3 = calculator3.calculator();
-//
-//        BigDecimal expected3 = new BigDecimal("200.20");
-//        assertEquals(expected3, resultado3.setScale(2, RoundingMode.HALF_UP), "IRRF faixa 15% deve calcular corretamente");
-//    }
-//
-//    @Test
-//    @DisplayName("Teste CalculatorNetSalary - cálculo do salário líquido")
-//    void testCalculatorNetSalary() {
-//
-//        BigDecimal salarioBruto = new BigDecimal("3000.00");
-//        BigDecimal inss = new BigDecimal("200.00");
-//        BigDecimal irrf = new BigDecimal("100.00");
-//        BigDecimal valeTransporte = new BigDecimal("150.00");
-//
-//        CalculatorNetSalary calculator = new CalculatorNetSalary(salarioBruto, inss, irrf, valeTransporte);
-//
-//
-//        BigDecimal resultado = calculator.calculator();
-//        BigDecimal expected = new BigDecimal("2550.00");
-//
-//
-//        assertEquals(0, expected.compareTo(resultado),
-//                "O salário líquido deve ser salário bruto menos descontos");
-//    }
-//
-//    @Test
-//    @DisplayName("Teste CalculatorUnhealthiness - cálculo de insalubridade para diferentes graus")
-//    void testCalculatorUnhealthiness() {
-//
-//        CalculatorUnhealthiness calculator1 = new CalculatorUnhealthiness(
-//                GrauInsalubridade.MINIMO, new BigDecimal("2000.00"));
-//        BigDecimal resultado1 = calculator1.calculator();
-//        BigDecimal expected1 = new BigDecimal("2200.00");
-//        assertEquals(0, expected1.compareTo(resultado1),
-//                "Insalubridade grau mínimo deve adicionar 10%");
-//
-//
-//        CalculatorUnhealthiness calculator2 = new CalculatorUnhealthiness(
-//                GrauInsalubridade.MEDIO, new BigDecimal("2000.00"));
-//        BigDecimal resultado2 = calculator2.calculator();
-//        BigDecimal expected2 = new BigDecimal("2400.00");
-//        assertEquals(0, expected2.compareTo(resultado2),
-//                "Insalubridade grau médio deve adicionar 20%");
-//
-//
-//        CalculatorUnhealthiness calculator3 = new CalculatorUnhealthiness(
-//                GrauInsalubridade.MAXIMO, new BigDecimal("2000.00"));
-//        BigDecimal resultado3 = calculator3.calculator();
-//        BigDecimal expected3 = new BigDecimal("2800.00");
-//        assertEquals(0, expected3.compareTo(resultado3),
-//                "Insalubridade grau máximo deve adicionar 40%");
-//    }
-//
-//    @Test
-//    @DisplayName("Teste CalculatorValueTransport - cálculo do vale transporte")
-//    void testCalculatorValueTransport() {
-//
-//        CalculatorValueTransport calculator1 = new CalculatorValueTransport(
-//                new BigDecimal("2000.00"), new BigDecimal("100.00"));
-//        BigDecimal resultado1 = calculator1.calculator();
-//        BigDecimal expected1 = new BigDecimal("120.00");
-//        assertEquals(0, expected1.compareTo(resultado1),
-//                "Vale transporte deve ser 6% do salário quando valor informado é menor");
-//
-//
-//        CalculatorValueTransport calculator2 = new CalculatorValueTransport(
-//                new BigDecimal("2000.00"), new BigDecimal("200.00"));
-//        BigDecimal resultado2 = calculator2.calculator();
-//        BigDecimal expected2 = new BigDecimal("120.00");
-//        assertEquals(0, expected2.compareTo(resultado2),
-//                "Vale transporte deve limitar a 6% do salário quando valor informado é maior");
-//    }
-//
-//    @Test
-//    @DisplayName("Teste valores nulos e negativos")
-//    void testValoresInvalidos() {
-//
-//        CalculatorFgts calculator1 = new CalculatorFgts(BigDecimal.ZERO);
-//        BigDecimal resultado1 = calculator1.calculator();
-//
-//        assertEquals(0, resultado1.compareTo(BigDecimal.ZERO),
-//                "FGTS de salário zero deve ser zero");
-//
-//
-//        CalculatorFoodValue calculator2 = new CalculatorFoodValue(0, new BigDecimal("15.00"));
-//        BigDecimal resultado2 = calculator2.calculator();
-//
-//        assertEquals(0, resultado2.compareTo(BigDecimal.ZERO),
-//                "Vale alimentação com zero dias deve ser zero");
-//    }
-//}
+package io.github.progmodular.gestaorh.acceptance;
+
+import io.github.progmodular.gestaorh.infra.config.calculator.*;
+import io.github.progmodular.gestaorh.model.entities.Employee;
+import io.github.progmodular.gestaorh.model.Enum.DegreeUnhealthiness;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+class CalculatorAllTests {
+
+    private Employee employee;
+
+    @BeforeEach
+    void setUp() {
+        employee = new Employee();
+
+        employee.setGrossSalary(new BigDecimal("3000.00"));
+        employee.setHoursWorkedMonth(160);
+        employee.setActualVTCost(new BigDecimal("100.00"));
+        employee.setDependents(0);
+
+        employee.setDegreeUnhealthiness(DegreeUnhealthiness.AVERAGE);
+    }
+
+    private void assertBigDecimalEquals(BigDecimal expected, BigDecimal actual) {
+        assertEquals(0, expected.compareTo(actual),
+                "Expected: " + expected + " but was: " + actual);
+    }
+
+    @Test
+    void testCalculatorDanger_WithValidSalary_ShouldCalculateCorrectly() {
+        CalculatorDanger calculator = new CalculatorDanger(employee);
+        BigDecimal expected = employee.getGrossSalary().multiply(new BigDecimal("0.30"));
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(expected, result);
+    }
+
+    @Test
+    void testCalculatorDanger_WithNullEmployee_ShouldThrowException() {
+        CalculatorDanger nullCalculator = new CalculatorDanger(null);
+
+        assertThrows(IllegalStateException.class, () -> nullCalculator.calculator());
+    }
+
+    @Test
+    void testCalculatorDanger_WithNullGrossSalary_ShouldThrowException() {
+        employee.setGrossSalary(null);
+        CalculatorDanger calculator = new CalculatorDanger(employee);
+
+        assertThrows(IllegalStateException.class, () -> calculator.calculator());
+    }
+
+    @Test
+    void testCalculatorDanger_GetCalculationType_ShouldReturnCorrectType() {
+        CalculatorDanger calculator = new CalculatorDanger(employee);
+
+        String result = calculator.getCalculationType();
+
+        assertEquals("DANGER", result);
+    }
+
+    @Test
+    void testCalculatorDiscountValueTransport_WhenActualCostIsLessThanMaxDiscount_ShouldReturnActualCost() {
+        CalculatorDiscountValueTransport calculator = new CalculatorDiscountValueTransport(employee);
+        BigDecimal actualVTCost = new BigDecimal("100.00");
+        employee.setActualVTCost(actualVTCost);
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(actualVTCost, result);
+    }
+
+    @Test
+    void testCalculatorDiscountValueTransport_WhenActualCostIsGreaterThanMaxDiscount_ShouldReturnMaxDiscount() {
+        CalculatorDiscountValueTransport calculator = new CalculatorDiscountValueTransport(employee);
+        BigDecimal actualVTCost = new BigDecimal("200.00");
+        employee.setActualVTCost(actualVTCost);
+        BigDecimal expected = employee.getGrossSalary().multiply(new BigDecimal("0.06"));
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(expected, result);
+    }
+
+    @Test
+    void testCalculatorDiscountValueTransport_ResultShouldBeRoundedToTwoDecimals() {
+        CalculatorDiscountValueTransport calculator = new CalculatorDiscountValueTransport(employee);
+        BigDecimal actualVTCost = new BigDecimal("90.123");
+        employee.setActualVTCost(actualVTCost);
+
+        BigDecimal result = calculator.calculator();
+
+        assertEquals(2, result.scale());
+        assertBigDecimalEquals(new BigDecimal("90.12"), result);
+    }
+
+    @Test
+    void testCalculatorDiscountValueTransport_GetCalculationType_ShouldReturnCorrectType() {
+        CalculatorDiscountValueTransport calculator = new CalculatorDiscountValueTransport(employee);
+
+        String result = calculator.getCalculationType();
+
+        assertEquals("VALUE_TRANSPORT", result);
+    }
+
+    @Test
+    void testCalculatorFgts_WithValidSalary_ShouldCalculateCorrectly() {
+        CalculatorFgts calculator = new CalculatorFgts(employee);
+        BigDecimal expected = employee.getGrossSalary().multiply(new BigDecimal("0.08"));
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(expected, result);
+    }
+
+    @Test
+    void testCalculatorFgts_WithZeroSalary_ShouldReturnZero() {
+        employee.setGrossSalary(BigDecimal.ZERO);
+        CalculatorFgts calculator = new CalculatorFgts(employee);
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(BigDecimal.ZERO, result);
+    }
+
+    @Test
+    void testCalculatorFgts_GetCalculationType_ShouldReturnCorrectType() {
+        CalculatorFgts calculator = new CalculatorFgts(employee);
+
+        String result = calculator.getCalculationType();
+
+        assertEquals("FGTS", result);
+    }
+
+    @Test
+    void testCalculatorHoursSalary_WithValidValues_ShouldCalculateCorrectly() {
+        CalculatorHoursSalary calculator = new CalculatorHoursSalary(employee);
+        BigDecimal expected = employee.getGrossSalary().divide(new BigDecimal(employee.getHoursWorkedMonth()), 2, java.math.RoundingMode.HALF_UP);
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(expected, result);
+        assertEquals(2, result.scale());
+    }
+
+    @Test
+    void testCalculatorHoursSalary_WithZeroHours_ShouldThrowException() {
+        employee.setHoursWorkedMonth(0);
+        CalculatorHoursSalary calculator = new CalculatorHoursSalary(employee);
+
+        assertThrows(ArithmeticException.class, () -> calculator.calculator());
+    }
+
+    @Test
+    void testCalculatorHoursSalary_GetCalculationType_ShouldReturnCorrectType() {
+        CalculatorHoursSalary calculator = new CalculatorHoursSalary(employee);
+
+        String result = calculator.getCalculationType();
+
+        assertEquals("HOURS_SALARY", result);
+    }
+
+    @Test
+    void testCalculatorInss_FirstBracket_ShouldCalculateCorrectly() {
+        employee.setGrossSalary(new BigDecimal("1400.00"));
+        CalculatorInss calculator = new CalculatorInss(employee);
+        BigDecimal expected = employee.getGrossSalary().multiply(new BigDecimal("0.075"));
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(expected.setScale(2, java.math.RoundingMode.HALF_UP), result);
+    }
+
+    @Test
+    void testCalculatorInss_SecondBracket_ShouldCalculateCorrectly() {
+        employee.setGrossSalary(new BigDecimal("2000.00"));
+        CalculatorInss calculator = new CalculatorInss(employee);
+        BigDecimal expected = new BigDecimal("1412.00").multiply(new BigDecimal("0.075"))
+                .add(employee.getGrossSalary().subtract(new BigDecimal("1412.00")).multiply(new BigDecimal("0.09")));
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(expected.setScale(2, java.math.RoundingMode.HALF_UP), result);
+    }
+
+    @Test
+    void testCalculatorInss_ThirdBracket_ShouldCalculateCorrectly() {
+        employee.setGrossSalary(new BigDecimal("3500.00"));
+        CalculatorInss calculator = new CalculatorInss(employee);
+
+        BigDecimal result = calculator.calculator();
+
+        assertTrue(result.compareTo(BigDecimal.ZERO) > 0);
+        assertEquals(2, result.scale());
+    }
+
+    @Test
+    void testCalculatorInss_FourthBracket_ShouldCalculateCorrectly() {
+        employee.setGrossSalary(new BigDecimal("5000.00"));
+        CalculatorInss calculator = new CalculatorInss(employee);
+
+        BigDecimal result = calculator.calculator();
+
+        assertTrue(result.compareTo(BigDecimal.ZERO) > 0);
+        assertEquals(2, result.scale());
+    }
+
+    @Test
+    void testCalculatorInss_AboveMaximum_ShouldCalculateCorrectly() {
+        employee.setGrossSalary(new BigDecimal("8000.00"));
+        CalculatorInss calculator = new CalculatorInss(employee);
+
+        BigDecimal result = calculator.calculator();
+
+        assertTrue(result.compareTo(BigDecimal.ZERO) > 0);
+        assertEquals(2, result.scale());
+    }
+
+    @Test
+    void testCalculatorInss_GetCalculationType_ShouldReturnCorrectType() {
+        CalculatorInss calculator = new CalculatorInss(employee);
+
+        String result = calculator.getCalculationType();
+
+        assertEquals("INSS", result);
+    }
+
+    @Test
+    void testCalculatorIrrf_FirstBracket_ShouldReturnZero() {
+        employee.setGrossSalary(new BigDecimal("2000.00"));
+        employee.setDependents(0);
+        CalculatorIrrf calculator = new CalculatorIrrf(employee);
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(BigDecimal.ZERO, result);
+    }
+
+    @Test
+    void testCalculatorIrrf_SecondBracket_ShouldCalculateCorrectly() {
+        employee.setGrossSalary(new BigDecimal("3000.00"));
+        employee.setDependents(0);
+        CalculatorIrrf calculator = new CalculatorIrrf(employee);
+
+        BigDecimal result = calculator.calculator();
+
+        assertTrue(result.compareTo(BigDecimal.ZERO) > 0);
+    }
+
+    @Test
+    void testCalculatorIrrf_WithDependents_ShouldReduceBaseCalculation() {
+        employee.setGrossSalary(new BigDecimal("3500.00"));
+        employee.setDependents(2);
+        CalculatorIrrf calculator = new CalculatorIrrf(employee);
+
+        BigDecimal result = calculator.calculator();
+
+        assertTrue(result.compareTo(BigDecimal.ZERO) >= 0);
+    }
+
+    @Test
+    void testCalculatorIrrf_NegativeResult_ShouldReturnZero() {
+        employee.setGrossSalary(new BigDecimal("2500.00"));
+        employee.setDependents(5);
+        CalculatorIrrf calculator = new CalculatorIrrf(employee);
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(BigDecimal.ZERO, result);
+    }
+
+    @Test
+    void testCalculatorIrrf_GetCalculationType_ShouldReturnCorrectType() {
+        CalculatorIrrf calculator = new CalculatorIrrf(employee);
+
+        String result = calculator.getCalculationType();
+
+        assertEquals("IRRF", result);
+    }
+
+    @Test
+    void testCalculatorNetSalary_WithAllDiscounts_ShouldCalculateCorrectly() {
+        CalculatorNetSalary calculator = new CalculatorNetSalary(employee);
+
+        BigDecimal result = calculator.calculator();
+
+        assertTrue(result.compareTo(BigDecimal.ZERO) > 0);
+        assertTrue(result.compareTo(employee.getGrossSalary()) < 0);
+    }
+
+    @Test
+    void testCalculatorNetSalary_WithHighSalary_ShouldCalculateCorrectly() {
+        employee.setGrossSalary(new BigDecimal("5000.00"));
+        employee.setActualVTCost(new BigDecimal("150.00"));
+        employee.setDependents(1);
+        CalculatorNetSalary calculator = new CalculatorNetSalary(employee);
+
+        BigDecimal result = calculator.calculator();
+
+        assertTrue(result.compareTo(BigDecimal.ZERO) > 0);
+        assertTrue(result.compareTo(employee.getGrossSalary()) < 0);
+    }
+
+    @Test
+    void testCalculatorNetSalary_GetCalculationType_ShouldReturnCorrectType() {
+        CalculatorNetSalary calculator = new CalculatorNetSalary(employee);
+
+        String result = calculator.getCalculationType();
+
+        assertEquals("NET_SALARY", result);
+    }
+
+    @Test
+    void testCalculatorUnhealthiness_WithValidDegree_ShouldCalculateCorrectly() {
+        CalculatorUnhealthiness calculator = new CalculatorUnhealthiness(employee);
+
+        BigDecimal percentage = employee.getDegreeUnhealthiness().getPercentage();
+        BigDecimal expected = new BigDecimal("1518.00").multiply(percentage);
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(expected, result);
+    }
+
+    @Test
+    void testCalculatorUnhealthiness_WithDifferentDegree_ShouldCalculateCorrectly() {
+        employee.setDegreeUnhealthiness(DegreeUnhealthiness.MAXIMUM);
+        CalculatorUnhealthiness calculator = new CalculatorUnhealthiness(employee);
+
+        BigDecimal percentage = employee.getDegreeUnhealthiness().getPercentage();
+        BigDecimal expected = new BigDecimal("1518.00").multiply(percentage);
+
+        BigDecimal result = calculator.calculator();
+
+        assertBigDecimalEquals(expected, result);
+    }
+
+    @Test
+    void testCalculatorUnhealthiness_GetCalculationType_ShouldReturnCorrectType() {
+        CalculatorUnhealthiness calculator = new CalculatorUnhealthiness(employee);
+
+        String result = calculator.getCalculationType();
+
+        assertEquals("UNHEALTHY", result);
+    }
+
+    @Test
+    void testCalculatorAbstract_Fields_ShouldHaveCorrectValues() {
+        CalculatorFgts calculator = new CalculatorFgts(employee);
+
+        assertNotNull(calculator.getMinimunSalary());
+        assertNotNull(calculator.getFgtsPercentage());
+        assertNotNull(calculator.getDangerPercentage());
+
+        assertBigDecimalEquals(new BigDecimal("1518.00"), calculator.getMinimunSalary());
+        assertBigDecimalEquals(new BigDecimal("0.08"), calculator.getFgtsPercentage());
+        assertBigDecimalEquals(new BigDecimal("0.30"), calculator.getDangerPercentage());
+    }
+
+    @Test
+    void testICalculatorInterface_Contract_ShouldBeImplementedCorrectly() {
+        ICalculatorInterface calculator = new CalculatorFgts(employee);
+
+        assertNotNull(calculator.calculator());
+        assertNotNull(calculator.getCalculationType());
+        assertFalse(calculator.getCalculationType().isEmpty());
+    }
+
+    @Test
+    void testIntegration_NetSalaryUsesOtherCalculatorsCorrectly() {
+        CalculatorNetSalary netSalaryCalculator = new CalculatorNetSalary(employee);
+        CalculatorInss inssCalculator = new CalculatorInss(employee);
+        CalculatorIrrf irrfCalculator = new CalculatorIrrf(employee);
+        CalculatorDiscountValueTransport vtCalculator = new CalculatorDiscountValueTransport(employee);
+
+        BigDecimal netSalary = netSalaryCalculator.calculator();
+        BigDecimal inss = inssCalculator.calculator();
+        BigDecimal irrf = irrfCalculator.calculator();
+        BigDecimal vt = vtCalculator.calculator();
+        BigDecimal expectedNetSalary = employee.getGrossSalary().subtract(inss).subtract(irrf).subtract(vt);
+
+        assertBigDecimalEquals(expectedNetSalary, netSalary);
+    }
+
+    @Test
+    void testIntegration_AllCalculatorsReturnValidResults() {
+        ICalculatorInterface[] calculators = {
+                new CalculatorDanger(employee),
+                new CalculatorDiscountValueTransport(employee),
+                new CalculatorFgts(employee),
+                new CalculatorHoursSalary(employee),
+                new CalculatorInss(employee),
+                new CalculatorIrrf(employee),
+                new CalculatorNetSalary(employee),
+                new CalculatorUnhealthiness(employee)
+        };
+
+        for (ICalculatorInterface calculator : calculators) {
+            BigDecimal result = calculator.calculator();
+            String calculationType = calculator.getCalculationType();
+
+            assertNotNull(result, "Result should not be null for: " + calculationType);
+            assertNotNull(calculationType, "Calculation type should not be null for: " + calculator.getClass().getSimpleName());
+            assertFalse(calculationType.isEmpty(), "Calculation type should not be empty for: " + calculator.getClass().getSimpleName());
+        }
+    }
+}
