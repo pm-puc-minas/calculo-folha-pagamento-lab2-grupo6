@@ -30,6 +30,6 @@ public class CalculatorFoodValue extends CalculatorAbstract implements ICalculat
 
     @Override
     public String getCalculationType() {
-        return "DANGER";
+        return "FOOD_VALUE";
     }
 }
