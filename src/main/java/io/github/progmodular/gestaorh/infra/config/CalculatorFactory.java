@@ -19,7 +19,6 @@ public class CalculatorFactory {
                 new CalculatorIrrf(employee),
                 new CalculatorNetSalary(employee),
                 new CalculatorUnhealthiness(employee),
-                new CalculatorFoodValue(employee),
                 new CalculatorDiscountValueTransport(employee)
         );
     }
@@ -34,7 +33,6 @@ public class CalculatorFactory {
             case "NET_SALARY" -> new CalculatorNetSalary(employee);
             case "UNHEALTHY" -> new CalculatorUnhealthiness(employee);
             case "VALUE_TRANSPORT" -> new CalculatorDiscountValueTransport(employee);
-            case "FOOD_VALUE" -> new CalculatorFoodValue(employee);
             default -> throw new IllegalStateException("Unexpected value: " + type);
 
         };

@@ -1,4 +1,4 @@
-package io.github.progmodular.gestaorh.infra.config.calculator;
+package io.github.progmodular.gestaorh.model.Enum;
 
 import lombok.Getter;
 

@@ -1,9 +1,9 @@
 package io.github.progmodular.gestaorh.controller;
 
-import io.github.progmodular.gestaorh.dto.SheetRequest;
-import io.github.progmodular.gestaorh.dto.SheetResponse;
-import io.github.progmodular.gestaorh.model.entities.SheetReport;
-import io.github.progmodular.gestaorh.service.SheetReportCalculatorOrchestrationService;
+import io.github.progmodular.gestaorh.dto.PayrollDTO;
+import io.github.progmodular.gestaorh.dto.PayrollDTOResponse;
+import io.github.progmodular.gestaorh.model.entities.Payroll;
+import io.github.progmodular.gestaorh.service.PayrollCalculatorOrchestrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,10 +20,10 @@ import java.util.List;
 @RequestMapping("/api/payroll")
 @CrossOrigin(origins = "*")
 @Tag(name = "Cálculo e Relatórios de Folha de Pagamento", description = "Endpoints para calcular, recalcular, buscar e excluir registros de holerites (SheetReport).")
-public class SheetReportController {
+public class PayrollController {
 
     @Autowired
-    private SheetReportCalculatorOrchestrationService payrollService;
+    private PayrollCalculatorOrchestrationService payrollService;
 
 
     @GetMapping("/employee/{employeeId}/history")
@@ -38,11 +38,11 @@ public class SheetReportController {
                     @ApiResponse(responseCode = "200", description = "Sucesso. Retorna a lista de relatórios (pode ser vazia)."),
                     @ApiResponse(responseCode = "404", description = "Funcionário não encontrado ou erro de busca.")
             })
-    public ResponseEntity<List<SheetResponse>> getPayrollHistory(
+    public ResponseEntity<List<PayrollDTOResponse>> getPayrollHistory(
             @PathVariable Long employeeId,
             @RequestParam(required = false) Integer year,
             @RequestParam(required = false) Integer month) {
-            List<SheetResponse> history;
+            List<PayrollDTOResponse> history;
             if (year != null && month != null) {
                 history = payrollService.getPayrollByMonthAndYear(employeeId, month, year);
             }
@@ -60,8 +60,8 @@ public class SheetReportController {
                     @ApiResponse(responseCode = "200", description = "Cálculo concluído. Retorna o SheetReport gerado."),
                     @ApiResponse(responseCode = "400", description = "Requisição inválida (falha no cálculo ou dados incompletos).")
             })
-    public ResponseEntity<Object> calculatePayroll(@RequestBody SheetRequest request) {
-            SheetReport result = payrollService.calculateCompletePayroll(request);
+    public ResponseEntity<Object> calculatePayroll(@RequestBody PayrollDTO request) {
+            Payroll result = payrollService.calculateCompletePayroll(request);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -80,11 +80,11 @@ public class SheetReportController {
                     @ApiResponse(responseCode = "404", description = "folha de pagamento não encontrado."),
                     @ApiResponse(responseCode = "400", description = "Erro de lógica ou validação no recálculo.")
             })
-    public ResponseEntity<SheetReport> recalculatePayroll(@PathVariable("payrollId") Long payrollId,
-                                                          @PathVariable("month") int month,
-                                                          @PathVariable("year") int year) {
-            SheetReport result = payrollService.recalculatePayroll(payrollId, month, year);
-            return ResponseEntity.ok(result);
+    public ResponseEntity<Void> recalculatePayroll(@PathVariable("payrollId") Long payrollId,
+                                                      @PathVariable("month") int month,
+                                                      @PathVariable("year") int year) {
+            payrollService.recalculatePayroll(payrollId, month, year);
+            return ResponseEntity.noContent().build();
     }
 
 

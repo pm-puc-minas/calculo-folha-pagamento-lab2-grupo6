@@ -1,12 +1,10 @@
 package io.github.progmodular.gestaorh.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.github.progmodular.gestaorh.model.entities.Employee;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-public record SheetResponse
+public record PayrollDTOResponse
         (
                 @JsonProperty("employee")
                 UserDTOResponse userDTOResponse,

@@ -2,7 +2,7 @@ package io.github.progmodular.gestaorh.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.github.progmodular.gestaorh.model.Enum.UserType;
-import io.github.progmodular.gestaorh.infra.config.calculator.DegreeUnhealthiness;
+import io.github.progmodular.gestaorh.model.Enum.DegreeUnhealthiness;
 
 import java.math.BigDecimal;
 
