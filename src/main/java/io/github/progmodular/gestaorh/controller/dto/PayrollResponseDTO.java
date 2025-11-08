@@ -24,8 +24,8 @@ public class PayrollResponseDTO {
 
     public PayrollResponseDTO(PayrollResult payroll) {
         this.id = payroll.getId();
-        this.employeeId = payroll.getEmployeeId();
-        this.employeeName = payroll.getEmployeeName();
+        this.employeeId = payroll.getEmployee().getId();
+        this.employeeName = payroll.getEmployee().getName();
         this.grossSalary = payroll.getGrossSalary();
         this.inssDiscount = payroll.getInssDiscount();
         this.irrfDiscount = payroll.getIrrfDiscount();

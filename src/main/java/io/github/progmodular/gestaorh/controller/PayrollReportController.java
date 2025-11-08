@@ -16,10 +16,17 @@ public class PayrollReportController {
     private final PayrollReportService payrollReportService;
 
     @PostMapping("/report/{employeeId}")
-    public ReponseEntity<PayrollReportDTO> generateReport(@PathVariable Long employeeId) {
+    public ResponseEntity<PayrollReportDTO> generateReport(@PathVariable Long employeeId) {
         PayrollReportDTO report = payrollReportService.generateReport(employeeId);
         return ResponseEntity.ok(report);
     }
+
+    @GetMapping("/report/{employeeId}")
+    public ResponseEntity<PayrollReportDTO> getLatestReport(@PathVariable Long employeeId) {
+        PayrollReportDTO report = payrollReportService.getLatestReport(employeeId);
+        return ResponseEntity.ok(report);
+    }
+
 
 
 }

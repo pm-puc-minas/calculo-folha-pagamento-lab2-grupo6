@@ -1,6 +1,7 @@
 package io.github.progmodular.gestaorh.service;
 
 
+import io.github.progmodular.gestaorh.controller.dto.PayrollReportDTO;
 import io.github.progmodular.gestaorh.model.entities.PayrollReport;
 import io.github.progmodular.gestaorh.model.entities.PayrollResult;
 import io.github.progmodular.gestaorh.repository.PayrollReportRepository;
@@ -19,7 +20,7 @@ public class PayrollReportService {
 
     public PayrollReportDTO generateReport (Long employeeId) {
         PayrollResult latestResult = payrollResultRepository
-                .findTopByEmployeeIdOrderByCalulationDateDesc(employeeId)
+                .findTopByEmployeeIdOrderByCalculationDateDesc(employeeId)
                 .orElseThrow(() -> new RuntimeException("No payroll found for employee id " + employeeId));
 
         PayrollReport report = new PayrollReport();
@@ -33,7 +34,7 @@ public class PayrollReportService {
 
     public PayrollReportDTO getLatestReport (Long employeeId) {
         PayrollResult result = payrollResultRepository
-                .findTopByEmployeeIdOrderByCalulationDateDesc(employeeId)
+                .findTopByEmployeeIdOrderByCalculationDateDesc(employeeId)
                 .orElseThrow(() -> new RuntimeException("No payroll found for employee id " + employeeId));
 
         return PayrollReportDTO.from(result);
