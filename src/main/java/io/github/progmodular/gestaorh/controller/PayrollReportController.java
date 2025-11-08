@@ -27,6 +27,17 @@ public class PayrollReportController {
         return ResponseEntity.ok(report);
     }
 
+    @DeleteMapping("/report/{employeeId}")
+    public ResponseEntity<Void> deleteReport(@PathVariable Long employeeId, Integer month, Integer year) {
+        try {
+            payrollReportService.deleteReport(employeeId, month, year);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
 
 }

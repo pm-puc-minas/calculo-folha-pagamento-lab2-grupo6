@@ -20,4 +20,5 @@ public interface PayrollResultRepository extends JpaRepository<PayrollResult,Lon
                                                @Param("employeeId") Long employeeId);
 
     Optional<PayrollResult> findTopByEmployeeIdOrderByCalculationDateDesc(Long employeeId);
+
 }

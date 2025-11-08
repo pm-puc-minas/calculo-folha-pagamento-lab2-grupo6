@@ -39,4 +39,15 @@ public class PayrollReportService {
 
         return PayrollReportDTO.from(result);
     }
+    
+    public void deleteReport(Long employeeId, Integer month, Integer year) {
+        PayrollResult result = (PayrollResult) payrollResultRepository
+                .findByEmployeeIdAndMonthAndYear(employeeId, month, year);
+        if (((java.util.List<?>) result).isEmpty()) {
+            throw new RuntimeException("No payroll found for employee id " + employeeId + " in " + month + "/" + year);
+        }
+
+        payrollResultRepository.delete(result);
+    }
 }
+    
