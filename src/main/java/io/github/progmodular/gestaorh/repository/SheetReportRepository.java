@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SheetReportRepository extends JpaRepository<SheetReport,Long> {
     List<SheetReport> findByEmployeeId(Long employeeId);
@@ -18,4 +19,7 @@ public interface SheetReportRepository extends JpaRepository<SheetReport,Long> {
                                                @Param("month") int month,
                                                @Param("year") int year,
                                                @Param("employeeId") Long employeeId);
+
+    Optional<PayrollResult> findTopByEmployeeIdOrderByCalculationDateDesc(Long employeeId);
+
 }
