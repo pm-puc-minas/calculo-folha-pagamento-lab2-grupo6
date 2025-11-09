@@ -21,6 +21,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("users")
 @Tag(name = "Gestão de Usuários (CRUD)", description = "Endpoints para criar, buscar, atualizar e deletar usuários Employee e PayrollAdmin.")
+@CrossOrigin(origins = "*")
 public class UserController {
 
         @Autowired
