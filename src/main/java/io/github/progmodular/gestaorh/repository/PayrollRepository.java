@@ -1,12 +1,15 @@
 package io.github.progmodular.gestaorh.repository;
 
+import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.entities.Payroll;
+import io.github.progmodular.gestaorh.model.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PayrollRepository extends JpaRepository<Payroll,Long> {
     List<Payroll> findByEmployeeId(Long employeeId);
@@ -18,6 +21,6 @@ public interface PayrollRepository extends JpaRepository<Payroll,Long> {
                                                @Param("year") int year,
                                                @Param("employeeId") Long employeeId);
 
-//    Optional<PayrollResult> findTopByEmployeeIdOrderByCalculationDateDesc(Long employeeId);
+    Optional<Payroll> findTopByEmployeeIdOrderByCalculationDateDesc(Long employeeId);
 
 }
