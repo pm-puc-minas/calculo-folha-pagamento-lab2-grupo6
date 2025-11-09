@@ -27,7 +27,7 @@ public class PayrollValidator {
     }
 
     public void isEmployeeExistById(Long employeeId) {
-        if(payrollRepository.findById(employeeId).isEmpty())
+        if(payrollRepository.findByEmployeeId(employeeId).isEmpty())
         {
             throw new UserNotExistException("Employee provided not exist in the system or not have any payroll active");
         }

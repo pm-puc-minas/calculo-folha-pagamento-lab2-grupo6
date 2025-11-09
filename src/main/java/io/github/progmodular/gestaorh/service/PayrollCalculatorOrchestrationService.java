@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -96,8 +97,10 @@ public class PayrollCalculatorOrchestrationService {
     public Payroll calculateCompletePayroll(PayrollDTO request) {
         payrollValidator.nullValidation(request);
         payrollValidator.validateOnCreation(request);
-        User user = employeeRepository.findById(request.employeeId())
+        Optional<User> optionalUser = employeeRepository.findById(request.employeeId());
+        User user = optionalUser
                 .orElseThrow(() -> new UserNotExistException("User provided not exist in the system"));
+
         payrollValidator.isEmployee(user);
         if(user instanceof Employee employee)
         {
