@@ -32,7 +32,8 @@ public record UserDTO(
 
         DegreeUnhealthiness degreeUnhealthiness,
 
-        Boolean isAdmin
+        Boolean isAdmin,
+        Boolean hasDanger
                       )
 {
     public Employee setEmployee()
@@ -52,6 +53,7 @@ public record UserDTO(
         employee.setDaysWorked(this.daysWorked);
         employee.setActualVTCost(this.actualVTCost);
         employee.setDegreeUnhealthiness(this.degreeUnhealthiness);
+        employee.setHasDanger(this.hasDanger);
 
         return employee;
     }

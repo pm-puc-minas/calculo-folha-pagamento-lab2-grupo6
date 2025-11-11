@@ -87,14 +87,34 @@ public class UserValidator
                 errors.add(new ErrorField("position", "Position is a mandatory field."));
             }
 
+            if (user.dependents() == null)
+            {
+                errors.add(new ErrorField("dependents", "dependents is a mandatory field."));
+            }
+
             if (user.hoursWorkedMonth() == null)
             {
-                errors.add(new ErrorField("hoursWorked", "hoursWorked is a mandatory field."));
+                errors.add(new ErrorField("hoursWorkedMonth", "hoursWorkedMonth is a mandatory field."));
             }
 
             if (user.daysWorked() == null)
             {
                 errors.add(new ErrorField("daysWorked", "daysWorked is a mandatory field."));
+            }
+
+            if (user.actualVTCost() == null)
+            {
+                errors.add(new ErrorField("actualVTCost", "actualVTCost is a mandatory field."));
+            }
+
+            if (user.degreeUnhealthiness() == null)
+            {
+                errors.add(new ErrorField("degreeUnhealthiness", "degreeUnhealthiness is a mandatory field."));
+            }
+
+            if (user.hasDanger() == null)
+            {
+                errors.add(new ErrorField("hasDanger", "hasDanger is a mandatory field."));
             }
 
         }

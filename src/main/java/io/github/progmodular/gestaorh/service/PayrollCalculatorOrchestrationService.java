@@ -90,6 +90,7 @@ public class PayrollCalculatorOrchestrationService {
                 employee.getDaysWorked(),
                 employee.getActualVTCost(),
                 employee.getDegreeUnhealthiness(),
+                employee.getHasDanger(),
                 employee.getIsAdmin());
         return dto;
     }
@@ -123,15 +124,18 @@ public class PayrollCalculatorOrchestrationService {
 
         for (ICalculatorInterface calculator : calculators) {
             BigDecimal calculationResult = calculator.calculator();
-            applyCalculationToResult(result, calculator, calculationResult);
+            applyCalculationToResult(result, calculator, calculationResult,employee.getHasDanger());
         }
 
         return result;
     }
 
-    private void applyCalculationToResult(Payroll result, ICalculatorInterface calculator, BigDecimal value) {
+    private void applyCalculationToResult(Payroll result, ICalculatorInterface calculator, BigDecimal value,Boolean hasDanger) {
         if (calculator instanceof CalculatorDanger) {
-            result.setDangerAllowance(value);
+            if(hasDanger == true)
+            {
+                result.setDangerAllowance(value);
+            }
         } else if (calculator instanceof CalculatorDiscountValueTransport) {
             result.setValueTransportDiscount(value);
         } else if (calculator instanceof CalculatorFgts) {

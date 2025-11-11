@@ -45,4 +45,7 @@ public class Employee extends User {
     @Column(name="degreeUnhealthiness")
     private DegreeUnhealthiness degreeUnhealthiness;
 
+    @Column(name="hasDanger")
+    private Boolean hasDanger;
+
 }

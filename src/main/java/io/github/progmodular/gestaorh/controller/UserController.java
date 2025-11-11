@@ -61,6 +61,7 @@ public class UserController {
                         employee.getDaysWorked(),
                         employee.getActualVTCost(),
                         employee.getDegreeUnhealthiness(),
+                        employee.getHasDanger(),
                         employee.getIsAdmin());
                 return ResponseEntity.ok(dto);
             }
@@ -118,11 +119,16 @@ public class UserController {
                 employee.setName(dto.name());
                 employee.setEmail(dto.email());
                 employee.setPassword(dto.password());
+
                 employee.setGrossSalary(dto.grossSalary());
                 employee.setCpf(dto.cpf());
                 employee.setPosition(dto.position());
+                employee.setDependents(dto.dependents());
                 employee.setHoursWorkedMonth(dto.hoursWorkedMonth());
                 employee.setDaysWorked(dto.daysWorked());
+                employee.setActualVTCost(dto.actualVTCost());
+                employee.setDegreeUnhealthiness(dto.degreeUnhealthiness());
+                employee.setHasDanger(dto.hasDanger());
             }
 
             if (user instanceof PayrollAdmin payrollAdmin) {

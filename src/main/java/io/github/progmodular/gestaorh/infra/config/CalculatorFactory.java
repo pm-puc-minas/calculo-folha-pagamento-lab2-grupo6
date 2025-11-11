@@ -24,17 +24,17 @@ public class CalculatorFactory {
     }
 
     public ICalculatorInterface createCalculator(String type, Employee employee) {
-        return switch (type) {
-            case "DANGER" -> new CalculatorDanger(employee);
-            case "FGTS" -> new CalculatorFgts(employee);
-            case "HOURS_SALARY" -> new CalculatorHoursSalary(employee);
-            case "INSS" -> new CalculatorInss(employee);
-            case "IRRF" -> new CalculatorIrrf(employee);
-            case "NET_SALARY" -> new CalculatorNetSalary(employee);
-            case "UNHEALTHY" -> new CalculatorUnhealthiness(employee);
-            case "VALUE_TRANSPORT" -> new CalculatorDiscountValueTransport(employee);
-            default -> throw new IllegalStateException("Unexpected value: " + type);
+            return switch (type) {
+                case "DANGER" -> new CalculatorDanger(employee);
+                case "FGTS" -> new CalculatorFgts(employee);
+                case "HOURS_SALARY" -> new CalculatorHoursSalary(employee);
+                case "INSS" -> new CalculatorInss(employee);
+                case "IRRF" -> new CalculatorIrrf(employee);
+                case "NET_SALARY" -> new CalculatorNetSalary(employee);
+                case "UNHEALTHY" -> new CalculatorUnhealthiness(employee);
+                case "VALUE_TRANSPORT" -> new CalculatorDiscountValueTransport(employee);
+                default -> throw new IllegalStateException("Unexpected value: " + type);
 
-        };
+            };
     }
 }
