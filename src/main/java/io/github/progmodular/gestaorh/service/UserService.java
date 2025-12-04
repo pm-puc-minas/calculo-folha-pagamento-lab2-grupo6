@@ -31,6 +31,11 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public User getByEmail(String email)
+    {
+        return userRepository.findByEmail(email);
+    }
+
     public void deleteById(Long id)
     {
         userValidator.isUserExistById(id);

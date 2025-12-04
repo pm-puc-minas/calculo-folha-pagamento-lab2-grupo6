@@ -22,7 +22,7 @@ public class UserValidator
     private IUserRepository userRepository;
 
     public void validateOnCreation(User user) {
-        if(userRepository.findByEmail(user.getEmail()).isPresent())
+        if (userRepository.existsByEmail(user.getEmail()))
         {
             throw new DuplicaValueException("Email is already used by another user.");
         }
