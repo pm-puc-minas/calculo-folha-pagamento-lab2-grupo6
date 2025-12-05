@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Folha de Pagamento</title>
+
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        padding: 30px;
+        background: #f4f6f9;
+      }
+
+      .header {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      }
+
+      .header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .title {
+        font-size: 1.4rem;
+        font-weight: 600;
+      }
+
+      .logout-btn {
+        padding: 8px 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        background: #dc3545;
+        color: #fff;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        margin-top: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      th {
+        background: #28a745;
+        color: white;
+        padding: 10px;
+        text-transform: uppercase;
+      }
+
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="header">
+      <div class="header-top">
+        <div>
+          <div class="title">Folha de Pagamento</div>
+          <div id="employeeInfo"></div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">Sair</button>
+      </div>
+    </div>
+
+    <h3>Histórico de Holerites</h3>
+    <p id="statusMsg"></p>
+
+    <table id="tablePayroll">
+      <thead>
+        <tr>
+          <th>Ano</th>
+          <th>Mês</th>
+          <th>Salário Bruto</th>
+          <th>Periculosidade</th>
+          <th>Insalubridade</th>
+          <th>FGTS</th>
+          <th>INSS</th>
+          <th>IRRF</th>
+          <th>VT</th>
+          <th>Salário Líquido</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <script>
+      const USER = JSON.parse(localStorage.getItem("loggedUser"));
+      if (!USER || USER.userType !== "EMPLOYEE") {
+        window.location.href = "login.html";
+      }
+
+      const USER_ID = USER.id;
+
+      const BASE = "http://localhost:8080";
+      const API_USER = `${BASE}/users/${USER_ID}`;
+      const API_HISTORY = `${BASE}/api/payroll/employee/${USER_ID}/history`;
+      const API_CALC = `${BASE}/api/payroll/calculate`;
+
+      const statusMsg = document.getElementById("statusMsg");
+
+      function logout() {
+        localStorage.removeItem("loggedUser");
+        window.location.href = "login.html";
+      }
+
+      async function loadEmployee() {
+        const res = await fetch(API_USER);
+        const user = await res.json();
+        document.getElementById(
+          "employeeInfo"
+        ).textContent = `${user.name} — ${user.position} — R$ ${user.grossSalary}`;
+      }
+
+      async function calculateNow() {
+        const today = new Date();
+        const body = {
+          employeeId: USER_ID,
+          month: today.getMonth() + 1,
+          year: today.getFullYear(),
+        };
+
+        console.log("➡ Enviando cálculo:", body);
+
+        const res = await fetch(API_CALC, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        const text = await res.text();
+        console.log("⬅ Resposta cálculo:", res.status, text);
+
+        return res.ok;
+      }
+
+      async function loadHistory() {
+        statusMsg.textContent = "Buscando histórico...";
+        let res = await fetch(API_HISTORY);
+
+        // Se der erro → tentar calcular
+        if (!res.ok) {
+          const err = await res.text();
+          console.warn("❌ Erro no GET histórico:", err);
+
+          statusMsg.textContent = "Nenhuma folha encontrada. Calculando...";
+          const calcOK = await calculateNow();
+
+          if (!calcOK) {
+            statusMsg.textContent =
+              "Erro ao calcular a folha. Verifique o backend.";
+            return;
+          }
+
+          // tentar novamente
+          res = await fetch(API_HISTORY);
+        }
+
+        const list = await res.json();
+
+        const tb = document.querySelector("#tablePayroll tbody");
+        tb.innerHTML = "";
+
+        if (!list || list.length === 0) {
+          statusMsg.textContent = "Nenhum registro encontrado.";
+          return;
+        }
+
+        statusMsg.textContent = "";
+
+        list.forEach((p) => {
+          const tr = document.createElement("tr");
+
+          tr.innerHTML = `
+      <td>${p.year}</td>
+      <td>${p.month}</td>
+      <td>R$ ${p.grossSalary}</td>
+      <td>R$ ${p.dangerAllowance}</td>
+      <td>R$ ${p.unhealthyAllowance}</td>
+      <td>R$ ${p.fgts}</td>
+      <td>R$ ${p.inssDiscount}</td>
+      <td>R$ ${p.irrfDiscount}</td>
+      <td>R$ ${p.valueTransportDiscount}</td>
+      <td>R$ ${p.netSalary}</td>
+    `;
+
+          tb.appendChild(tr);
+        });
+      }
+
+      async function init() {
+        await loadEmployee();
+        await loadHistory();
+      }
+
+      init();
+    </script>
+  </body>
+</html>

@@ -2,6 +2,7 @@
 
 import io.github.progmodular.gestaorh.dto.UserDTO;
 import io.github.progmodular.gestaorh.dto.UserDTOResponse;
+import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.entities.PayrollAdmin;
 import io.github.progmodular.gestaorh.model.entities.User;
@@ -68,29 +69,79 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
 
-        @PostMapping
-        @Operation(summary = "Cria Novo Usuário",
-                description = "Cria um novo registro de usuário (Employee ou PayrollAdmin) com base no DTO de entrada. Retorna a URI do novo recurso.",
-                responses = {
-                        @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso. Retorna o header Location."),
-                        @ApiResponse(responseCode = "400", description = "Dados inválidos (erro de validação).")
-                })
-        public ResponseEntity<Object> create(@RequestBody UserDTO userdto, BindingResult bindingResult) {
+    @PostMapping
+    @Operation(summary = "Cria Novo Usuário",
+            description = "Cria um novo registro de usuário (Employee ou PayrollAdmin) com base no DTO de entrada. Retorna a URI do novo recurso.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso. Retorna o header Location."),
+                    @ApiResponse(responseCode = "400", description = "Dados inválidos (erro de validação).")
+            })
+    public ResponseEntity<Object> create(@RequestBody UserDTO userdto, BindingResult bindingResult) {
 
-            User user = userService.checkUser(userdto);
+        User user = userService.checkUser(userdto);
 
-
-            userService.saveUser(user);
+        // Verificando se o usuário é do tipo EMPLOYEE
+        if (userdto.userType() == UserType.EMPLOYEE) {
+            // Criação de Employee com os dados fornecidos
+            Employee employee = userdto.setEmployee();
+            userService.saveUser(employee);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(user.getId())
+                    .buildAndExpand(employee.getId())
                     .toUri();
             return ResponseEntity.created(location).build();
         }
 
-        @DeleteMapping("{id}")
+        // Verificando se o usuário é do tipo PAYROLL_ADMIN
+        if (userdto.userType() == UserType.PAYROLL_ADMIN) {
+            // Criação de PayrollAdmin com os dados fornecidos
+            PayrollAdmin payrollAdmin = userdto.setPayroll();
+            userService.saveUser(payrollAdmin);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(payrollAdmin.getId())
+                    .toUri();
+            return ResponseEntity.created(location).build();
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/employee/{id}")
+    @Operation(summary = "Atualiza dados adicionais do Employee",
+            description = "Atualiza dados como horas trabalhadas, dias trabalhados, custo VT, grau de insalubridade e se possui periculosidade.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Atualização bem-sucedida."),
+                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado."),
+                    @ApiResponse(responseCode = "400", description = "Dados inválidos.")
+            })
+    public ResponseEntity<Void> updateEmployeeData(@PathVariable("id") Long id, @RequestBody Employee employee) {
+        Optional<User> userOptional = userService.getById(id);
+
+        if (userOptional.isEmpty() || !(userOptional.get() instanceof Employee)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Employee existingEmployee = (Employee) userOptional.get();
+
+        // Atualizando os dados do Employee
+        existingEmployee.setHoursWorkedMonth(employee.getHoursWorkedMonth());
+        existingEmployee.setDaysWorked(employee.getDaysWorked());
+        existingEmployee.setActualVTCost(employee.getActualVTCost());
+        existingEmployee.setDegreeUnhealthiness(employee.getDegreeUnhealthiness());
+        existingEmployee.setHasDanger(employee.getHasDanger());
+
+        userService.updateById(existingEmployee, id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @DeleteMapping("{id}")
         @Operation(summary = "Deleta Usuário por ID",
                 description = "Remove permanentemente um registro de usuário usando sua chave primária.",
                 responses = {

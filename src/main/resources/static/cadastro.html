@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro - Gestão RH</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Roboto, sans-serif;
+        display: flex;
+        justify-content: center;
+        padding: 40px 15px;
+        background: linear-gradient(135deg, #f5f7fa, #e8ebf3);
+        color: #444;
+      }
+
+      .auth-container {
+        background: #ffffff;
+        padding: 2.5rem;
+        border-radius: 12px;
+        width: 420px;
+        max-width: 95%;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+        animation: fadeIn 0.4s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 1.3rem;
+        color: #2a2a2a;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 0.92rem;
+        color: #333;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1.5px solid #dcdfe6;
+        border-radius: 6px;
+        background: #fafafa;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: #2e8f46;
+        background: #ffffff;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(46, 143, 70, 0.15);
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+      }
+
+      .section-divider {
+        border-top: 1px solid #e0e0e6;
+        margin: 20px 0 12px;
+        padding-top: 8px;
+        font-size: 0.78rem;
+        color: #777;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 700;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        background: linear-gradient(135deg, #28a745, #23943d);
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: transform 0.2s ease, background 0.3s ease;
+      }
+
+      button:hover {
+        background: linear-gradient(135deg, #23943d, #1f7f35);
+        transform: translateY(-2px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      #message {
+        margin-top: 15px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @media (max-width: 480px) {
+        .auth-container {
+          padding: 1.5rem;
+          width: 100%;
+        }
+        button {
+          font-size: 0.95rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-container">
+      <h2>Novo Usuário</h2>
+
+      <form id="cadastroForm">
+        <div class="form-group">
+          <label for="userType">Tipo de Usuário:</label>
+          <select id="userType" name="userType" onchange="toggleFields()">
+            <option value="PAYROLL_ADMIN">Administrador</option>
+            <option value="EMPLOYEE">Funcionário</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="name">Nome Completo:</label>
+          <input type="text" id="name" required placeholder="Ex: Maria Silva" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            required
+            placeholder="email@empresa.com"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Senha:</label>
+          <input type="password" id="password" required />
+        </div>
+
+        <!-- Campos específicos de Funcionário -->
+        <div id="employeeFields" class="hidden">
+          <div class="section-divider">Dados Contratuais</div>
+
+          <div class="form-group">
+            <label for="cpf">CPF:</label>
+            <input type="text" id="cpf" placeholder="000.000.000-00" />
+          </div>
+
+          <div class="form-group">
+            <label for="position">Cargo:</label>
+            <input type="text" id="position" placeholder="Ex: Desenvolvedor" />
+          </div>
+
+          <div class="form-group">
+            <label for="grossSalary">Salário Bruto (R$):</label>
+            <input
+              type="number"
+              id="grossSalary"
+              step="0.01"
+              placeholder="0.00"
+            />
+          </div>
+
+          <div class="section-divider">Jornada e Benefícios</div>
+
+          <div class="form-group">
+            <label for="hoursWorkedMonth">Horas Trabalhadas (Mês):</label>
+            <input type="number" id="hoursWorkedMonth" placeholder="Ex: 160" />
+          </div>
+
+          <div class="form-group">
+            <label for="daysWorked">Dias Trabalhados:</label>
+            <input type="number" id="daysWorked" placeholder="Ex: 20" />
+          </div>
+
+          <div class="form-group">
+            <label for="dependents">Nº de Dependentes:</label>
+            <input type="number" id="dependents" min="0" value="0" />
+          </div>
+
+          <div class="form-group">
+            <label for="actualVTCost">Custo Vale Transporte (R$):</label>
+            <input
+              type="number"
+              id="actualVTCost"
+              step="0.01"
+              placeholder="0.00"
+            />
+          </div>
+
+          <div class="section-divider">Adicionais</div>
+
+          <div class="form-group">
+            <label for="degreeUnhealthiness">Grau de Insalubridade:</label>
+            <select id="degreeUnhealthiness">
+              <option value="MINIMUM">Mínimo</option>
+              <option value="MEDIUM">Médio</option>
+              <option value="MAXIMUM">Máximo</option>
+            </select>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <input type="checkbox" id="hasDanger" />
+            <label for="hasDanger" style="margin: 0"
+              >Recebe Periculosidade?</label
+            >
+          </div>
+        </div>
+
+        <button type="submit">Cadastrar</button>
+      </form>
+
+      <p id="message"></p>
+    </div>
+
+    <script>
+      const API_URL = "http://localhost:8080/users";
+
+      function toggleFields() {
+        const type = document.getElementById("userType").value;
+        const empFields = document.getElementById("employeeFields");
+
+        empFields.style.display = type === "EMPLOYEE" ? "block" : "none";
+      }
+
+      document
+        .getElementById("cadastroForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const messageEl = document.getElementById("message");
+          messageEl.innerText = "Enviando...";
+          messageEl.style.color = "blue";
+
+          const userType = document.getElementById("userType").value;
+
+          const isAdmin = userType === "PAYROLL_ADMIN";
+
+          let payload = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+            userType: userType,
+            isAdmin: isAdmin,
+          };
+
+          if (userType === "EMPLOYEE") {
+            payload.cpf = document.getElementById("cpf").value;
+            payload.position = document.getElementById("position").value;
+
+            payload.grossSalary =
+              parseFloat(document.getElementById("grossSalary").value) || 0.0;
+            payload.actualVTCost =
+              parseFloat(document.getElementById("actualVTCost").value) || 0.0;
+
+            payload.hoursWorkedMonth =
+              parseInt(document.getElementById("hoursWorkedMonth").value) || 0;
+            payload.daysWorked =
+              parseInt(document.getElementById("daysWorked").value) || 0;
+            payload.dependents =
+              parseInt(document.getElementById("dependents").value) || 0;
+
+            payload.degreeUnhealthiness = document.getElementById(
+              "degreeUnhealthiness"
+            ).value;
+            payload.hasDanger = document.getElementById("hasDanger").checked;
+          }
+
+          console.log("JSON Enviado:", JSON.stringify(payload));
+
+          try {
+            const response = await fetch(API_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+              messageEl.style.color = "green";
+              messageEl.innerText = "Sucesso! Usuário criado.";
+              document.getElementById("cadastroForm").reset();
+              toggleFields();
+            } else {
+              const errorText = await response.text();
+              throw new Error(errorText || `Erro ${response.status}`);
+            }
+          } catch (error) {
+            messageEl.style.color = "red";
+            messageEl.innerText = "Erro: " + error.message.me;
+            console.error(error);
+          }
+        });
+    </script>
+  </body>
+</html>
