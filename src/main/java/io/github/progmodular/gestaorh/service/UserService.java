@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,12 +38,7 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("Usuário não encontrado: " + email);
         }
 
-        System.out.println("Usuário encontrado! Tipo: " + user.getUserType());
-        System.out.println("Senha no banco: " + user.getPassword());
-
-
         String role = user.getIsAdmin() ? "ADMIN" : "USER";
-
 
         return org.springframework.security.core.userdetails.User
                 .builder()
@@ -53,10 +48,8 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-
     public void saveUser(User user) {
         userValidator.validateOnCreation(user);
-
 
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
@@ -64,12 +57,14 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-
     public Optional<User> getById(Long id) {
         userValidator.isUserExistById(id);
         return userRepository.findById(id);
     }
 
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
 
     public User authenticate(String email, String password) {
         User user = userRepository.findByEmail(email);
@@ -82,19 +77,16 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User getByEmail(String email)
-    {
+    public User getByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public void deleteById(Long id)
-    {
+    public void deleteById(Long id) {
         userValidator.isUserExistById(id);
         userRepository.deleteById(id);
     }
 
-    public void updateById(User user,Long id)
-    {
+    public void updateById(User user, Long id) {
         userValidator.isUserExistById(id);
         userRepository.save(user);
     }
@@ -102,15 +94,11 @@ public class UserService implements UserDetailsService {
     public User checkUser(UserDTO userdto) {
         userValidator.nullValidation(userdto);
         User user = null;
-        if(userdto.userType() == UserType.EMPLOYEE)
-        {
-            return  userdto.setEmployee();
-        }
-        else if(userdto.userType() == UserType.PAYROLL_ADMIN)
-        {
+        if(userdto.userType() == UserType.EMPLOYEE) {
+            return userdto.setEmployee();
+        } else if(userdto.userType() == UserType.PAYROLL_ADMIN) {
             return userdto.setPayroll();
         }
-        
         return user;
     }
 }

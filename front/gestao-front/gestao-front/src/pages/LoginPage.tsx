@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./LoginPage.css"; // Importando o estilo
+import "./LoginPage.css";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -10,7 +10,6 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    // Limpa erro anterior ao tentar novamente
     setError("");
 
     if (!email || !password) {
@@ -19,20 +18,16 @@ const LoginPage: React.FC = () => {
     }
 
     try {
-      // 1. Tenta logar (Validação)
       const response = await axios.post("http://localhost:8080/users/login", {
         email,
         password,
       });
 
-      // 2. Gera e salva o token
       const token = "Basic " + btoa(`${email}:${password}`);
       localStorage.setItem("authHeader", token);
 
-      // 3. Salva os dados do usuário
       localStorage.setItem("user", JSON.stringify(response.data));
 
-      // 4. Redirecionamento
       if (response.data.userType === "PAYROLL_ADMIN") {
         navigate("/dashboard");
       } else {
@@ -45,7 +40,6 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  // Permite logar apertando ENTER no campo de senha
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       handleLogin();

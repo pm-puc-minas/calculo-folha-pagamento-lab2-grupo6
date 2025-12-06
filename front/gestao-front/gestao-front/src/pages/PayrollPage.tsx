@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import api from "../services/api"; // Importe o axios configurado
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 import { User, DegreeUnhealthiness } from "../types";
+import "./PayrollPage.css";
 
 const PayrollPage: React.FC = () => {
+  const navigate = useNavigate();
+
   // Estados de Controle
   const [step, setStep] = useState<"SEARCH" | "FORM">("SEARCH");
   const [searchId, setSearchId] = useState("");
@@ -11,14 +15,13 @@ const PayrollPage: React.FC = () => {
   // Dados do Funcionário e Parametros de Folha
   const [employee, setEmployee] = useState<User | null>(null);
 
-  // Inputs do Formulário (Valores que serão atualizados via PATCH)
+  // Inputs do Formulário
   const [formData, setFormData] = useState({
     hoursWorkedMonth: 0,
     daysWorked: 0,
     actualVTCost: 0,
     degreeUnhealthiness: DegreeUnhealthiness.MINIMUM,
     hasDanger: false,
-    // Parametros para o POST de cálculo
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear(),
   });
@@ -31,8 +34,10 @@ const PayrollPage: React.FC = () => {
       const response = await api.get<User>(`/users/${searchId}`);
       const emp = response.data;
 
-      // Só permite avançar se for Employee
-      if (emp.userType !== "EMPLOYEE") {
+      // Verifica se é funcionário
+      // Nota: Ajuste a verificação conforme seu backend (role vs userType)
+      const role = emp.userType || emp.userType;
+      if (role !== "EMPLOYEE") {
         alert("O ID informado não pertence a um funcionário (Employee).");
         setLoading(false);
         return;
@@ -40,13 +45,15 @@ const PayrollPage: React.FC = () => {
 
       setEmployee(emp);
 
-      // Preenche o formulário com os dados ATUAIS do banco
+      // Preenche o formulário com dados atuais
       setFormData({
         hoursWorkedMonth: emp.hoursWorkedMonth || 220,
         daysWorked: emp.daysWorked || 20,
         actualVTCost: emp.actualVTCost || 0,
+        // Cast forçado para garantir compatibilidade com o Enum/Select
         degreeUnhealthiness:
-          emp.degreeUnhealthiness || DegreeUnhealthiness.MINIMUM,
+          (emp.degreeUnhealthiness as DegreeUnhealthiness) ||
+          DegreeUnhealthiness.MINIMUM,
         hasDanger: emp.hasDanger || false,
         month: new Date().getMonth() + 1,
         year: new Date().getFullYear(),
@@ -67,8 +74,7 @@ const PayrollPage: React.FC = () => {
     setLoading(true);
 
     try {
-      // 1. Atualizar dados variáveis do funcionário (PATCH)
-      // O endpoint espera um objeto Employee no body
+      // 1. Atualizar dados variáveis (PATCH)
       await api.patch(`/users/employee/${employee.id}`, {
         hoursWorkedMonth: formData.hoursWorkedMonth,
         daysWorked: formData.daysWorked,
@@ -78,17 +84,18 @@ const PayrollPage: React.FC = () => {
       });
 
       // 2. Calcular a folha (POST)
-      // O endpoint espera PayrollDTO: { employeeId, month, year }
       await api.post("/api/payroll/calculate", {
         employeeId: employee.id,
         month: formData.month,
         year: formData.year,
       });
 
-      alert("Dados atualizados e Folha de Pagamento calculada com sucesso!");
-      // Resetar ou redirecionar
+      alert("Sucesso! Folha de pagamento calculada.");
+
+      // Resetar para buscar outro funcionário
       setStep("SEARCH");
       setSearchId("");
+      setEmployee(null);
     } catch (error) {
       console.error("Erro no processo:", error);
       alert("Erro ao processar. Verifique o console.");
@@ -98,79 +105,116 @@ const PayrollPage: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Gerar Nova Folha de Pagamento</h2>
+    <div className="payroll-page-container">
+      {/* Cabeçalho com Botão Voltar */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "30px",
+        }}
+      >
+        <h2 style={{ margin: 0, textAlign: "left" }}>Lançamento de Folha</h2>
+        <button
+          onClick={() => navigate("/dashboard")}
+          style={{
+            backgroundColor: "#6b7280",
+            color: "white",
+            padding: "8px 16px",
+            height: "auto",
+          }}
+        >
+          Voltar ao Dashboard
+        </button>
+      </div>
 
+      {/* --- PASSO 1: BUSCA --- */}
       {step === "SEARCH" && (
         <div className="card">
-          <label>Informe o ID do Funcionário:</label>
-          <input
-            type="number"
-            value={searchId}
-            onChange={(e) => setSearchId(e.target.value)}
-            placeholder="Ex: 1"
-          />
+          <label>
+            ID do Funcionário:
+            <input
+              type="number"
+              value={searchId}
+              onChange={(e) => setSearchId(e.target.value)}
+              placeholder="Digite o ID..."
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            />
+          </label>
           <button onClick={handleSearch} disabled={loading}>
-            {loading ? "Buscando..." : "Buscar e Iniciar"}
+            {loading ? "Buscando..." : "Iniciar Lançamento"}
           </button>
         </div>
       )}
 
+      {/* --- PASSO 2: FORMULÁRIO --- */}
       {step === "FORM" && employee && (
         <div className="form-container">
-          <h3>Configurar Parâmetros para: {employee.name}</h3>
+          <h3>
+            Colaborador:{" "}
+            <span style={{ color: "#2563eb" }}>{employee.name}</span>
+          </h3>
 
           <div className="row">
-            <label>Mês de Referência:</label>
-            <input
-              type="number"
-              max={12}
-              min={1}
-              value={formData.month}
-              onChange={(e) =>
-                setFormData({ ...formData, month: Number(e.target.value) })
-              }
-            />
-            <label>Ano:</label>
-            <input
-              type="number"
-              value={formData.year}
-              onChange={(e) =>
-                setFormData({ ...formData, year: Number(e.target.value) })
-              }
-            />
+            <div className="input-group">
+              <label>Mês de Referência:</label>
+              <input
+                type="number"
+                max={12}
+                min={1}
+                value={formData.month}
+                onChange={(e) =>
+                  setFormData({ ...formData, month: Number(e.target.value) })
+                }
+              />
+            </div>
+            <div className="input-group">
+              <label>Ano:</label>
+              <input
+                type="number"
+                value={formData.year}
+                onChange={(e) =>
+                  setFormData({ ...formData, year: Number(e.target.value) })
+                }
+              />
+            </div>
           </div>
 
           <hr />
-          <h4>Dados Variáveis (Atualizará o Cadastro)</h4>
+          <h4>Variáveis da Folha</h4>
 
-          <div className="input-group">
-            <label>Horas Trabalhadas no Mês:</label>
-            <input
-              type="number"
-              value={formData.hoursWorkedMonth}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  hoursWorkedMonth: Number(e.target.value),
-                })
-              }
-            />
+          <div className="row">
+            <div className="input-group">
+              <label>Horas Trabalhadas:</label>
+              <input
+                type="number"
+                value={formData.hoursWorkedMonth}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    hoursWorkedMonth: Number(e.target.value),
+                  })
+                }
+              />
+            </div>
+            <div className="input-group">
+              <label>Dias Trabalhados:</label>
+              <input
+                type="number"
+                value={formData.daysWorked}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    daysWorked: Number(e.target.value),
+                  })
+                }
+              />
+            </div>
           </div>
 
           <div className="input-group">
-            <label>Dias Trabalhados:</label>
-            <input
-              type="number"
-              value={formData.daysWorked}
-              onChange={(e) =>
-                setFormData({ ...formData, daysWorked: Number(e.target.value) })
-              }
-            />
-          </div>
-
-          <div className="input-group">
-            <label>Custo VT Real:</label>
+            <label>Custo VT (Real):</label>
             <input
               type="number"
               value={formData.actualVTCost}
@@ -183,44 +227,54 @@ const PayrollPage: React.FC = () => {
             />
           </div>
 
-          <div className="input-group">
-            <label>Insalubridade:</label>
-            <select
-              value={formData.degreeUnhealthiness}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  degreeUnhealthiness: e.target.value as DegreeUnhealthiness,
-                })
-              }
-            >
-              <option value="MINIMUM">Mínimo</option>
-              <option value="MEDIUM">Médio</option>
-              <option value="MAXIMUM">Máximo</option>
-            </select>
-          </div>
-
-          <div className="input-group">
-            <label>
-              <input
-                type="checkbox"
-                checked={formData.hasDanger}
+          <div className="row">
+            <div className="input-group">
+              <label>Grau de Insalubridade:</label>
+              <select
+                value={formData.degreeUnhealthiness}
                 onChange={(e) =>
-                  setFormData({ ...formData, hasDanger: e.target.checked })
+                  setFormData({
+                    ...formData,
+                    degreeUnhealthiness: e.target.value as DegreeUnhealthiness,
+                  })
                 }
-              />
-              Possui Periculosidade?
-            </label>
+              >
+                <option value="MINIMUM">Mínimo</option>
+                <option value="MEDIUM">Médio</option>
+                <option value="MAXIMUM">Máximo</option>
+              </select>
+            </div>
+
+            <div className="input-group" style={{ justifyContent: "center" }}>
+              <label style={{ cursor: "pointer" }}>
+                <input
+                  type="checkbox"
+                  checked={formData.hasDanger}
+                  onChange={(e) =>
+                    setFormData({ ...formData, hasDanger: e.target.checked })
+                  }
+                />
+                Possui Periculosidade?
+              </label>
+            </div>
           </div>
 
           <div className="actions">
-            <button onClick={() => setStep("SEARCH")}>Cancelar</button>
+            <button
+              onClick={() => {
+                setStep("SEARCH");
+                setSearchId("");
+                setEmployee(null);
+              }}
+            >
+              Cancelar
+            </button>
             <button
               onClick={handleSubmit}
               disabled={loading}
-              style={{ backgroundColor: "#4CAF50", color: "white" }}
+              style={{ backgroundColor: "#10b981", color: "white" }}
             >
-              {loading ? "Processando..." : "Salvar Dados e Calcular Folha"}
+              {loading ? "Processando..." : "Confirmar e Calcular"}
             </button>
           </div>
         </div>
