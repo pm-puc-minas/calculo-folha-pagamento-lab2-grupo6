@@ -5,13 +5,19 @@ import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.User;
 import io.github.progmodular.gestaorh.repository.IUserRepository;
 import io.github.progmodular.gestaorh.validator.UserValidator;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     IUserRepository userRepository;
@@ -19,16 +25,61 @@ public class UserService {
     @Autowired
     UserValidator userValidator;
 
-    public void saveUser(User user)
-    {
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println("Tentando buscar usuário: " + email);
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Usuário não encontrado: " + email);
+        }
+
+        System.out.println("Usuário encontrado! Tipo: " + user.getUserType());
+        System.out.println("Senha no banco: " + user.getPassword());
+
+
+        String role = user.getIsAdmin() ? "ADMIN" : "USER";
+
+
+        return org.springframework.security.core.userdetails.User
+                .builder()
+                .username(user.getEmail())
+                .password(user.getPassword())
+                .roles(role)
+                .build();
+    }
+
+
+    public void saveUser(User user) {
         userValidator.validateOnCreation(user);
+
+
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
+
         userRepository.save(user);
     }
 
-    public Optional<User> getById(Long id)
-    {
+
+    public Optional<User> getById(Long id) {
         userValidator.isUserExistById(id);
         return userRepository.findById(id);
+    }
+
+
+    public User authenticate(String email, String password) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return null;
+        }
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            return null;
+        }
+        return user;
     }
 
     public User getByEmail(String email)

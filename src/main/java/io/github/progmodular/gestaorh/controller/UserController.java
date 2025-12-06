@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -28,46 +30,48 @@ public class UserController {
         @Autowired
         UserService userService;
 
-        @GetMapping("{id}")
-        @Operation(summary = "Busca Usuário por ID",
-                description = "Procura por um usuário (Employee ou PayrollAdmin) usando sua chave primária.",
-                responses = {
-                        @ApiResponse(responseCode = "200", description = "Sucesso. Retorna os dados do usuário."),
-                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado.")
-                })
-        public ResponseEntity<UserDTOResponse> get(@PathVariable("id") Long id) {
-            Optional<User> optionalUser = userService.getById(id);
-            User user = optionalUser.get();
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-            if (user instanceof PayrollAdmin payrollAdmin) {
-                UserDTOResponse dto = new UserDTOResponse(
-                        payrollAdmin.getId(),
-                        payrollAdmin.getName(),
-                        payrollAdmin.getEmail(),
-                        payrollAdmin.getUserType(),
-                        payrollAdmin.getIsAdmin());
-                return ResponseEntity.ok(dto);
-            }
-            if (user instanceof Employee employee) {
-                UserDTOResponse dto = new UserDTOResponse(
-                        employee.getId(),
-                        employee.getUserType(),
-                        employee.getName(),
-                        employee.getEmail(),
-                        employee.getGrossSalary(),
-                        employee.getCpf(),
-                        employee.getPosition(),
-                        employee.getDependents(),
-                        employee.getHoursWorkedMonth(),
-                        employee.getDaysWorked(),
-                        employee.getActualVTCost(),
-                        employee.getDegreeUnhealthiness(),
-                        employee.getHasDanger(),
-                        employee.getIsAdmin());
-                return ResponseEntity.ok(dto);
-            }
-            return ResponseEntity.notFound().build();
+    @GetMapping("{id}")
+    @Operation(summary = "Busca Usuário por ID",
+            description = "Procura por um usuário (Employee ou PayrollAdmin) usando sua chave primária.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Sucesso. Retorna os dados do usuário."),
+                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado.")
+            })
+    public ResponseEntity<UserDTOResponse> get(@PathVariable("id") Long id) {
+        Optional<User> optionalUser = userService.getById(id);
+        User user = optionalUser.get();
+
+        if (user instanceof PayrollAdmin payrollAdmin) {
+            UserDTOResponse dto = new UserDTOResponse(
+                    payrollAdmin.getId(),
+                    payrollAdmin.getName(),
+                    payrollAdmin.getEmail(),
+                    payrollAdmin.getUserType(),
+                    payrollAdmin.getIsAdmin());
+            return ResponseEntity.ok(dto);
         }
+        if (user instanceof Employee employee) {
+            UserDTOResponse dto = new UserDTOResponse(
+                    employee.getId(),
+                    employee.getUserType(),
+                    employee.getName(),
+                    employee.getEmail(),
+                    employee.getGrossSalary(),
+                    employee.getCpf(),
+                    employee.getPosition(),
+                    employee.getDependents(),
+                    employee.getHoursWorkedMonth(),
+                    employee.getDaysWorked(),
+                    employee.getActualVTCost(),
+                    employee.getDegreeUnhealthiness(),
+                    employee.getHasDanger(),
+                    employee.getIsAdmin());
+            return ResponseEntity.ok(dto);
+        }
+        return ResponseEntity.notFound().build();
+    }
 
     @PostMapping
     @Operation(summary = "Cria Novo Usuário",
@@ -76,39 +80,54 @@ public class UserController {
                     @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso. Retorna o header Location."),
                     @ApiResponse(responseCode = "400", description = "Dados inválidos (erro de validação).")
             })
-    public ResponseEntity<Object> create(@RequestBody UserDTO userdto, BindingResult bindingResult) {
+    public ResponseEntity<Object> create(@RequestBody UserDTO userdto) {
 
         User user = userService.checkUser(userdto);
 
-        // Verificando se o usuário é do tipo EMPLOYEE
-        if (userdto.userType() == UserType.EMPLOYEE) {
-            // Criação de Employee com os dados fornecidos
-            Employee employee = userdto.setEmployee();
-            userService.saveUser(employee);
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(employee.getId())
-                    .toUri();
-            return ResponseEntity.created(location).build();
+        String encryptedPassword = passwordEncoder.encode(userdto.password());
+        user.setPassword(encryptedPassword);
+
+        userService.saveUser(user);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(user.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
+    }
+
+    @PostMapping("/login")
+    @Operation(summary = "Login do Usuário",
+            description = "Autentica um usuário e retorna os dados do usuário.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Login bem-sucedido."),
+                    @ApiResponse(responseCode = "400", description = "Credenciais inválidas."),
+            })
+    public ResponseEntity<Object> login(@RequestBody UserDTO loginDto) {
+        try {
+
+            User user = userService.authenticate(loginDto.email(), loginDto.password());
+            if (user == null) {
+                return ResponseEntity.status(400).body("Credenciais inválidas.");
+            }
+
+
+            UserDTOResponse userDtoResponse = new UserDTOResponse(
+                    user.getId(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getUserType(),
+                    user.getIsAdmin()
+            );
+
+            return ResponseEntity.ok(userDtoResponse);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Erro interno no servidor: " + e.getMessage());
         }
-
-        // Verificando se o usuário é do tipo PAYROLL_ADMIN
-        if (userdto.userType() == UserType.PAYROLL_ADMIN) {
-            // Criação de PayrollAdmin com os dados fornecidos
-            PayrollAdmin payrollAdmin = userdto.setPayroll();
-            userService.saveUser(payrollAdmin);
-
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(payrollAdmin.getId())
-                    .toUri();
-            return ResponseEntity.created(location).build();
-        }
-
-        return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/employee/{id}")
@@ -128,7 +147,7 @@ public class UserController {
 
         Employee existingEmployee = (Employee) userOptional.get();
 
-        // Atualizando os dados do Employee
+
         existingEmployee.setHoursWorkedMonth(employee.getHoursWorkedMonth());
         existingEmployee.setDaysWorked(employee.getDaysWorked());
         existingEmployee.setActualVTCost(employee.getActualVTCost());
