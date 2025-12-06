@@ -84,10 +84,6 @@ public class UserController {
 
         User user = userService.checkUser(userdto);
 
-
-        String encryptedPassword = passwordEncoder.encode(userdto.password());
-        user.setPassword(encryptedPassword);
-
         userService.saveUser(user);
 
         URI location = ServletUriComponentsBuilder
