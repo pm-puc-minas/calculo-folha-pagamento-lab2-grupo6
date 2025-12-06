@@ -1,0 +1,82 @@
+/* LoginPage.css */
+
+/* Fundo da tela inteira */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f3f4f6; /* Cinza claro corporativo */
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* O Cartão de Login */
+.login-card {
+  background-color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  max-width: 400px; /* Largura ideal para login */
+}
+
+/* Título */
+.login-card h2 {
+  color: #111827;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* Campos de Input */
+.login-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #374151;
+  background-color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box; /* Garante que padding não estoure a largura */
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #2563eb; /* Azul foco */
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Botão de Entrar */
+.login-button {
+  width: 100%;
+  padding: 0.85rem;
+  background-color: #1e40af; /* Azul Escuro Institucional */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 0.5rem;
+}
+
+.login-button:hover {
+  background-color: #1e3a8a; /* Azul ainda mais escuro no hover */
+}
+
+/* Mensagem de Erro */
+.error-message {
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+}

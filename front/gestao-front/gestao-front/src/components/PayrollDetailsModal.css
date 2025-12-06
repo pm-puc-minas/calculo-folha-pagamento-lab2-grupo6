@@ -1,0 +1,170 @@
+/* PayrollDetailsModal.css */
+
+/* Fundo Escuro (Overlay) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Um pouco mais escuro para foco */
+  backdrop-filter: blur(4px); /* Efeito de desfoque no fundo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Container do Modal (O "Papel" do Holerite) */
+.modal-container {
+  background-color: white;
+  padding: 32px;
+  border-radius: 12px;
+  width: 600px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto; /* Caso a tela seja muito pequena */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  font-family: "Inter", sans-serif;
+  color: #374151;
+}
+
+/* Cabeçalho */
+.modal-header {
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 16px;
+}
+
+.modal-header h3 {
+  margin: 0 0 12px 0;
+  color: #111827;
+  font-size: 1.5rem;
+}
+
+.employee-info p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+/* Grid de Vencimentos e Descontos */
+.payroll-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.title-earnings {
+  color: #059669;
+} /* Verde */
+.title-discounts {
+  color: #dc2626;
+} /* Vermelho */
+
+/* Linhas de Valores (Label .... Valor) */
+.financial-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  border-bottom: 1px dashed #f3f4f6;
+  padding-bottom: 4px;
+}
+
+.financial-row:last-child {
+  border-bottom: none;
+}
+
+.value-positive {
+  color: #059669;
+  font-weight: 500;
+}
+.value-negative {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* Rodapé / Totais */
+.modal-footer {
+  text-align: right;
+  background-color: #f9fafb;
+  margin: 0 -32px -32px -32px; /* Estica para encostar nas bordas */
+  padding: 24px 32px;
+  border-top: 1px solid #e5e7eb;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.fgts-info {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.net-salary-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+.net-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.net-value {
+  font-size: 1.8rem;
+  color: #059669;
+  font-weight: 800;
+  margin: 0;
+}
+
+/* Botão Fechar */
+.close-btn {
+  margin-top: 20px;
+  background-color: #374151;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%; /* Botão largo no mobile */
+}
+
+.close-btn:hover {
+  background-color: #1f2937;
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+  .payroll-grid {
+    grid-template-columns: 1fr; /* Uma coluna no celular */
+    gap: 24px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

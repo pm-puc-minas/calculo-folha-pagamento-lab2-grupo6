@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
+import DashboardPage from "./pages/DashboardPage";
+import PayrollPage from "./pages/PayrollPage";
+import EmployeePayrollPage from "./pages/EmployeePayrollPage";
+import "./App.css";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/cadastro" element={<SignUpPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/payroll" element={<PayrollPage />} />
+        <Route path="/employee/payroll" element={<EmployeePayrollPage />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
