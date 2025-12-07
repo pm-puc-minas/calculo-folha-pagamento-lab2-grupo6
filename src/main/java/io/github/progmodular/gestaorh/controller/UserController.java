@@ -30,7 +30,6 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    // Instância local para uso no controller, garantindo criptografia
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @GetMapping
@@ -56,7 +55,6 @@ public class UserController {
                         employee.getCpf(),
                         employee.getPosition(),
                         employee.getDependents(),
-//                        employee.getHoursWorkedMonth(),
                         employee.getDaysWorked(),
                         employee.getActualVTCost(),
                         employee.getDegreeUnhealthiness(),
@@ -101,7 +99,6 @@ public class UserController {
                     employee.getCpf(),
                     employee.getPosition(),
                     employee.getDependents(),
-//                    employee.getHoursWorkedMonth(),
                     employee.getDaysWorked(),
                     employee.getActualVTCost(),
                     employee.getDegreeUnhealthiness(),
@@ -166,7 +163,6 @@ public class UserController {
         }
 
         Employee existingEmployee = (Employee) userOptional.get();
-//        existingEmployee.setHoursWorkedMonth(employee.getHoursWorkedMonth());
         existingEmployee.setDaysWorked(employee.getDaysWorked());
         existingEmployee.setActualVTCost(employee.getActualVTCost());
         existingEmployee.setDegreeUnhealthiness(employee.getDegreeUnhealthiness());
@@ -195,42 +191,32 @@ public class UserController {
 
         User user = userOptional.get();
 
-        // 1. Lógica de Criptografia: Só prepara a nova senha SE ela foi enviada
         String encodedPassword = null;
         if (dto.password() != null && !dto.password().isBlank()) {
             encodedPassword = passwordEncoder.encode(dto.password());
         }
 
-        // 2. Atualização para Employee
         if (user instanceof Employee employee) {
             employee.setName(dto.name());
             employee.setEmail(dto.email());
 
-            // IMPORTANTE: Só atualiza a senha se encodedPassword não for nulo
             if (encodedPassword != null) {
                 employee.setPassword(encodedPassword);
             }
 
-            // Atualiza os outros campos (Verifique se o DTO pode vir nulo nesses campos numéricos)
-            // Se o DTO vier com valores nulos/zeros indesejados, faça ifs similares
             employee.setGrossSalary(dto.grossSalary());
             employee.setCpf(dto.cpf());
             employee.setPosition(dto.position());
             employee.setDependents(dto.dependents());
 
-            // Dados da folha geralmente não mudam na edição de perfil, mas se quiser permitir:
 
-            // Booleanos primitivos no DTO podem vir false se omitidos, cuidado.
-            // Se no DTO for Boolean (wrapper), use if(dto.hasDanger() != null)
             employee.setHasDanger(dto.hasDanger());
         }
 
-        // 3. Atualização para PayrollAdmin
         if (user instanceof PayrollAdmin payrollAdmin) {
             payrollAdmin.setName(dto.name());
             payrollAdmin.setEmail(dto.email());
 
-            // IMPORTANTE: Só atualiza a senha se encodedPassword não for nulo
             if (encodedPassword != null) {
                 payrollAdmin.setPassword(encodedPassword);
             }

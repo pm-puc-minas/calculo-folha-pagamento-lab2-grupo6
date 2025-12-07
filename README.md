@@ -3,8 +3,14 @@
 Trabalho final da disciplina Programação Modular – PUC Minas
 Professor: Paulo Henrique D. S. Coelho
 
-[Veja a Documentação Completa](docs/README.md)
-[Veja a Demonstração da aplicação Completa](docs/Sprint_4/demo-app)
+## Documentação extra
+
+[Documentação Completa](docs/README.md)
+
+[Demonstração da aplicação Completa](docs/Sprint_4/demo-app)
+
+[Padrão de Projeto Factory](docs/Sprint_4/padraoProjeto.md)
+
 ## Sobre o projeto
 
 O Sistema de Gestão de Recursos Humanos (RH) é uma solução abrangente para automatizar e otimizar processos-chave do departamento de pessoal de uma empresa. Inspirado em sistemas líderes de mercado como o da TOTVS, este projeto foca em funcionalidades essenciais como folha de pagamento, controle de ponto eletrônico, e gestão de dados de funcionários.
@@ -31,7 +37,7 @@ O desenvolvimento segue as melhores práticas de qualidade de software, incluind
 
 **Maven**: Gerenciador de dependências e automação de build.
 
-**Banco de Dados**: A definir.
+**Banco de Dados**: Postgree.
 
 **Frontend**: React.
 

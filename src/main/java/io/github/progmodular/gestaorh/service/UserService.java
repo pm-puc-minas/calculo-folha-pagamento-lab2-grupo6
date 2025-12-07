@@ -81,11 +81,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void deleteById(Long id) {
         userValidator.isUserExistById(id);
-
-
         payrollRepository.deleteAllByEmployeeId(id);
-
-
         userRepository.deleteById(id);
     }
 
