@@ -1,0 +1,57 @@
+/* Reutiliza o overlay padrão, mas personaliza o container */
+.delete-modal {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 450px;
+  max-width: 90%;
+  border-top: 6px solid #ef4444; /* Borda vermelha no topo para indicar perigo */
+}
+
+.delete-header h3 {
+  margin-top: 0;
+  color: #b91c1c;
+  font-size: 1.5rem;
+}
+
+.delete-body p {
+  font-size: 1rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.warning-box {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 15px 0;
+  font-size: 0.9rem;
+}
+
+.confirm-text {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+/* Botões */
+.confirm-delete-btn {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.confirm-delete-btn:hover {
+  background-color: #dc2626;
+}
+
+.confirm-delete-btn:disabled {
+  background-color: #fca5a5;
+  cursor: not-allowed;
+}

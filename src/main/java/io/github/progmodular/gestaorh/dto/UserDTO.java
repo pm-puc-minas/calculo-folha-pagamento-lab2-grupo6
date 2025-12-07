@@ -24,7 +24,7 @@ public record UserDTO(
 
         Integer dependents,
 
-        Integer hoursWorkedMonth,
+//        Integer hoursWorkedMonth,
 
         Integer daysWorked,
 
@@ -49,7 +49,7 @@ public record UserDTO(
         employee.setCpf(this.cpf);
         employee.setPosition(this.position);
         employee.setDependents(this.dependents);
-        employee.setHoursWorkedMonth(this.hoursWorkedMonth);
+//        employee.setHoursWorkedMonth(this.hoursWorkedMonth);
         employee.setDaysWorked(this.daysWorked);
         employee.setActualVTCost(this.actualVTCost);
         employee.setDegreeUnhealthiness(this.degreeUnhealthiness);

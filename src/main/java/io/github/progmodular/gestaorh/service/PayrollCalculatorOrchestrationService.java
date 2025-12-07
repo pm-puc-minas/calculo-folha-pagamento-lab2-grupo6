@@ -86,7 +86,7 @@ public class PayrollCalculatorOrchestrationService {
                 employee.getName(),
                 employee.getPosition(),
                 employee.getDependents(),
-                employee.getHoursWorkedMonth(),
+//                employee.getHoursWorkedMonth(),
                 employee.getDaysWorked(),
                 employee.getActualVTCost(),
                 employee.getDegreeUnhealthiness(),
@@ -140,9 +140,11 @@ public class PayrollCalculatorOrchestrationService {
             result.setValueTransportDiscount(value);
         } else if (calculator instanceof CalculatorFgts) {
             result.setFgts(value);
-        } else if (calculator instanceof CalculatorHoursSalary) {
-            result.setHoursSalary(value);
-        } else if (calculator instanceof CalculatorInss) {
+        }
+//        else if (calculator instanceof CalculatorHoursSalary) {
+//            result.setHoursSalary(value);
+//        }
+        else if (calculator instanceof CalculatorInss) {
             result.setInssDiscount(value);
         } else if (calculator instanceof CalculatorIrrf) {
             result.setIrrfDiscount(value);

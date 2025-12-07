@@ -39,7 +39,7 @@ const DashboardPage: React.FC = () => {
 
         <div className="action-card" onClick={() => navigate("/payroll")}>
           <h3>💰 Gerar Folha</h3>
-          <p>Lançar horas, descontos e calcular pagamento.</p>
+          <p>Calcular pagamento e descontos.</p>
         </div>
 
         <div className="action-card" onClick={() => navigate("/admin/users")}>

@@ -15,7 +15,7 @@ public record UserDTOResponse(Long id,
                               String cpf,
                               String position,
                               Integer dependents,
-                              Integer hoursWorkedMonth,
+//                              Integer hoursWorkedMonth,
                               Integer daysWorked,
                               BigDecimal actualVTCost,
                               DegreeUnhealthiness degreeUnhealthiness,
@@ -31,7 +31,7 @@ public record UserDTOResponse(Long id,
                            String email,
                            UserType userType,
                            Boolean isAdmin) {
-        this(id,name,email,userType,null,null,null,null,null,null,null,null,null,isAdmin);
+        this(id,name,email,userType,null,null,null,null,null,null,null,null,isAdmin);
     }
 
     //DTO para UserController
@@ -43,13 +43,13 @@ public record UserDTOResponse(Long id,
                            String cpf,
                            String position,
                            Integer dependents,
-                           Integer hoursWorkedMonth,
+//                           Integer hoursWorkedMonth,
                            Integer daysWorked,
                            BigDecimal actualVTCost,
                            DegreeUnhealthiness degreeUnhealthiness,
                            Boolean hasDanger,
                            Boolean isAdmin) {
-        this(id,name,email,userType,grossSalary,cpf,position,dependents,hoursWorkedMonth,daysWorked,actualVTCost,degreeUnhealthiness,hasDanger,isAdmin);
+        this(id,name,email,userType,grossSalary,cpf,position,dependents,daysWorked,actualVTCost,degreeUnhealthiness,hasDanger,isAdmin);
     }
 
     //DTO para PayrollController com parametros especificos removidos
@@ -58,13 +58,12 @@ public record UserDTOResponse(Long id,
                            String name,
                            String position,
                            Integer dependents,
-                           Integer hoursWorkedMonth,
                            Integer daysWorked,
                            BigDecimal actualVTCost,
                            DegreeUnhealthiness degreeUnhealthiness,
                            Boolean hasDanger,
                            Boolean isAdmin) {
-        this(id,name,null,userType,null,null,position,dependents,hoursWorkedMonth,daysWorked,actualVTCost,degreeUnhealthiness,hasDanger,isAdmin);
+        this(id,name,null,userType,null,null,position,dependents,daysWorked,actualVTCost,degreeUnhealthiness,hasDanger,isAdmin);
     }
 }
 

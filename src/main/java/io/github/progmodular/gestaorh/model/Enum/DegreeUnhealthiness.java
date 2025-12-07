@@ -10,7 +10,7 @@ public enum DegreeUnhealthiness {
 
     MINIMUM("Minimum", new BigDecimal("0.10")),
 
-    AVERAGE("Average", new BigDecimal("0.20")),
+    MEDIUM("Medium", new BigDecimal("0.20")),
 
     MAXIMUM("Maximum", new BigDecimal("0.40"));
 

@@ -24,11 +24,10 @@ class CalculatorAllTests {
         employee = new Employee();
 
         employee.setGrossSalary(new BigDecimal("3000.00"));
-        employee.setHoursWorkedMonth(160);
         employee.setActualVTCost(new BigDecimal("100.00"));
         employee.setDependents(0);
 
-        employee.setDegreeUnhealthiness(DegreeUnhealthiness.AVERAGE);
+        employee.setDegreeUnhealthiness(DegreeUnhealthiness.MEDIUM);
     }
 
     private void assertBigDecimalEquals(BigDecimal expected, BigDecimal actual) {
@@ -143,33 +142,7 @@ class CalculatorAllTests {
         assertEquals("FGTS", result);
     }
 
-    @Test
-    void testCalculatorHoursSalary_WithValidValues_ShouldCalculateCorrectly() {
-        CalculatorHoursSalary calculator = new CalculatorHoursSalary(employee);
-        BigDecimal expected = employee.getGrossSalary().divide(new BigDecimal(employee.getHoursWorkedMonth()), 2, java.math.RoundingMode.HALF_UP);
 
-        BigDecimal result = calculator.calculator();
-
-        assertBigDecimalEquals(expected, result);
-        assertEquals(2, result.scale());
-    }
-
-    @Test
-    void testCalculatorHoursSalary_WithZeroHours_ShouldThrowException() {
-        employee.setHoursWorkedMonth(0);
-        CalculatorHoursSalary calculator = new CalculatorHoursSalary(employee);
-
-        assertThrows(ArithmeticException.class, () -> calculator.calculator());
-    }
-
-    @Test
-    void testCalculatorHoursSalary_GetCalculationType_ShouldReturnCorrectType() {
-        CalculatorHoursSalary calculator = new CalculatorHoursSalary(employee);
-
-        String result = calculator.getCalculationType();
-
-        assertEquals("HOURS_SALARY", result);
-    }
 
     @Test
     void testCalculatorInss_FirstBracket_ShouldCalculateCorrectly() {
@@ -399,7 +372,6 @@ class CalculatorAllTests {
                 new CalculatorDanger(employee),
                 new CalculatorDiscountValueTransport(employee),
                 new CalculatorFgts(employee),
-                new CalculatorHoursSalary(employee),
                 new CalculatorInss(employee),
                 new CalculatorIrrf(employee),
                 new CalculatorNetSalary(employee),

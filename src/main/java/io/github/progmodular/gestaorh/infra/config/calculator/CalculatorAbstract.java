@@ -23,6 +23,7 @@ public abstract class CalculatorAbstract {
     protected BigDecimal minimunSalary = new BigDecimal("1518.00");
     protected BigDecimal hourSalary;
     protected BigDecimal vtDiscountValue;
+    protected BigDecimal actualVT;
     protected BigDecimal inss;
     protected final BigDecimal fgtsPercentage = new BigDecimal("0.08");
     protected BigDecimal netSalary;

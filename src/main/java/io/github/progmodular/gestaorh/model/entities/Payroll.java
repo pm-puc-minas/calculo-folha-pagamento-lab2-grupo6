@@ -32,5 +32,7 @@ public class Payroll {
     private BigDecimal netSalary;
     private BigDecimal unhealthyAllowance;
     private LocalDateTime calculationDate;
+    private Integer daysWorked;
+    private BigDecimal actualVTCost;
 
 }

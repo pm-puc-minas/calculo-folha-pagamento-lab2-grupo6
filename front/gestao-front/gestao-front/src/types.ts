@@ -21,7 +21,6 @@ export interface User {
   cpf?: string;
   position?: string;
   dependents?: number;
-  hoursWorkedMonth?: number;
   daysWorked?: number;
   actualVTCost?: number;
   degreeUnhealthiness?: DegreeUnhealthiness;
@@ -29,17 +28,16 @@ export interface User {
   isAdmin: boolean;
 }
 
-// Baseado no PayrollDTOResponse
 export interface PayrollResponse {
   id: number;
-  employee: User; // O objeto UserDTOResponse aninhado
+  employee: User;
   month: number;
   year: number;
   grossSalary: number;
   dangerAllowance: number;
   valueTransportDiscount: number;
   fgts: number;
-  hoursSalary: number;
+  daysWorked: number;
   inssDiscount: number;
   irrfDiscount: number;
   netSalary: number;

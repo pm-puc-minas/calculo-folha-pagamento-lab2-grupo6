@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,6 +30,8 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    // Instância local para uso no controller, garantindo criptografia
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @GetMapping
     @Operation(summary = "Lista todos os usuários", description = "Retorna uma lista com todos os usuários do sistema.")
@@ -52,7 +56,7 @@ public class UserController {
                         employee.getCpf(),
                         employee.getPosition(),
                         employee.getDependents(),
-                        employee.getHoursWorkedMonth(),
+//                        employee.getHoursWorkedMonth(),
                         employee.getDaysWorked(),
                         employee.getActualVTCost(),
                         employee.getDegreeUnhealthiness(),
@@ -97,7 +101,7 @@ public class UserController {
                     employee.getCpf(),
                     employee.getPosition(),
                     employee.getDependents(),
-                    employee.getHoursWorkedMonth(),
+//                    employee.getHoursWorkedMonth(),
                     employee.getDaysWorked(),
                     employee.getActualVTCost(),
                     employee.getDegreeUnhealthiness(),
@@ -162,7 +166,7 @@ public class UserController {
         }
 
         Employee existingEmployee = (Employee) userOptional.get();
-        existingEmployee.setHoursWorkedMonth(employee.getHoursWorkedMonth());
+//        existingEmployee.setHoursWorkedMonth(employee.getHoursWorkedMonth());
         existingEmployee.setDaysWorked(employee.getDaysWorked());
         existingEmployee.setActualVTCost(employee.getActualVTCost());
         existingEmployee.setDegreeUnhealthiness(employee.getDegreeUnhealthiness());
@@ -179,31 +183,57 @@ public class UserController {
     }
 
     @PutMapping("{id}")
+    @Operation(summary = "Atualiza Usuário por ID",
+            description = "Substitui os dados do usuário. Se a senha não for enviada, mantém a atual.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Atualização bem-sucedida."),
+                    @ApiResponse(responseCode = "404", description = "Usuário não encontrado.")
+            })
     public ResponseEntity<Void> update(@PathVariable("id") Long id, @RequestBody UserDTO dto) {
         Optional<User> userOptional = userService.getById(id);
         if (userOptional.isEmpty()) return ResponseEntity.notFound().build();
 
         User user = userOptional.get();
 
+        // 1. Lógica de Criptografia: Só prepara a nova senha SE ela foi enviada
+        String encodedPassword = null;
+        if (dto.password() != null && !dto.password().isBlank()) {
+            encodedPassword = passwordEncoder.encode(dto.password());
+        }
+
+        // 2. Atualização para Employee
         if (user instanceof Employee employee) {
             employee.setName(dto.name());
             employee.setEmail(dto.email());
-            employee.setPassword(dto.password());
+
+            // IMPORTANTE: Só atualiza a senha se encodedPassword não for nulo
+            if (encodedPassword != null) {
+                employee.setPassword(encodedPassword);
+            }
+
+            // Atualiza os outros campos (Verifique se o DTO pode vir nulo nesses campos numéricos)
+            // Se o DTO vier com valores nulos/zeros indesejados, faça ifs similares
             employee.setGrossSalary(dto.grossSalary());
             employee.setCpf(dto.cpf());
             employee.setPosition(dto.position());
             employee.setDependents(dto.dependents());
-            employee.setHoursWorkedMonth(dto.hoursWorkedMonth());
-            employee.setDaysWorked(dto.daysWorked());
-            employee.setActualVTCost(dto.actualVTCost());
-            employee.setDegreeUnhealthiness(dto.degreeUnhealthiness());
+
+            // Dados da folha geralmente não mudam na edição de perfil, mas se quiser permitir:
+
+            // Booleanos primitivos no DTO podem vir false se omitidos, cuidado.
+            // Se no DTO for Boolean (wrapper), use if(dto.hasDanger() != null)
             employee.setHasDanger(dto.hasDanger());
         }
 
+        // 3. Atualização para PayrollAdmin
         if (user instanceof PayrollAdmin payrollAdmin) {
             payrollAdmin.setName(dto.name());
             payrollAdmin.setEmail(dto.email());
-            payrollAdmin.setPassword(dto.password());
+
+            // IMPORTANTE: Só atualiza a senha se encodedPassword não for nulo
+            if (encodedPassword != null) {
+                payrollAdmin.setPassword(encodedPassword);
+            }
         }
 
         userService.updateById(user, id);

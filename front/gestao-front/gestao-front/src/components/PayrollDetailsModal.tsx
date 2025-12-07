@@ -26,7 +26,7 @@ const PayrollDetailsModal: React.FC<Props> = ({ payroll, onClose }) => {
               {payroll.employee.id})
             </p>
             <p>
-              <strong>Cargo:</strong> {payroll.employee.actualVTCost}
+              <strong>Cargo:</strong> {payroll.employee.position || "N/A"}
             </p>
           </div>
         </div>
@@ -35,12 +35,12 @@ const PayrollDetailsModal: React.FC<Props> = ({ payroll, onClose }) => {
           {/* Vencimentos */}
           <div>
             <h4 className="section-title title-earnings">Vencimentos</h4>
-            <div className="financial-row">
-              <span>Salário Base (Hora):</span>
+            {/* <div className="financial-row">
+              <span>Dias Trabalhados:</span>
               <span className="value-positive">
-                {formatMoney(payroll.hoursSalary)}
+                {formatMoney(payroll.daysWorked)}
               </span>
-            </div>
+            </div> */}
             <div className="financial-row">
               <span>Salário Bruto:</span>
               <span className="value-positive">

@@ -7,17 +7,13 @@ import "./PayrollPage.css";
 const PayrollPage: React.FC = () => {
   const navigate = useNavigate();
 
-  // Estados de Controle
   const [step, setStep] = useState<"SEARCH" | "FORM">("SEARCH");
   const [searchId, setSearchId] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // Dados do Funcionário e Parametros de Folha
   const [employee, setEmployee] = useState<User | null>(null);
 
-  // Inputs do Formulário
   const [formData, setFormData] = useState({
-    hoursWorkedMonth: 0,
+    // REMOVIDO: hoursWorkedMonth: 0,
     daysWorked: 0,
     actualVTCost: 0,
     degreeUnhealthiness: DegreeUnhealthiness.MINIMUM,
@@ -26,7 +22,6 @@ const PayrollPage: React.FC = () => {
     year: new Date().getFullYear(),
   });
 
-  // PASSO 1: Buscar Funcionário
   const handleSearch = async () => {
     if (!searchId) return;
     setLoading(true);
@@ -34,9 +29,7 @@ const PayrollPage: React.FC = () => {
       const response = await api.get<User>(`/users/${searchId}`);
       const emp = response.data;
 
-      // Verifica se é funcionário
-      // Nota: Ajuste a verificação conforme seu backend (role vs userType)
-      const role = emp.userType || emp.userType;
+      const role = emp.userType;
       if (role !== "EMPLOYEE") {
         alert("O ID informado não pertence a um funcionário (Employee).");
         setLoading(false);
@@ -45,12 +38,10 @@ const PayrollPage: React.FC = () => {
 
       setEmployee(emp);
 
-      // Preenche o formulário com dados atuais
       setFormData({
-        hoursWorkedMonth: emp.hoursWorkedMonth || 220,
-        daysWorked: emp.daysWorked || 20,
+        // REMOVIDO: hoursWorkedMonth
+        daysWorked: emp.daysWorked || 20, // Padrão 20 ou 30 dias
         actualVTCost: emp.actualVTCost || 0,
-        // Cast forçado para garantir compatibilidade com o Enum/Select
         degreeUnhealthiness:
           (emp.degreeUnhealthiness as DegreeUnhealthiness) ||
           DegreeUnhealthiness.MINIMUM,
@@ -68,15 +59,13 @@ const PayrollPage: React.FC = () => {
     }
   };
 
-  // PASSO 2: Atualizar Dados e Calcular
   const handleSubmit = async () => {
     if (!employee) return;
     setLoading(true);
 
     try {
-      // 1. Atualizar dados variáveis (PATCH)
+      // 1. Atualizar dados variáveis (PATCH) - Sem HoursWorked
       await api.patch(`/users/employee/${employee.id}`, {
-        hoursWorkedMonth: formData.hoursWorkedMonth,
         daysWorked: formData.daysWorked,
         actualVTCost: formData.actualVTCost,
         degreeUnhealthiness: formData.degreeUnhealthiness,
@@ -92,7 +81,6 @@ const PayrollPage: React.FC = () => {
 
       alert("Sucesso! Folha de pagamento calculada.");
 
-      // Resetar para buscar outro funcionário
       setStep("SEARCH");
       setSearchId("");
       setEmployee(null);
@@ -106,7 +94,6 @@ const PayrollPage: React.FC = () => {
 
   return (
     <div className="payroll-page-container">
-      {/* Cabeçalho com Botão Voltar */}
       <div
         style={{
           display: "flex",
@@ -129,7 +116,6 @@ const PayrollPage: React.FC = () => {
         </button>
       </div>
 
-      {/* --- PASSO 1: BUSCA --- */}
       {step === "SEARCH" && (
         <div className="card">
           <label>
@@ -148,7 +134,6 @@ const PayrollPage: React.FC = () => {
         </div>
       )}
 
-      {/* --- PASSO 2: FORMULÁRIO --- */}
       {step === "FORM" && employee && (
         <div className="form-container">
           <h3>
@@ -185,23 +170,12 @@ const PayrollPage: React.FC = () => {
           <h4>Variáveis da Folha</h4>
 
           <div className="row">
-            <div className="input-group">
-              <label>Horas Trabalhadas:</label>
-              <input
-                type="number"
-                value={formData.hoursWorkedMonth}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    hoursWorkedMonth: Number(e.target.value),
-                  })
-                }
-              />
-            </div>
+            {/* REMOVIDO INPUT DE HORAS */}
             <div className="input-group">
               <label>Dias Trabalhados:</label>
               <input
                 type="number"
+                max={30} // Sugestão: limitar a 30 ou 31
                 value={formData.daysWorked}
                 onChange={(e) =>
                   setFormData({
@@ -211,20 +185,20 @@ const PayrollPage: React.FC = () => {
                 }
               />
             </div>
-          </div>
 
-          <div className="input-group">
-            <label>Custo VT (Real):</label>
-            <input
-              type="number"
-              value={formData.actualVTCost}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  actualVTCost: Number(e.target.value),
-                })
-              }
-            />
+            <div className="input-group">
+              <label>Custo VT (Real):</label>
+              <input
+                type="number"
+                value={formData.actualVTCost}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    actualVTCost: Number(e.target.value),
+                  })
+                }
+              />
+            </div>
           </div>
 
           <div className="row">

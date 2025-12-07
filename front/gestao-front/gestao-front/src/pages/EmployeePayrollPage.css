@@ -146,3 +146,56 @@
   border-radius: 12px;
   border: 2px dashed #e5e7eb;
 }
+
+/* ... CSS anterior ... */
+
+/* Ajuste no Card para botões em coluna */
+.card-actions-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.disabled-btn {
+  background-color: #e5e7eb;
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
+.disabled-btn:hover {
+  background-color: #e5e7eb; /* Sem efeito hover */
+}
+
+/* Novo Botão de Editar */
+.edit-btn {
+  width: 100%;
+  background-color: #f59e0b; /* Amarelo/Laranja */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit-btn:hover {
+  background-color: #d97706;
+}
+
+.delete-btn-card {
+  background-color: #fd2121;
+  color: #ffffff;
+  border: 1px solid #fecaca;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-btn-card:hover {
+  background-color: #770000;
+  border-color: #dc2626;
+}

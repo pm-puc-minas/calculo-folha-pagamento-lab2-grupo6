@@ -33,9 +33,6 @@ public class Employee extends User {
     @Column(name="dependents")
     private Integer dependents;
 
-    @Column(name="hoursWorkedMonth")
-    private Integer hoursWorkedMonth;
-
     @Column(name="daysWorked")
     private Integer daysWorked;
 

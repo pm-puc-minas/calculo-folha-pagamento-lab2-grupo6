@@ -4,6 +4,7 @@ import io.github.progmodular.gestaorh.dto.UserDTO;
 import io.github.progmodular.gestaorh.model.Enum.UserType;
 import io.github.progmodular.gestaorh.model.entities.User;
 import io.github.progmodular.gestaorh.repository.IUserRepository;
+import io.github.progmodular.gestaorh.repository.PayrollRepository;
 import io.github.progmodular.gestaorh.validator.UserValidator;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,10 @@ public class UserService implements UserDetailsService {
     @Autowired
     IUserRepository userRepository;
 
+
+    @Autowired
+    PayrollRepository payrollRepository;
+
     @Autowired
     UserValidator userValidator;
 
@@ -31,15 +37,11 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println("Tentando buscar usuário: " + email);
         User user = userRepository.findByEmail(email);
-
         if (user == null) {
             throw new UsernameNotFoundException("Usuário não encontrado: " + email);
         }
-
         String role = user.getIsAdmin() ? "ADMIN" : "USER";
-
         return org.springframework.security.core.userdetails.User
                 .builder()
                 .username(user.getEmail())
@@ -50,10 +52,8 @@ public class UserService implements UserDetailsService {
 
     public void saveUser(User user) {
         userValidator.validateOnCreation(user);
-
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
-
         userRepository.save(user);
     }
 
@@ -68,12 +68,8 @@ public class UserService implements UserDetailsService {
 
     public User authenticate(String email, String password) {
         User user = userRepository.findByEmail(email);
-        if (user == null) {
-            return null;
-        }
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            return null;
-        }
+        if (user == null) return null;
+        if (!passwordEncoder.matches(password, user.getPassword())) return null;
         return user;
     }
 
@@ -81,10 +77,18 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+
+    @Transactional
     public void deleteById(Long id) {
         userValidator.isUserExistById(id);
+
+
+        payrollRepository.deleteAllByEmployeeId(id);
+
+
         userRepository.deleteById(id);
     }
+
 
     public void updateById(User user, Long id) {
         userValidator.isUserExistById(id);
@@ -93,12 +97,11 @@ public class UserService implements UserDetailsService {
 
     public User checkUser(UserDTO userdto) {
         userValidator.nullValidation(userdto);
-        User user = null;
         if(userdto.userType() == UserType.EMPLOYEE) {
             return userdto.setEmployee();
         } else if(userdto.userType() == UserType.PAYROLL_ADMIN) {
             return userdto.setPayroll();
         }
-        return user;
+        return null;
     }
 }
