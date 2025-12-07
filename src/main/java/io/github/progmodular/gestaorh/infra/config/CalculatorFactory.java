@@ -14,7 +14,6 @@ public class CalculatorFactory {
         return List.of(
                 new CalculatorDanger(employee),
                 new CalculatorFgts(employee),
-//                new CalculatorHoursSalary(employee),
                 new CalculatorInss(employee),
                 new CalculatorIrrf(employee),
                 new CalculatorNetSalary(employee),
@@ -27,7 +26,6 @@ public class CalculatorFactory {
             return switch (type) {
                 case "DANGER" -> new CalculatorDanger(employee);
                 case "FGTS" -> new CalculatorFgts(employee);
-//                case "HOURS_SALARY" -> new CalculatorHoursSalary(employee);
                 case "INSS" -> new CalculatorInss(employee);
                 case "IRRF" -> new CalculatorIrrf(employee);
                 case "NET_SALARY" -> new CalculatorNetSalary(employee);

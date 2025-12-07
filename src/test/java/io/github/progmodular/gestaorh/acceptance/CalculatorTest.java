@@ -1,5 +1,6 @@
 package io.github.progmodular.gestaorh.acceptance;
 
+import io.github.progmodular.gestaorh.infra.config.CalculatorFactory;
 import io.github.progmodular.gestaorh.infra.config.calculator.*;
 import io.github.progmodular.gestaorh.model.entities.Employee;
 import io.github.progmodular.gestaorh.model.Enum.DegreeUnhealthiness;
@@ -10,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,7 +52,7 @@ class CalculatorAllTests {
     void testCalculatorDanger_WithNullEmployee_ShouldThrowException() {
         CalculatorDanger nullCalculator = new CalculatorDanger(null);
 
-        assertThrows(IllegalStateException.class, () -> nullCalculator.calculator());
+        assertThrows(IllegalStateException.class, nullCalculator::calculator);
     }
 
     @Test
@@ -57,7 +60,7 @@ class CalculatorAllTests {
         employee.setGrossSalary(null);
         CalculatorDanger calculator = new CalculatorDanger(employee);
 
-        assertThrows(IllegalStateException.class, () -> calculator.calculator());
+        assertThrows(IllegalStateException.class, calculator::calculator);
     }
 
     @Test
@@ -264,19 +267,28 @@ class CalculatorAllTests {
 
     @Test
     void testCalculatorNetSalary_WithAllDiscounts_ShouldCalculateCorrectly() {
+
+        employee.setDaysWorked(30);
+
         CalculatorNetSalary calculator = new CalculatorNetSalary(employee);
 
         BigDecimal result = calculator.calculator();
 
         assertTrue(result.compareTo(BigDecimal.ZERO) > 0);
+
         assertTrue(result.compareTo(employee.getGrossSalary()) < 0);
     }
+
 
     @Test
     void testCalculatorNetSalary_WithHighSalary_ShouldCalculateCorrectly() {
         employee.setGrossSalary(new BigDecimal("5000.00"));
         employee.setActualVTCost(new BigDecimal("150.00"));
         employee.setDependents(1);
+
+
+        employee.setDaysWorked(30);
+
         CalculatorNetSalary calculator = new CalculatorNetSalary(employee);
 
         BigDecimal result = calculator.calculator();
@@ -352,31 +364,44 @@ class CalculatorAllTests {
 
     @Test
     void testIntegration_NetSalaryUsesOtherCalculatorsCorrectly() {
+
+        int daysWorked = 30;
+        employee.setDaysWorked(daysWorked);
+
         CalculatorNetSalary netSalaryCalculator = new CalculatorNetSalary(employee);
         CalculatorInss inssCalculator = new CalculatorInss(employee);
         CalculatorIrrf irrfCalculator = new CalculatorIrrf(employee);
         CalculatorDiscountValueTransport vtCalculator = new CalculatorDiscountValueTransport(employee);
 
+
         BigDecimal netSalary = netSalaryCalculator.calculator();
         BigDecimal inss = inssCalculator.calculator();
         BigDecimal irrf = irrfCalculator.calculator();
         BigDecimal vt = vtCalculator.calculator();
-        BigDecimal expectedNetSalary = employee.getGrossSalary().subtract(inss).subtract(irrf).subtract(vt);
+
+
+        BigDecimal daysInMonth = new BigDecimal("30");
+        BigDecimal proportionalGrossSalary = employee.getGrossSalary()
+                .divide(daysInMonth, 2, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(daysWorked))
+                .setScale(2, RoundingMode.HALF_UP);
+
+
+        BigDecimal expectedNetSalary = proportionalGrossSalary
+                .subtract(inss)
+                .subtract(irrf)
+                .subtract(vt)
+                .max(BigDecimal.ZERO);
 
         assertBigDecimalEquals(expectedNetSalary, netSalary);
     }
 
     @Test
     void testIntegration_AllCalculatorsReturnValidResults() {
-        ICalculatorInterface[] calculators = {
-                new CalculatorDanger(employee),
-                new CalculatorDiscountValueTransport(employee),
-                new CalculatorFgts(employee),
-                new CalculatorInss(employee),
-                new CalculatorIrrf(employee),
-                new CalculatorNetSalary(employee),
-                new CalculatorUnhealthiness(employee)
-        };
+
+        employee.setDaysWorked(30);
+
+        List<ICalculatorInterface> calculators = new CalculatorFactory().createAllCalculators(employee);
 
         for (ICalculatorInterface calculator : calculators) {
             BigDecimal result = calculator.calculator();
@@ -386,5 +411,21 @@ class CalculatorAllTests {
             assertNotNull(calculationType, "Calculation type should not be null for: " + calculator.getClass().getSimpleName());
             assertFalse(calculationType.isEmpty(), "Calculation type should not be empty for: " + calculator.getClass().getSimpleName());
         }
+    }
+
+
+    @Test
+    void testCalculatorNetSalary_WithPartialMonth_ShouldReduceGrossSalaryBase() {
+        employee.setGrossSalary(new BigDecimal("3000.00"));
+        employee.setDaysWorked(15);
+
+        employee.setActualVTCost(BigDecimal.ZERO);
+
+        CalculatorNetSalary calculator = new CalculatorNetSalary(employee);
+
+        BigDecimal result = calculator.calculator();
+
+        BigDecimal expectedProportional = new BigDecimal("1500.00");
+        assertTrue(result.compareTo(expectedProportional) < 0, "O salário líquido deve ser menor que o bruto proporcional (devido aos descontos)");
     }
 }
