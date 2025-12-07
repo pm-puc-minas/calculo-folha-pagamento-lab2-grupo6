@@ -21,9 +21,7 @@ Automatize o cálculo salarial, considerando descontos, benefícios e horas extr
 
 Gerencie o registro de ponto, permitindo o controle de jornada e a integração com o cálculo da folha.
 
-Ofereça um portal para que funcionários consultem contracheques, solicitem abonos e férias.
-
-Garanta a conformidade com as leis trabalhistas, como a Portaria 671, que regulamenta o registro de ponto eletrônico.
+Ofereça um portal para que funcionários consultem contracheques.
 
 O desenvolvimento segue as melhores práticas de qualidade de software, incluindo Programação Orientada a Objetos (POO), aplicação dos princípios SOLID e a criação de uma suíte completa de testes unitários para garantir a confiabilidade e a integridade dos dados.
 
