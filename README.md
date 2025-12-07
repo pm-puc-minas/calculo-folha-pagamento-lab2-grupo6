@@ -5,7 +5,7 @@ Professor: Paulo Henrique D. S. Coelho
 
 ## Documentação extra
 
-[Documentação Completa](docs/README.md)
+[Documentação Completa](docs/README.md) <br>
 
 [Demonstração da aplicação Completa](docs/Sprint_4/demo-app)
 
