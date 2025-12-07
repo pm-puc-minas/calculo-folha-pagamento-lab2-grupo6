@@ -199,3 +199,10 @@
   background-color: #770000;
   border-color: #dc2626;
 }
+.disabled-action-btn {
+  background-color: #e5e7eb !important; /* Cinza claro */
+  color: #9ca3af !important; /* Texto cinza escuro */
+  border-color: #d1d5db !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}

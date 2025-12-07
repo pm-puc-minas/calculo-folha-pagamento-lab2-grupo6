@@ -3,14 +3,17 @@ import api from "../services/api";
 import { User } from "../types";
 import { useNavigate } from "react-router-dom";
 import EditUserModal from "../components/EditUserModal";
-import DeleteUserModal from "../components/DeleteUserModal"; // Importe o novo modal
+import DeleteUserModal from "../components/DeleteUserModal";
 import "./EmployeePayrollPage.css";
 
 const AdminUserListPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [deletingUser, setDeletingUser] = useState<User | null>(null); // Novo estado
+  const [deletingUser, setDeletingUser] = useState<User | null>(null);
   const navigate = useNavigate();
+
+  const userStorage = localStorage.getItem("user");
+  const currentUser = userStorage ? JSON.parse(userStorage) : null;
 
   useEffect(() => {
     fetchUsers();
@@ -33,78 +36,115 @@ const AdminUserListPage: React.FC = () => {
       </header>
 
       <div className="card-grid">
-        {users.map((user) => (
-          <div
-            key={user.id}
-            className="payroll-card"
-            style={{
-              borderColor:
-                user.userType === "PAYROLL_ADMIN" ? "#2563eb" : "#e5e7eb",
-            }}
-          >
-            <div>
-              <h3 className="card-title">
-                {user.name}
-                {user.userType === "PAYROLL_ADMIN" && (
-                  <span
-                    style={{
-                      fontSize: "0.8rem",
-                      color: "#2563eb",
-                      marginLeft: "8px",
-                    }}
-                  >
-                    (Admin)
-                  </span>
+        {users.map((user) => {
+          const isCurrentUser = currentUser && currentUser.id === user.id;
+
+          return (
+            <div
+              key={user.id}
+              className="payroll-card"
+              style={{
+                borderColor:
+                  user.userType === "PAYROLL_ADMIN" ? "#2563eb" : "#e5e7eb",
+                opacity: isCurrentUser ? 0.8 : 1,
+              }}
+            >
+              <div>
+                <h3 className="card-title">
+                  {user.name}
+                  {user.userType === "PAYROLL_ADMIN" && (
+                    <span
+                      style={{
+                        fontSize: "0.8rem",
+                        color: "#2563eb",
+                        marginLeft: "8px",
+                      }}
+                    >
+                      (Admin)
+                    </span>
+                  )}
+                  {/* Tag visual "Você" */}
+                  {isCurrentUser && (
+                    <span
+                      style={{
+                        fontSize: "0.7rem",
+                        backgroundColor: "#d1fae5",
+                        color: "#065f46",
+                        marginLeft: "8px",
+                        padding: "2px 6px",
+                        borderRadius: "4px",
+                      }}
+                    >
+                      VOCÊ
+                    </span>
+                  )}
+                </h3>
+                <p className="card-info">Email: {user.email}</p>
+
+                {user.userType === "EMPLOYEE" && (
+                  <p className="card-info">
+                    Cargo: {user.position || "Não informado"}
+                  </p>
                 )}
-              </h3>
-              <p className="card-info">Email: {user.email}</p>
+              </div>
 
-              {user.userType === "EMPLOYEE" && (
-                <p className="card-info">
-                  Cargo: {user.position || "Não informado"}
-                </p>
-              )}
-            </div>
+              <div className="card-actions-column">
+                {/* Botão de Histórico */}
+                {user.userType === "EMPLOYEE" ? (
+                  <button
+                    className="details-btn"
+                    onClick={() => navigate(`/admin/users/${user.id}/history`)}
+                  >
+                    📄 Ver Folhas
+                  </button>
+                ) : (
+                  <button className="details-btn disabled-btn" disabled>
+                    🚫 Sem Folha
+                  </button>
+                )}
 
-            <div className="card-actions-column">
-              {/* Botão de Histórico */}
-              {user.userType === "EMPLOYEE" ? (
-                <button
-                  className="details-btn"
-                  onClick={() => navigate(`/admin/users/${user.id}/history`)}
-                >
-                  📄 Ver Folhas
-                </button>
-              ) : (
-                <button className="details-btn disabled-btn" disabled>
-                  🚫 Sem Folha
-                </button>
-              )}
+                {/* Grupo de Ações de Manutenção */}
+                <div style={{ display: "flex", gap: "10px" }}>
+                  {/* 3. Desabilita botões se for o usuário atual */}
+                  <button
+                    className={`edit-btn ${
+                      isCurrentUser ? "disabled-action-btn" : ""
+                    }`}
+                    style={{ flex: 1 }}
+                    onClick={() => !isCurrentUser && setEditingUser(user)}
+                    disabled={isCurrentUser}
+                    title={
+                      isCurrentUser
+                        ? "Você não pode editar seu próprio perfil aqui."
+                        : "Editar Usuário"
+                    }
+                  >
+                    ✏️ Editar
+                  </button>
 
-              {/* Grupo de Ações de Manutenção */}
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button
-                  className="edit-btn"
-                  style={{ flex: 1 }}
-                  onClick={() => setEditingUser(user)}
-                >
-                  ✏️ Editar
-                </button>
-
-                <button
-                  className="delete-btn-card"
-                  style={{ flex: 1 }}
-                  onClick={() => setDeletingUser(user)}
-                >
-                  🗑️ Excluir
-                </button>
+                  <button
+                    className={`delete-btn-card ${
+                      isCurrentUser ? "disabled-action-btn" : ""
+                    }`}
+                    style={{ flex: 1 }}
+                    onClick={() => !isCurrentUser && setDeletingUser(user)}
+                    disabled={isCurrentUser}
+                    title={
+                      isCurrentUser
+                        ? "Você não pode excluir a si mesmo."
+                        : "Excluir Usuário"
+                    }
+                  >
+                    🗑️ Excluir
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Modal de Edição */}
+      {/* Modais... */}
       {editingUser && (
         <EditUserModal
           user={editingUser}
@@ -116,7 +156,6 @@ const AdminUserListPage: React.FC = () => {
         />
       )}
 
-      {/* Modal de Deleção (NOVO) */}
       {deletingUser && (
         <DeleteUserModal
           user={deletingUser}
