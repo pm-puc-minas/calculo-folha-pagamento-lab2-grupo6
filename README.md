@@ -19,8 +19,6 @@ O objetivo é criar uma ferramenta robusta que:
 
 Automatize o cálculo salarial, considerando descontos, benefícios e horas extras.
 
-Gerencie o registro de ponto, permitindo o controle de jornada e a integração com o cálculo da folha.
-
 Ofereça um portal para que funcionários consultem contracheques.
 
 O desenvolvimento segue as melhores práticas de qualidade de software, incluindo Programação Orientada a Objetos (POO), aplicação dos princípios SOLID e a criação de uma suíte completa de testes unitários para garantir a confiabilidade e a integridade dos dados.
