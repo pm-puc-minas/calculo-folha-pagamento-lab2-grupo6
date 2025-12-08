@@ -3,13 +3,11 @@
 Trabalho final da disciplina Programação Modular – PUC Minas
 Professor: Paulo Henrique D. S. Coelho
 
-## Documentação extra
+## Links Importantes
 
-[Documentação Completa](docs/README.md) <br>
-
-[Demonstração da aplicação Completa](docs/Sprint_4/demo-app)
-
-[Padrão de Projeto Factory](docs/Sprint_4/padraoProjeto.md)
+* [Documentação Detalhada](docs/README.md) 
+* [Demonstração da aplicação](docs/Sprint_4/demo-app)
+* [Padrão de Projeto Factory](docs/Sprint_4/padraoProjeto.md)
 
 ## Sobre o projeto
 
