@@ -13,14 +13,13 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* Rotas Existentes */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/payroll" element={<PayrollPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/employee/payroll" element={<EmployeePayrollPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
-        {/* NOVAS ROTAS ADMINISTRATIVAS */}
         <Route path="/admin/users" element={<AdminUserListPage />} />
         <Route
           path="/admin/users/:id/history"
