@@ -1,4 +1,4 @@
-# 🌐 Referência da API (Endpoints)
+#  Referência da API (Endpoints)
 
 Os Endpoints são o ponto de comunicação HTTP entre o Frontend e o Backend, definidos nos Controllers (rota base: porta 8080).
 
