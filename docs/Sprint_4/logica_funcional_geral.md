@@ -10,8 +10,7 @@ O sistema é centrado em três perfis de usuário, definidos pela **Herança** d
 
 | Perfil | Tipo de Usuário | Funções Chave | Endpoint de Acesso |
 | :--- | :--- | :--- | :--- |
-| **Administrador Master** | `PAYROLL_ADMIN` (`is_admin: true`) | Cria o primeiro `PAYROLL_ADMIN` (RH) via script SQL e gerencia configurações globais. | `POST /users/login` |
-| **Administrador de RH** | `PAYROLL_ADMIN` (`is_admin: false`) | **Gestão de Funcionários** e **Execução do Processamento Salarial**. | `POST /users/login` |
+| **Administrador** | `PAYROLL_ADMIN`| Cria o primeiro `PAYROLL_ADMIN` (RH) via script SQL e gerencia configurações globais. | `POST /users/login` |
 | **Funcionário** | `EMPLOYEE` | **Consulta** seu próprio contracheque e histórico de pagamentos. | `POST /users/login` |
 
 O fluxo inicia com a **rota direta para o login**, onde o sistema valida o perfil para direcionar o usuário para o painel de funções correto. O **Admin Master** é criado via script SQL de `INSERT` inicial no banco.
@@ -55,6 +54,5 @@ O Frontend (React) se comunica com o Backend (Spring Boot) através de Controlle
 
 * **`UserController`:** Gerencia login (`/users/login`) e criação/gestão de perfis.
 * **`PayrollController`:** Contém a rota crítica de processamento (`/api/payroll/calculate`) e histórico.
-* **`PayrollReportController`:** Gerencia a geração e consulta de relatórios.
 
-O detalhamento completo das rotas e seus parâmetros está no documento **`Api_endpoints.md`**.
+Detalhamento de outras rotas está no documento **`Api_endpoints.md`**.
